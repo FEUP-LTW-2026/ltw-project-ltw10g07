@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiftToBig — Ginásio &amp; Gestão Online</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/index.css" />
+</head>
+<body>
+
+  
+  <header class="site-header">
+    <div class="container header-inner">
+
+      <a href="landingpage.html" class="logo" aria-label="LiftToBig — página inicial">
+        <span class="logo-icon" aria-hidden="true">LB</span>
+        LiftToBig
+      </a>
+
+      <nav aria-label="Navegação principal">
+        <ul class="nav-links">
+          <li><a href="landingpage.html" class="active">Home</a></li>
+          <li><a href="classes.html">Aulas</a></li>
+          <li><a href="trainers.html">Treinadores</a></li>
+          <li><a href="schedule.html">Horário</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        
+        <a href="login.html" class="nav-signin">Entrar</a>
+        <a href="register.html" class="btn btn-primary btn-sm">Join Now</a>
+      </div>
+
+      </div>
+  </header>
+
+
+  <main>
+
+    <!-- ============================================================
+         HERO
+         ============================================================ -->
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="container hero-inner">
+
+        <!-- Esquerda -->
+        <div class="hero-content">
+          <p class="hero-eyebrow">&#9733; #1 Comunidade de Fitness em Portugal</p>
+
+          <h1 id="hero-heading">
+            Transforma-te na<br />
+            <span>Melhor Versão</span><br />
+            de Ti.
+          </h1>
+
+          <p>
+            Desbloqueia o teu potencial com treinadores de excelência,
+            equipamento de última geração e uma comunidade que evolui contigo.
+          </p>
+
+          <div class="hero-search" role="search">
+            <label for="hero-search-input" >Pesquisar aulas ou treinadores</label>
+            <span aria-hidden="true" style="color:var(--color-text-muted);font-size:.95rem">&#9906;</span>
+            <input
+              type="search"
+              id="hero-search-input"
+              name="q"
+              placeholder="Pesquisar aulas ou treinadores..."
+            />
+            <button type="submit" class="btn btn-primary btn-sm">Pesquisar</button>
+          </div>
+
+          <div class="hero-members">
+            <div class="member-avatars" aria-hidden="true">
+              <div class="member-avatar-placeholder">SC</div>
+              <div class="member-avatar-placeholder">RM</div>
+              <div class="member-avatar-placeholder">AL</div>
+              <div class="member-avatar-placeholder">+</div>
+            </div>
+            <p><strong>2.400+</strong> membros inscritos este mês</p>
+          </div>
+        </div>
+
+        <!-- Imagem principal -->
+        <div class="hero-image-wrap" aria-hidden="true">
+         
+            <img src="img/hero-athlete.jpg" alt="Atleta a treinar no ginásio" class="hero-img" />
+          
+
+          <!-- Card flutuante de ocupação -->
+          <aside class="hero-float-card" aria-label="Estado atual do ginásio">
+            <p class="float-card-header">
+              <span class="float-card-dot"></span>
+              Horas de Pico
+            </p>
+            <p class="float-card-body">
+              A zona de cardio está a 25% de ocupação.<br />
+              Hora perfeita para treinar!
+            </p>
+          </aside>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ============================================================
+         FEATURED CLASSES
+         ============================================================ -->
+    <section class="featured-classes" aria-labelledby="classes-heading">
+      <div class="container">
+
+        <div class="section-header">
+          <div>
+            <h2 id="classes-heading">Aulas em Destaque</h2>
+            <p>Encontra a sessão perfeita para o teu nível de energia hoje.</p>
+          </div>
+          <a href="classes.html" class="link-more">Ver Horários &rsaquo;</a>
+        </div>
+
+        <ul class="classes-grid">
+            <!--Power Hit-->
+          <li class="class-card">
+            <div class="class-img-wrap">
+              
+              <img src="img/powerhit.jpg" alt="Aula de Power HIIT" />
+              <div class="class-badge-img">
+                <span class="badge badge-blue">Cardio</span>
+              </div>
+              <div class="class-name-overlay">
+                <h3>Power HIIT</h3>
+              </div>
+            </div>
+
+            <div class="class-info">
+              <div class="class-meta-item">
+                <span class="meta-icon" aria-hidden="true">&#9202;</span>
+                <span>45m</span>
+              </div>
+              <div class="class-meta-item">
+                <span class="meta-icon" aria-hidden="true">&#128293;</span>
+                <span>Alta</span>
+              </div>
+              <a href="classes.html" class="btn btn-outline btn-sm" style="margin-left:auto">Inscrever</a>
+            </div>
+          </li>
+          <!--Yoga-->
+          <li class="class-card">
+            <div class="class-img-wrap">
+              <img src="img/yoga.jpg" alt="yoga" />
+              <div class="class-badge-img">
+                <span class="badge badge-green">Yoga</span>
+              </div>
+              <div class="class-name-overlay">
+                <h3>Yoga</h3>
+              </div>
+            </div>
+            <div class="class-info">
+              <div class="class-meta-item">
+                <span class="meta-icon" aria-hidden="true">&#9202;</span>
+                <span>60m</span>
+              </div>
+              <div class="class-meta-item">
+                <span class="meta-icon" aria-hidden="true">&#127774;</span>
+                <span>Média</span>
+              </div>
+              <a href="classes.html" class="btn btn-outline btn-sm" style="margin-left:auto">Inscrever</a>
+            </div>
+          </li>
+          <!--Zumba -->
+          <li class="class-card">
+            <div class="class-img-wrap">
+              <img src="img/zumba.jpg" alt="zumba" />
+              <div class="class-badge-img">
+                <span class="badge badge-amber">Cardio</span>
+              </div>
+              <div class="class-name-overlay">
+                <h3>Zumba</h3>
+              </div>
+            </div>
+            <div class="class-info">
+              <div class="class-meta-item">
+                <span class="meta-icon" aria-hidden="true">&#9202;</span>
+                <span>60m</span>
+              </div>
+              <div class="class-meta-item">
+               <span class="meta-icon" aria-hidden="true">&#127774;</span>
+                <span>Média</span>
+              </div>
+              <a href="classes.html" class="btn btn-outline btn-sm" style="margin-left:auto">Inscrever</a>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         TRAINERS
+         ============================================================ -->
+    <section class="trainers-section" aria-labelledby="trainers-heading">
+      <div class="container trainers-inner">
+
+        <!-- Texto à esquerda -->
+        <div class="trainers-text">
+          <p class="trainers-badge-label">&#9989; Orientação Especializada</p>
+          <h2 id="trainers-heading">Conhece os Teus Futuros Mentores.</h2>
+          <p>
+            Os nossos personal trainers certificados estão dedicados ao teu sucesso.
+            Obtém um plano personalizado adaptado aos teus objetivos.
+          </p>
+          <a href="trainers.html" class="btn btn-primary">Ver Todos os Treinadores</a>
+        </div>
+
+        <!-- Grid de trainers à direita -->
+        <ul class="trainers-grid">
+
+          <li class="trainer-card">
+            <img src="img/rui-costa.jpg" alt="Rui Costa" class="avatar" />
+            <div class="trainer-info">
+              <h3>Rui Costa</h3>
+              <p class="trainer-specialty">Personal Trainer · HIIT</p>
+              <p class="top-rated-tag">&#9733; Top Rated (4.9)</p>
+            </div>
+          </li>
+
+          <li class="trainer-card">
+            <img src="img/andre.jpg" alt="André Brás" class="avatar" />
+            <div class="trainer-info">
+              <h3>André Brás</h3>
+              <p class="trainer-specialty">Força &amp; Condicionamento</p>
+              <p class="top-rated-tag">&#9733; Top Rated (5)</p>
+            </div>
+          </li>
+
+          <li class="trainer-card">
+            <img src="img/tomas.jpg" alt="Tomás" class="avatar" />
+            <div class="trainer-info">
+              <h3>Tomás </h3>
+              <p class="trainer-specialty">Yoga Master</p>
+              <p class="top-rated-tag">&#9733; Top Rated (4.8)</p>
+            </div>
+          </li>
+
+         
+
+        </ul>
+
+      </div>
+    </section>
+
+
+    <!-- ============================================================
+         CTA FINAL
+         ============================================================ -->
+    <section class="cta-section" aria-labelledby="cta-heading">
+      <div class="container">
+        <h2 id="cta-heading">Pronto para Encontrar o Teu Ritmo?</h2>
+        <p>
+          Junta-te a mais de 15.000 membros que transformaram as suas vidas.
+          Inscreve-te hoje e recebe a primeira consulta com personal trainer gratuita.
+        </p>
+        <div class="cta-buttons">
+          <a href="register.html" class="btn btn-primary btn-lg">Juntar à Comunidade</a>
+          <a href="classes.html" class="btn btn-ghost btn-lg">Ver Horários</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+
+      <div class="footer-brand">
+        <a href="landingpage.html" class="logo">
+          <span class="logo-icon" aria-hidden="true">LB</span>
+          LiftToBig
+        </a>
+        <p>
+          Eleva a tua jornada de fitness com tecnologia e comunidade.
+          Os teus objetivos, o nosso foco.
+        </p>
+        <nav aria-label="Redes sociais">
+          <ul class="footer-social">
+            <li><a href="#" aria-label="Facebook">f</a></li>
+            <li><a href="#" aria-label="Instagram">&#9419;</a></li>
+            <li><a href="#" aria-label="Twitter">X</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="footer-col">
+        <h4>Links Rápidos</h4>
+        <ul>
+          <li><a href="classes.html">Ver Aulas</a></li>
+          <li><a href="trainers.html">Encontrar Treinador</a></li>
+          <li><a href="schedule.html">O Meu Horário</a></li>
+          <li><a href="equipment.html">Estado do Ginásio</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Suporte</h4>
+        <ul>
+          <li><a href="#">Centro de Ajuda</a></li>
+          <li><a href="#">Planos de Membro</a></li>
+          <li><a href="#">Protocolos de Segurança</a></li>
+          <li><a href="#">Contacta-nos</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <address>
+          <p class="footer-contact-item">
+            <span class="contact-icon" aria-hidden="true">&#9679;</span>
+            FEUP
+          </p>
+          <p class="footer-contact-item">
+            <span class="contact-icon" aria-hidden="true">&#9743;</span>
+            912 345 678
+          </p>
+          <p class="footer-contact-item">
+            <span class="contact-icon" aria-hidden="true">&#9993;</span>
+            lifttobig@gmail.com
+          </p>
+        </address>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2025 LiftToBig. Todos os direitos reservados. &mdash; Projeto académico LTW.</p>
+    </div>
+  </footer>
+
+  
+
+</body>
+</html>
