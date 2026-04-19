@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IronPulse — Ginásio &amp; Gestão Online</title>
+  <title>LiftToBig — Ginásio &amp; Gestão Online</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -17,14 +17,14 @@
   <header class="site-header">
     <div class="container header-inner">
 
-      <a href="index.html" class="logo" aria-label="IronPulse — página inicial">
+      <a href="landingpage.html" class="logo" aria-label="LiftToBig — página inicial">
         <span class="logo-icon" aria-hidden="true">LB</span>
         LiftToBig
       </a>
 
       <nav aria-label="Navegação principal">
         <ul class="nav-links">
-          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="landingpage.html" class="active">Home</a></li>
           <li><a href="classes.html">Aulas</a></li>
           <li><a href="trainers.html">Treinadores</a></li>
           <li><a href="schedule.html">Horário</a></li>
@@ -32,27 +32,12 @@
       </nav>
 
       <div class="nav-actions">
-        <button class="nav-search-btn" aria-label="Pesquisar">&#9906;</button>
+        
         <a href="login.html" class="nav-signin">Entrar</a>
         <a href="register.html" class="btn btn-primary btn-sm">Join Now</a>
       </div>
 
-      <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-menu">
-        <span></span><span></span><span></span>
-      </button>
-
-    </div>
-
-    <nav id="mobile-menu" class="mobile-nav" aria-label="Menu móvel" hidden>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="classes.html">Aulas</a></li>
-        <li><a href="trainers.html">Treinadores</a></li>
-        <li><a href="schedule.html">Horário</a></li>
-        <li><a href="login.html">Entrar</a></li>
-        <li><a href="register.html" class="btn btn-primary" style="margin-top:.5rem">Join Now</a></li>
-      </ul>
-    </nav>
+      </div>
   </header>
 
 
@@ -80,7 +65,7 @@
           </p>
 
           <div class="hero-search" role="search">
-            <label for="hero-search-input" class="sr-only">Pesquisar aulas ou treinadores</label>
+            <label for="hero-search-input" >Pesquisar aulas ou treinadores</label>
             <span aria-hidden="true" style="color:var(--color-text-muted);font-size:.95rem">&#9906;</span>
             <input
               type="search"
@@ -168,7 +153,7 @@
           <!--Yoga-->
           <li class="class-card">
             <div class="class-img-wrap">
-              <img src="img/yoga.jpg" alt="Aula de Power HIIT" />
+              <img src="img/yoga.jpg" alt="yoga" />
               <div class="class-badge-img">
                 <span class="badge badge-green">Yoga</span>
               </div>
@@ -191,7 +176,7 @@
           <!--Zumba -->
           <li class="class-card">
             <div class="class-img-wrap">
-              <img src="img/zumba.jpg" alt="Aula de Power HIIT" />
+              <img src="img/zumba.jpg" alt="zumba" />
               <div class="class-badge-img">
                 <span class="badge badge-amber">Cardio</span>
               </div>
@@ -237,40 +222,33 @@
         <ul class="trainers-grid">
 
           <li class="trainer-card">
-            <div class="avatar-initials">SJ</div>
+            <img src="img/rui-costa.jpg" alt="Rui Costa" class="avatar" />
             <div class="trainer-info">
-              <h3>Sarah Jenkins</h3>
+              <h3>Rui Costa</h3>
               <p class="trainer-specialty">Personal Trainer · HIIT</p>
               <p class="top-rated-tag">&#9733; Top Rated (4.9)</p>
             </div>
           </li>
 
           <li class="trainer-card">
-            <div class="avatar-initials" style="background:#dcfce7;color:#16a34a">MC</div>
+            <img src="img/andre.jpg" alt="André Brás" class="avatar" />
             <div class="trainer-info">
-              <h3>Marcus Chen</h3>
+              <h3>André Brás</h3>
               <p class="trainer-specialty">Força &amp; Condicionamento</p>
               <p class="top-rated-tag">&#9733; Top Rated (5)</p>
             </div>
           </li>
 
           <li class="trainer-card">
-            <div class="avatar-initials" style="background:#fef3c7;color:#d97706">ER</div>
+            <img src="img/tomas.jpg" alt="Tomás" class="avatar" />
             <div class="trainer-info">
-              <h3>Elena Rodriguez</h3>
+              <h3>Tomás </h3>
               <p class="trainer-specialty">Yoga Master</p>
               <p class="top-rated-tag">&#9733; Top Rated (4.8)</p>
             </div>
           </li>
 
-          <li class="trainer-card">
-            <div class="avatar-initials" style="background:#fce7f3;color:#9d174d">DW</div>
-            <div class="trainer-info">
-              <h3>David Wilson</h3>
-              <p class="trainer-specialty">Nutrição &amp; Coaching</p>
-              <p class="top-rated-tag">&#9733; Top Rated (4.9)</p>
-            </div>
-          </li>
+         
 
         </ul>
 
@@ -305,7 +283,7 @@
     <div class="container footer-grid">
 
       <div class="footer-brand">
-        <a href="index.html" class="logo">
+        <a href="landingpage.html" class="logo">
           <span class="logo-icon" aria-hidden="true">LB</span>
           LiftToBig
         </a>
@@ -347,15 +325,15 @@
         <address>
           <p class="footer-contact-item">
             <span class="contact-icon" aria-hidden="true">&#9679;</span>
-            Rua do Fitness, 123, Porto
+            FEUP
           </p>
           <p class="footer-contact-item">
             <span class="contact-icon" aria-hidden="true">&#9743;</span>
-            (555) 123-4567
+            912 345 678
           </p>
           <p class="footer-contact-item">
             <span class="contact-icon" aria-hidden="true">&#9993;</span>
-            contacto@ironpulse.pt
+            lifttobig@gmail.com
           </p>
         </address>
       </div>
@@ -363,7 +341,7 @@
     </div>
 
     <div class="footer-bottom">
-      <p>&copy; 2025 IronPulse. Todos os direitos reservados. &mdash; Projeto académico LTW.</p>
+      <p>&copy; 2025 LiftToBig. Todos os direitos reservados. &mdash; Projeto académico LTW.</p>
     </div>
   </footer>
 

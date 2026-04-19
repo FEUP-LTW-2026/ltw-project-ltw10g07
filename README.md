@@ -2,11 +2,21 @@
 
 Projeto académico de LTW (Linguagens e Tecnologias Web) — Faculdade de Engenharia da Universidade do Porto.
 
+
+
+## Como abrir
+
+Abrir diretamente os ficheiros `landingpage.html`, `classes.html` e `trainers.html` num browser.
+
+
+Não é necessário servidor, PHP ou JavaScript para esta primeira entrega.
+
+
 ## Estrutura de Ficheiros
 
 ```
 /
-├── landingpage.html          ← Landing page (página inicial)
+├── landingpage.html    ← Landing page (página inicial)
 ├── classes.html        ← Listagem de aulas 
 ├── trainers.html       ← Perfis de treinadores 
 │
@@ -19,9 +29,12 @@ Projeto académico de LTW (Linguagens e Tecnologias Web) — Faculdade de Engenh
 │
 └── img/                ← Imagens 
     ├── hero-athlete.jpg
-    ├── class-hiit.jpg
-    ├── class-yoga.jpg
-    └── class-weight.jpg
+    ├── powerhit.jpg
+    ├── yoga.jpg
+    ├── zumba.jpg
+    ├── rui-costa.jpg
+    ├── andre.jpg
+    └── tomas.jpg
     └── ...
 ```
 
@@ -30,7 +43,7 @@ Projeto académico de LTW (Linguagens e Tecnologias Web) — Faculdade de Engenh
 
 | Ficheiro | Responsável | Estado |
 |---|---|---|
-| `index.html` | [nome] | ✅ HTML + CSS |
+| `landingpage.html` | [nome] | ✅ HTML + CSS |
 | `classes.html` | [nome] |  ✅ HTML + CSS |
 | `trainers.html` | [nome] | ✅ HTML + CSS |
 

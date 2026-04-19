@@ -100,47 +100,6 @@
 }
 .nav-signin:hover { color: var(--color-primary); }
 
-/* Hambúrguer mobile */
-.nav-toggle {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  background: none;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  padding: 8px;
-  cursor: pointer;
-  width: 38px;
-  height: 38px;
-  justify-content: center;
-}
-.nav-toggle span {
-  display: block;
-  height: 2px;
-  background: var(--color-text-secondary);
-  border-radius: 2px;
-}
-
-/* Menu mobile */
-.mobile-nav {
-  background: var(--color-bg);
-  border-top: 1px solid var(--color-border);
-  padding: 1rem var(--container-pad) 1.5rem;
-}
-.mobile-nav ul {
-  display: flex;
-  flex-direction: column;
-  gap: .25rem;
-}
-.mobile-nav a {
-  display: block;
-  padding: .6em .75em;
-  font-size: .95rem;
-  font-weight: 500;
-  color: var(--color-text-secondary);
-  border-radius: var(--radius-sm);
-}
-.mobile-nav a:hover { background: var(--color-bg-soft); color: var(--color-primary); }
 
 /* ==========================================
    HERO
@@ -270,36 +229,6 @@
   justify-content: center;
 }
 
-/* Imagem placeholder (quando não há img) */
-.hero-img-placeholder {
-  width: 100%;
-  height: 420px;
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg);
-  background: linear-gradient(135deg, #1e293b 60%, #0f172a 100%);
-  display: flex;
-  align-items: flex-end;
-  overflow: hidden;
-  position: relative;
-}
-.hero-img-placeholder::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse at 30% 80%, rgba(37,99,235,.25) 0%, transparent 60%),
-    radial-gradient(ellipse at 70% 20%, rgba(16,185,129,.15) 0%, transparent 50%);
-}
-.hero-img-label {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  padding: 1.5rem;
-  color: rgba(255,255,255,.4);
-  font-size: .8rem;
-  text-align: center;
-}
-
 /* Floating card sobre a imagem */
 .hero-float-card {
   position: absolute;
@@ -376,22 +305,11 @@
   height: 180px;
   overflow: hidden;
 }
-.class-img-wrap img,
-.class-img-placeholder {
+.class-img-wrap img{
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-.class-img-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2.5rem;
-  opacity: .15;
-}
-.class-img-placeholder.bg-hiit   { background: #1e293b; }
-.class-img-placeholder.bg-yoga   { background: #0f2d1e; }
-.class-img-placeholder.bg-weight { background: #1a1a1a; }
 
 .class-badge-img {
   position: absolute;
@@ -431,68 +349,7 @@
 }
 .class-meta-item .meta-icon { font-size: .75rem; }
 
-/* ==========================================
-   REAL-TIME OCCUPANCY
-   ========================================== */
 
-.occupancy-section {
-  padding-block: var(--space-xl);
-  background: var(--color-bg-soft);
-  border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.occupancy-section .section-header {
-  text-align: center;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 2.5rem;
-}
-
-.occupancy-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
-}
-
-.occupancy-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  text-align: center;
-  box-shadow: var(--shadow-sm);
-  display: flex;
-  flex-direction: column;
-  gap: .5rem;
-}
-.occupancy-icon {
-  font-size: 1.6rem;
-  margin-bottom: .25rem;
-}
-.occupancy-name {
-  font-size: .9rem;
-  font-weight: 600;
-  color: var(--color-text);
-}
-.occupancy-pct {
-  font-size: 1.6rem;
-  font-weight: 800;
-  line-height: 1;
-}
-.occupancy-pct .pct-label {
-  font-size: .7rem;
-  font-weight: 700;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-  margin-left: .2em;
-}
-.occupancy-card .progress { margin-block: .25rem; }
-.occupancy-update {
-  font-size: .72rem;
-  color: var(--color-text-muted);
-}
 
 /* ==========================================
    TRAINERS
@@ -534,6 +391,14 @@
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
+@media (min-width: 641px) {
+  .trainers-grid .trainer-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc((100% - 1rem) / 2);
+  }
+}
+
 
 .trainer-card {
   background: var(--color-surface);
@@ -550,14 +415,7 @@
   box-shadow: var(--shadow-md);
   transform: translateY(-2px);
 }
-.trainer-card img.avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
-  background: var(--color-primary-light);
-}
+
 .trainer-info { min-width: 0; }
 .trainer-info h3 {
   font-size: .9rem;
@@ -708,7 +566,6 @@
   .hero-inner          { grid-template-columns: 1fr; }
   .hero-image-wrap     { display: none; }
   .classes-grid        { grid-template-columns: 1fr; max-width: 420px; }
-  .occupancy-grid      { grid-template-columns: 1fr; max-width: 380px; margin-inline: auto; }
   .trainers-inner      { grid-template-columns: 1fr; }
   .trainers-grid       { grid-template-columns: 1fr 1fr; }
   .footer-grid         { grid-template-columns: 1fr 1fr; }

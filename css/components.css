@@ -68,29 +68,13 @@
   background: var(--color-bg-soft);
 }
 
-/* Branco (para fundos com cor) */
-.btn-white {
-  background: #fff;
-  color: var(--color-primary);
-  border-color: #fff;
-}
-.btn-white:hover {
-  background: var(--color-primary-light);
-  color: var(--color-primary-dark);
-}
 
-/* Desativado */
-.btn[disabled],
-.btn-disabled {
-  opacity: .45;
-  cursor: not-allowed;
-  pointer-events: none;
-}
+
 
 /* Tamanhos */
 .btn-sm  { font-size: .8rem;  padding: .45em 1em; }
 .btn-lg  { font-size: 1rem;   padding: .75em 1.75em; }
-.btn-xl  { font-size: 1.05rem; padding: .85em 2.2em; }
+
 
 /* ==========================================
    BADGES / TAGS
@@ -112,64 +96,8 @@
 .badge-blue    { background: var(--color-primary-light);  color: var(--color-primary-dark); }
 .badge-green   { background: var(--color-success-bg);     color: var(--color-success); }
 .badge-amber   { background: var(--color-warning-bg);     color: var(--color-warning); }
-.badge-red     { background: var(--color-danger-bg);      color: var(--color-danger); }
-.badge-neutral { background: #f1f5f9; color: var(--color-text-secondary); }
 
-/* ==========================================
-   CARDS
-   ========================================== */
 
-.card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  box-shadow: var(--shadow-sm);
-}
-
-.card-hover {
-  transition: box-shadow .2s, transform .2s, border-color .2s;
-}
-.card-hover:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-3px);
-  border-color: var(--color-border-strong);
-}
-
-/* Card com imagem no topo */
-.card-image {
-  padding: 0;
-  overflow: hidden;
-}
-.card-image .card-img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-}
-.card-image .card-body {
-  padding: 1rem 1.25rem;
-}
-
-/* ==========================================
-   PROGRESS BAR
-   ========================================== */
-
-.progress {
-  width: 100%;
-  height: 6px;
-  background: var(--color-border);
-  border-radius: var(--radius-full);
-  overflow: hidden;
-}
-.progress-bar {
-  height: 100%;
-  border-radius: var(--radius-full);
-  background: var(--color-primary);
-  transition: width .4s ease;
-}
-.progress-bar--green  { background: var(--color-success); }
-.progress-bar--amber  { background: var(--color-warning); }
-.progress-bar--red    { background: var(--color-danger); }
 
 /* ==========================================
    AVATAR
@@ -182,48 +110,11 @@
   object-fit: cover;
   flex-shrink: 0;
 }
-.avatar-initials {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--color-primary-light);
-  color: var(--color-primary);
-  font-size: .875rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-/* ==========================================
-   RATING (estrelas)
-   ========================================== */
-
-.rating {
-  display: flex;
-  align-items: center;
-  gap: .25rem;
-  font-size: .8rem;
-  font-weight: 600;
-  color: var(--color-text-secondary);
-}
-.rating .stars {
-  color: #f59e0b;
-  font-size: .75rem;
-  letter-spacing: -.05em;
-}
 
 /* ==========================================
    FORMULÁRIOS
    ========================================== */
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: .35rem;
-  margin-bottom: 1rem;
-}
 
 label {
   font-size: .8rem;
@@ -264,49 +155,7 @@ input::placeholder,
 textarea::placeholder { color: var(--color-text-muted); }
 textarea { resize: vertical; min-height: 100px; }
 
-/* Input com ícone à esquerda */
-.input-group {
-  position: relative;
-}
-.input-group .input-icon {
-  position: absolute;
-  left: .85rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--color-text-muted);
-  pointer-events: none;
-  font-size: .95rem;
-}
-.input-group input { padding-left: 2.4rem; }
 
-/* ==========================================
-   TABELAS
-   ========================================== */
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: .9rem;
-}
-thead th {
-  font-size: .75rem;
-  font-weight: 600;
-  letter-spacing: .07em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-  text-align: left;
-  padding: .6rem .875rem;
-  border-bottom: 1px solid var(--color-border);
-  background: var(--color-bg-soft);
-}
-tbody td {
-  padding: .75rem .875rem;
-  border-bottom: 1px solid var(--color-border);
-  color: var(--color-text-secondary);
-  vertical-align: middle;
-}
-tbody tr:last-child td { border-bottom: none; }
-tbody tr:hover { background: var(--color-bg-soft); }
 
 /* ==========================================
    SECTION HEADER (título + link "Ver todos")
@@ -333,69 +182,3 @@ tbody tr:hover { background: var(--color-bg-soft); }
   gap: .25em;
 }
 .link-more:hover { color: var(--color-primary-dark); }
-
-/* ==========================================
-   DIVIDER COM TEXTO
-   ========================================== */
-
-.divider-text {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  color: var(--color-text-muted);
-  font-size: .85rem;
-}
-.divider-text::before,
-.divider-text::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--color-border);
-}
-
-/* ==========================================
-   STAT / METRIC CARD
-   ========================================== */
-
-.stat-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  text-align: center;
-  box-shadow: var(--shadow-sm);
-}
-.stat-card .stat-label {
-  font-size: .8rem;
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: .07em;
-  margin-bottom: .5rem;
-}
-.stat-card .stat-value {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: var(--color-primary);
-  line-height: 1;
-}
-.stat-card .stat-suffix {
-  font-size: .75rem;
-  font-weight: 700;
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  margin-left: .25em;
-}
-.stat-card .stat-note {
-  font-size: .72rem;
-  color: var(--color-text-muted);
-  margin-top: .75rem;
-}
-
-/* ==========================================
-   OCUPAÇÃO — barra de progresso colorida
-   ========================================== */
-
-.occupancy-low    { color: var(--color-success); }
-.occupancy-medium { color: var(--color-warning); }
-.occupancy-high   { color: var(--color-danger);  }
