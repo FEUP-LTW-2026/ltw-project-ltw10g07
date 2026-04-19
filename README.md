@@ -57,9 +57,3 @@ O CSS está dividido em 3 camadas:
 
 3. **`css/[pagina].css`** — estilos específicos de cada página (header, hero, secções únicas). Mantido o mais pequeno possível.
 
-## Tag para entrega
-
-```bash
-git tag first-delivery-v1
-git push origin first-delivery-v1
-```
