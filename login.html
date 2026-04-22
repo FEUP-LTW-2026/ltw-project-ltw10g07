@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Entrar — LiftToBig</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/login.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="landingpage.html" class="logo" aria-label="LiftToBig — página inicial">
+        <span class="logo-icon" aria-hidden="true">LB</span>
+        LiftToBig
+      </a>
+
+      <nav aria-label="Navegação principal">
+        <ul class="nav-links">
+          <li><a href="landingpage.html" class="active">Home</a></li>
+          <li><a href="classes.html">Aulas</a></li>
+          <li><a href="trainers.html">Treinadores</a></li>
+          <li><a href="schedule.html">Horário</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        
+        <a href="login.html" class="nav-signin">Entrar</a>
+        <a href="register.html" class="btn btn-primary btn-sm">Join Now</a>
+      </div>
+
+      </div>
+  </header>
+
+  <main>
+    <section class="auth" aria-labelledby="auth-heading">
+      <div class="container auth-inner">
+  
+        <div class="auth-content">
+          <h2>Bem-vindo de volta!</h2>
+          <p>Entra na tua conta para veres o teu plano de treinos.</p>
+        </div>
+
+        <div class="auth-form-wrapper">
+          <form action="#" method="POST" class="auth-form">
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="exemplo@email.com" required />
+            </div>
+
+            <div class="form-group">
+              <label for="password">Palavra-passe</label>
+              <input type="password" id="password" name="password" placeholder="Insere a tua password" required />
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-outline btn-full">Entrar na Conta</button>
+            </div>
+          </form>
+
+          <div class="auth-footer">
+            <p>Ainda não fazes parte da comunidade? <a href="register.html">Regista-te aqui</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    </footer>
+
+</body>
+</html>

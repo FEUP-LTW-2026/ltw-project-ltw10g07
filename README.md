@@ -18,14 +18,14 @@ Não é necessário servidor, PHP ou JavaScript para esta primeira entrega.
 /
 ├── landingpage.html    ← Landing page (página inicial)
 ├── classes.html        ← Listagem de aulas 
-├── trainers.html       ← Perfis de treinadores 
+├── login.html       ← Perfis de treinadores 
 │
 ├── css/
 │   ├── base.css        ← Variáveis, reset e estilos de elementos HTML
 │   ├── components.css  ← Componentes reutilizáveis (botões, cards, badges, forms…)
 │   ├── index.css       ← Estilos específicos da landing page
 │   ├── classes.css     ← Estilos específicos da página de aulas
-│   └── trainers.css    ← Estilos específicos dos treinadores
+│   └── login.css    ← Estilos específicos da página de login
 │
 └── img/                ← Imagens 
     ├── hero-athlete.jpg
@@ -45,7 +45,7 @@ Não é necessário servidor, PHP ou JavaScript para esta primeira entrega.
 |---|---|---|
 | `landingpage.html` | [nome] | ✅ HTML + CSS |
 | `classes.html` | [nome] |  ✅ HTML + CSS |
-| `trainers.html` | [nome] | ✅ HTML + CSS |
+| `login.html` | [nome] | ✅ HTML + CSS |
 
 ## Organização do CSS
 
