@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aulas — LiftToBig</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/classes.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+
+      <a href="landingpage.html" class="logo" aria-label="LiftToBig — página inicial">
+        <span class="logo-icon" aria-hidden="true">LB</span>
+        LiftToBig
+      </a>
+
+      <nav aria-label="Navegação principal">
+        <ul class="nav-links">
+          <li><a href="landingpage.html">Home</a></li>
+          <li><a href="classes.html" class="active">Aulas</a></li>
+          <li><a href="trainers.html">Treinadores</a></li>
+          <li><a href="schedule.html">Horário</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="login.html" class="nav-signin">Entrar</a>
+        <a href="register.html" class="btn btn-primary btn-sm">Join Now</a>
+      </div>
+
+    </div>
+  </header>
+
+  <main>
+    <section class="classes-hero">
+      <div class="container">
+        
+        <div class="hero-eyebrow">
+          <span aria-hidden="true">★</span> EXPLORA O NOSSO CATÁLOGO
+        </div>
+
+        <h1 class="hero-title">Encontra o Teu <br><span>Ritmo</span></h1>
+        <p class="hero-subtitle">Explora as nossas aulas, reserva com treinadores e atinge a tua melhor performance.</p>
+
+        <div class="filters-wrapper">
+          
+          <div class="hero-search-pill">
+            <div class="search-input-group">
+              <span class="search-icon" aria-hidden="true">&#9906;</span>
+              <input type="search" placeholder="Pesquisar aulas ou treinadores..." aria-label="Pesquisar" />
+            </div>
+            <button class="btn btn-primary search-btn">Pesquisar</button>
+          </div>
+          
+          <div class="filters-row">
+            <div class="filter-item">
+              <label>Dia</label>
+              <select>
+                <option>Hoje</option>
+                <option>Amanhã</option>
+                <option>Esta Semana</option>
+              </select>
+            </div>
+            
+            <div class="filter-item">
+              <label>Intensidade</label>
+              <select>
+                <option>Todas as Intensidades</option>
+                <option>Alta</option>
+                <option>Média</option>
+                <option>Baixa</option>
+              </select>
+            </div>
+
+            <div class="filter-item">
+              <label>Treinador</label>
+              <select>
+                <option>Todos os Treinadores</option>
+                <option>Coach Sarah</option>
+                <option>Elena Rivers</option>
+                <option>Jessica Wu</option>
+                <option>Marcus Stone</option>
+              </select>
+            </div>
+
+            <div class="filter-item">
+              <label>Ordenar por</label>
+              <select>
+                <option>Próximas a começar</option>
+                <option>Mais vagas</option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="classes-grid-section">
+      <div class="container">
+        <ul class="classes-grid">
+          
+          <li class="class-card">
+            <div class="class-img-wrap">
+              <img src="img/hiit.jpg" alt="HIIT Intensity Max" />
+              <span class="badge badge-accent card-status">4 vagas</span>
+            </div>
+            <div class="class-card-body">
+              <div class="class-card-tags">
+                <span class="badge">Cardio</span>
+                <span class="badge badge-danger">Intensidade Max</span>
+              </div>
+              <h3>HIIT Intensity Max</h3>
+              <p class="class-time">08:30 AM - 45 min</p>
+              <div class="class-card-footer">
+                <span class="trainer-name">Coach Sarah</span>
+                <a href="#" class="btn btn-outline btn-sm">Ver Detalhes</a>
+              </div>
+            </div>
+          </li>
+
+          <li class="class-card">
+            <div class="class-img-wrap">
+              <img src="img/yoga.jpg" alt="Zen Yoga Flow" />
+              <span class="badge badge-success card-status">12 vagas</span>
+            </div>
+            <div class="class-card-body">
+              <div class="class-card-tags">
+                <span class="badge">Mind & Body</span>
+                <span class="badge badge-success">Baixa</span>
+              </div>
+              <h3>Zen Yoga Flow</h3>
+              <p class="class-time">10:00 AM - 60 min</p>
+              <div class="class-card-footer">
+                <span class="trainer-name">Elena Rivers</span>
+                <a href="#" class="btn btn-outline btn-sm">Ver Detalhes</a>
+              </div>
+            </div>
+          </li>
+
+          <li class="class-card">
+            <div class="class-img-wrap">
+              <img src="img/cycling.jpg" alt="Cycle Rush 300" />
+              <span class="badge badge-accent card-status">6 vagas</span>
+            </div>
+            <div class="class-card-body">
+              <div class="class-card-tags">
+                <span class="badge">Cycling</span>
+                <span class="badge badge-warning">Média</span>
+              </div>
+              <h3>Cycle Rush 300</h3>
+              <p class="class-time">17:00 - 45 min</p>
+              <div class="class-card-footer">
+                <span class="trainer-name">Jessica Wu</span>
+                <a href="#" class="btn btn-outline btn-sm">Ver Detalhes</a>
+              </div>
+            </div>
+          </li>
+
+          <li class="class-card">
+            <div class="class-img-wrap">
+              <img src="img/mobility.jpg" alt="Mobility & Core" />
+              <span class="badge badge-success card-status">8 vagas</span>
+            </div>
+            <div class="class-card-body">
+              <div class="class-card-tags">
+                <span class="badge">Flexibilidade</span>
+                <span class="badge badge-success">Baixa</span>
+              </div>
+              <h3>Mobility & Core</h3>
+              <p class="class-time">18:30 - 40 min</p>
+              <div class="class-card-footer">
+                <span class="trainer-name">David Miller</span>
+                <a href="#" class="btn btn-outline btn-sm">Ver Detalhes</a>
+              </div>
+            </div>
+          </li>
+
+          <li class="class-card">
+            <div class="class-img-wrap">
+              <img src="img/barbell.jpg" alt="Power Barbell" />
+              <span class="badge badge-danger card-status">2 vagas</span>
+            </div>
+            <div class="class-card-body">
+              <div class="class-card-tags">
+                <span class="badge">Strength</span>
+                <span class="badge badge-danger">Alta</span>
+              </div>
+              <h3>Power Barbell</h3>
+              <p class="class-time">12:15 - 50 min</p>
+              <div class="class-card-footer">
+                <span class="trainer-name">Marcus Stone</span>
+                <a href="#" class="btn btn-outline btn-sm">Ver Detalhes</a>
+              </div>
+            </div>
+          </li>
+
+          <li class="class-card">
+            <div class="class-img-wrap">
+              <img src="img/boxing.jpg" alt="Boxing" />
+              <span class="badge badge-accent card-status">5 vagas</span>
+            </div>
+            <div class="class-card-body">
+              <div class="class-card-tags">
+                <span class="badge">Combat</span>
+                <span class="badge badge-danger">Alta</span>
+              </div>
+              <h3>Boxing Fundamentals</h3>
+              <p class="class-time">19:00 - 60 min</p>
+              <div class="class-card-footer">
+                <span class="trainer-name">Rocky V.</span>
+                <a href="#" class="btn btn-outline btn-sm">Ver Detalhes</a>
+              </div>
+            </div>
+          </li>
+
+        </ul>
+
+        <div class="load-more">
+          <button class="btn btn-ghost btn-lg">Mostrar Mais Aulas</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+
+      <div class="footer-brand">
+        <a href="landingpage.html" class="logo">
+          <span class="logo-icon" aria-hidden="true">LB</span>
+          LiftToBig
+        </a>
+        <p>
+          Eleva a tua jornada de fitness com tecnologia e comunidade.
+          Os teus objetivos, o nosso foco.
+        </p>
+        <nav aria-label="Redes sociais">
+          <ul class="footer-social">
+            <li><a href="#" aria-label="Facebook">f</a></li>
+            <li><a href="#" aria-label="Instagram">&#9419;</a></li>
+            <li><a href="#" aria-label="Twitter">X</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="footer-col">
+        <h4>Links Rápidos</h4>
+        <ul>
+          <li><a href="classes.html">Ver Aulas</a></li>
+          <li><a href="trainers.html">Encontrar Treinador</a></li>
+          <li><a href="schedule.html">O Meu Horário</a></li>
+          <li><a href="equipment.html">Estado do Ginásio</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Suporte</h4>
+        <ul>
+          <li><a href="#">Centro de Ajuda</a></li>
+          <li><a href="#">Planos de Membro</a></li>
+          <li><a href="#">Protocolos de Segurança</a></li>
+          <li><a href="#">Contacta-nos</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <address>
+          <p class="footer-contact-item">
+            <span class="contact-icon" aria-hidden="true">&#9679;</span>
+            FEUP
+          </p>
+          <p class="footer-contact-item">
+            <span class="contact-icon" aria-hidden="true">&#9743;</span>
+            912 345 678
+          </p>
+          <p class="footer-contact-item">
+            <span class="contact-icon" aria-hidden="true">&#9993;</span>
+            lifttobig@gmail.com
+          </p>
+        </address>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2025 LiftToBig. Todos os direitos reservados. &mdash; Projeto académico LTW.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
