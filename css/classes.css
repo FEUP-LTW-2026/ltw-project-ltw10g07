@@ -213,11 +213,27 @@
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: var(--color-success);
-  color: #fff;
-  border: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  border: none !important;
+  opacity: 1 !important;
+  color: #fff !important;
+  font-weight: 700;
+  display: inline-block !important;
 }
 
+.class-card .card-status.badge-success {
+  background-color: #4caf72 !important;
+}
+
+.class-card .card-status.badge-accent, 
+
+.class-card .card-status.badge-warning {
+  background-color: #eecc0c !important;
+}
+
+.class-card .card-status.badge-danger {
+  background-color: #e84444 !important;
+}
 .class-card-body {
   padding: 1.5rem;
   display: flex;
