@@ -218,21 +218,3 @@
   font-size: .8rem;
   color: var(--color-text-muted);
 }
-
-/* Responsive */
-
-@media (max-width: 900px) {
-  .hero-inner { grid-template-columns: 1fr; }
-  .hero-image-wrap { display: none; }
-  .classes-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; }
-  .trainers-inner { grid-template-columns: 1fr; }
-  .footer-grid { grid-template-columns: 1fr 1fr; }
-}
-
-@media (max-width: 640px) {
-  .nav-links, .nav-signin { display: none; }
-  .trainers-grid { grid-template-columns: 1fr; }
-  .footer-grid { grid-template-columns: 1fr; }
-  .hero-search { flex-direction: column; border-radius: var(--radius-lg); padding: .75rem; }
-  .hero-search input { padding: .35rem .25rem; }
-}
