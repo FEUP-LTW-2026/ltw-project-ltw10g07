@@ -51,9 +51,9 @@ Não é necessário servidor, PHP ou JavaScript para esta primeira entrega.
 
 O CSS está dividido em 3 camadas:
 
-1. **`css/base.css`** — tokens de design (variáveis de cor, tipografia, espaçamento), reset e estilos padrão de elementos HTML (`body`, `h1–h6`, `a`, `p`, `ul`, `img`, `table`, etc.)
+1. **`css/base.css`** — tokens de design (variáveis de cor, tipografia, espaçamento), reset e estilos padrão de elementos HTML 
 
-2. **`css/components.css`** — componentes reutilizáveis partilhados entre todas as páginas: botões (primary, outline, ghost, white, disabled, sm/lg/xl), badges, cards, progress bars, avatars, rating, formulários, tabelas, etc.
+2. **`css/components.css`** — componentes reutilizáveis partilhados entre todas as páginas.
 
 3. **`css/[pagina].css`** — estilos específicos de cada página (header, hero, secções únicas). Mantido o mais pequeno possível.
 
