@@ -41,8 +41,6 @@ Não é necessário servidor, PHP ou JavaScript para esta primeira entrega.
 
 ## Páginas para a 1ª Entrega
 
-| Ficheiro | Responsável | Estado |
-|---|---|---|
 | `landingpage.html` | [nome] | ✅ HTML + CSS |
 | `classes.html` | [nome] |  ✅ HTML + CSS |
 | `login.html` | [nome] | ✅ HTML + CSS |
