@@ -10,33 +10,38 @@
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/components.css" />
   <link rel="stylesheet" href="css/login.css" />
+   <link rel="stylesheet" href="css/responsive.css"/>
 </head>
 <body>
 
   <header class="site-header">
-    <div class="container header-inner">
-      <a href="landingpage.html" class="logo" aria-label="LiftToBig — página inicial">
-        <span class="logo-icon" aria-hidden="true">LB</span>
-        LiftToBig
-      </a>
+  <div class="container header-inner">
 
-      <nav aria-label="Navegação principal">
-        <ul class="nav-links">
-          <li><a href="landingpage.html" class="active">Home</a></li>
-          <li><a href="classes.html">Aulas</a></li>
-          <li><a href="trainers.html">Treinadores</a></li>
-          <li><a href="schedule.html">Horário</a></li>
-        </ul>
-      </nav>
+    <a href="landingpage.html" class="logo" aria-label="LiftToBig — página inicial">
+      <span class="logo-icon" aria-hidden="true">LB</span>
+      LiftToBig
+    </a>
 
-      <div class="nav-actions">
-        
-        <a href="login.html" class="nav-signin">Entrar</a>
-        <a href="register.html" class="btn btn-primary btn-sm">Join Now</a>
-      </div>
+    <button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+      ☰
+    </button>
 
-      </div>
-  </header>
+    <nav class="main-nav" aria-label="Navegação principal">
+      <ul class="nav-links">
+        <li><a href="landingpage.html" class="active">Home</a></li>
+        <li><a href="classes.html">Aulas</a></li>
+        <li><a href="trainers.html">Treinadores</a></li>
+        <li><a href="schedule.html">Horário</a></li>
+      </ul>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="login.html" class="nav-signin">Entrar</a>
+      <a href="register.html" class="btn btn-primary btn-sm">Join Now</a>
+    </div>
+
+  </div>
+</header>
 
   <main>
     <section class="auth" aria-labelledby="auth-heading">
@@ -141,6 +146,17 @@
     </div>
   </footer>
 
+ <script>
+  const header = document.querySelector('.site-header');
+  const navToggle = document.querySelector('.nav-toggle');
 
+  navToggle.addEventListener('click', () => {
+    header.classList.toggle('menu-open');
+
+    const isOpen = header.classList.contains('menu-open');
+    navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    navToggle.textContent = isOpen ? '✕' : '☰';
+  });
+</script>
 </body>
 </html>
