@@ -1,5 +1,9 @@
 /* Responsive */
 
+.menu-checkbox {
+  display: none;
+}
+
 .nav-toggle {
   display: none;
   background: none;
@@ -8,6 +12,15 @@
   cursor: pointer;
   color: var(--color-text);
   margin-left: auto;
+  user-select: none;
+}
+
+.nav-toggle::after {
+  content: '☰';
+}
+
+.site-header:has(.menu-checkbox:checked) .nav-toggle::after {
+  content: '✕';
 }
 
 @media (max-width: 900px) {
@@ -38,12 +51,12 @@
     width: 100%;
   }
 
-  .site-header.menu-open .main-nav {
+  .site-header:has(.menu-checkbox:checked) .main-nav {
     display: block;
     padding-top: 1rem;
   }
 
-  .site-header.menu-open .nav-actions {
+  .site-header:has(.menu-checkbox:checked) .nav-actions {
     display: flex;
     flex-direction: column;
     gap: .75rem;

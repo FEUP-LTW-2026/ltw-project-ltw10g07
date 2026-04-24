@@ -15,6 +15,7 @@
 <body>
 
    <header class="site-header">
+  <input type="checkbox" id="menu-toggle" class="menu-checkbox" />
   <div class="container header-inner">
 
     <a href="landingpage.html" class="logo" aria-label="LiftToBig — página inicial">
@@ -22,9 +23,7 @@
       LiftToBig
     </a>
 
-    <button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
-      ☰
-    </button>
+    <label for="menu-toggle" class="nav-toggle" aria-label="Abrir/fechar menu"></label>
 
     <nav class="main-nav" aria-label="Navegação principal">
       <ul class="nav-links">
@@ -297,17 +296,6 @@
       <p>&copy; 2025 LiftToBig. Todos os direitos reservados. &mdash; Projeto académico LTW.</p>
     </div>
   </footer>
-   <script>
-  const header = document.querySelector('.site-header');
-  const navToggle = document.querySelector('.nav-toggle');
 
-  navToggle.addEventListener('click', () => {
-    header.classList.toggle('menu-open');
-
-    const isOpen = header.classList.contains('menu-open');
-    navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    navToggle.textContent = isOpen ? '✕' : '☰';
-  });
-</script>
 </body>
 </html>
