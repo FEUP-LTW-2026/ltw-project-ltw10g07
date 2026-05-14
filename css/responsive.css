@@ -25,6 +25,7 @@
 
 @media (max-width: 900px) {
   .hero-inner { grid-template-columns: 1fr; }
+  .auth-inner { grid-template-columns: 1fr; }
   .hero-image-wrap { display: none; }
   .classes-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; }
   .trainers-inner { grid-template-columns: 1fr; }
