@@ -48,17 +48,21 @@
         
         <div class="hero-eyebrow">★ EXPLORA O NOSSO CATÁLOGO</div>
 
-        <h1 class="hero-title">Encontra o Teu <br><span>Ritmo</span></h1>
+        <h1 class="hero-title">Encontra o Teu <br><span>Ritmo</span>.</h1>
         <p class="hero-subtitle">Explora as nossas aulas, reserva com treinadores e atinge a tua melhor performance.</p>
 
         <div class="filters-wrapper">
           
-          <div class="hero-search-pill">
-            <div class="search-input-group">
-              <span class="search-icon">&#9906;</span>
-              <input type="search" placeholder="Pesquisar aulas ou treinadores..." />
-            </div>
-            <button class="btn btn-primary search-btn">Pesquisar</button>
+          <div class="hero-search" role="search">
+            <label for="hero-search-input">Pesquisar aulas ou treinadores</label>
+            <span aria-hidden="true" style="color:var(--color-text-muted);font-size:.95rem">&#9906;</span>
+            <input
+              type="search"
+              id="hero-search-input"
+              name="q"
+              placeholder="Pesquisar aulas ou treinadores..."
+              />
+            <button type="sumbit" class="btn btn-primary btn-sm">Pesquisar</button>
           </div>
           
           <div class="filters-row">
