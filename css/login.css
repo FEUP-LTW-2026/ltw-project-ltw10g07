@@ -119,6 +119,7 @@
 
 /* Lado esquerdo */
 .auth-content { max-width: 560px; }
+.auth-content h1 { font-size: 2.25rem; }
 
 .auth-form {
     display: flex;
@@ -171,7 +172,7 @@
   background: var(--color-primary-light);
 }
 
-.footer-col h4 {
+.footer-col h2 {
   font-size: .8rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -217,4 +218,8 @@
 .footer-bottom p {
   font-size: .8rem;
   color: var(--color-text-muted);
+}
+
+@media (max-width: 640px) {
+  .auth-content h1 { font-size: 1.8rem; }
 }

@@ -449,7 +449,7 @@
   background: var(--color-primary-light);
 }
 
-.footer-col h4 {
+.footer-col h2 {
   font-size: .8rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -496,4 +496,3 @@
   font-size: .8rem;
   color: var(--color-text-muted);
 }
-
