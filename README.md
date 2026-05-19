@@ -6,19 +6,25 @@ Projeto académico de LTW (Linguagens e Tecnologias Web) — Faculdade de Engenh
 
 ## Como abrir
 
-Abrir diretamente os ficheiros `landingpage.html`, `classes.html` e `trainers.html` num browser.
+Como agora as páginas usam templates PHP, é preciso abrir através de um servidor PHP:
 
+```bash
+php -S localhost:8000
+```
 
-Não é necessário servidor, PHP ou JavaScript para esta primeira entrega.
+Depois abrir `http://localhost:8000/landingpage.php` no browser.
 
 
 ## Estrutura de Ficheiros
 
 ```
 /
-├── landingpage.html    ← Landing page (página inicial)
-├── classes.html        ← Listagem de aulas 
-├── login.html       ← Perfis de treinadores 
+├── landingpage.php    ← Landing page (página inicial)
+├── classes.php        ← Listagem de aulas 
+├── login.php          ← Página de login
+├── templates/
+│   ├── header.php     ← Cabeçalho, navegação e imports CSS comuns
+│   └── footer.php     ← Rodapé comum
 │
 ├── css/
 │   ├── base.css        ← Variáveis, reset e estilos de elementos HTML
@@ -41,9 +47,9 @@ Não é necessário servidor, PHP ou JavaScript para esta primeira entrega.
 
 ## Páginas para a 1ª Entrega
 
-| `landingpage.html` | [nome] | ✅ HTML + CSS |
-| `classes.html` | [nome] |  ✅ HTML + CSS |
-| `login.html` | [nome] | ✅ HTML + CSS |
+| `landingpage.php` | [nome] | ✅ PHP + HTML + CSS |
+| `classes.php` | [nome] |  ✅ PHP + HTML + CSS |
+| `login.php` | [nome] | ✅ PHP + HTML + CSS |
 
 ## Organização do CSS
 
@@ -53,5 +59,4 @@ O CSS está dividido em 3 camadas:
 
 2. **`css/components.css`** — componentes reutilizáveis partilhados entre todas as páginas.
 
-3. **`css/[pagina].css`** — estilos específicos de cada página (header, hero, secções únicas). Mantido o mais pequeno possível.
-
+3. **`css/[pagina].css`** — estilos específicos de cada página. Mantido o mais pequeno possível.

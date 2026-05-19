@@ -1,0 +1,62 @@
+<?php
+$pageTitle = $pageTitle ?? 'LiftToBig';
+$pageStyles = $pageStyles ?? [];
+$activePage = $activePage ?? '';
+
+$navLinks = [
+  'home' => ['label' => 'Home', 'href' => 'landingpage.php'],
+  'classes' => ['label' => 'Aulas', 'href' => 'classes.php'],
+  'trainers' => ['label' => 'Treinadores', 'href' => 'trainers.php'],
+  'schedule' => ['label' => 'Horario', 'href' => 'schedule.php'],
+];
+?>
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><?= htmlspecialchars($pageTitle) ?></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <?php foreach ($pageStyles as $style): ?>
+    <link rel="stylesheet" href="<?= htmlspecialchars($style) ?>" />
+  <?php endforeach; ?>
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <input type="checkbox" id="menu-toggle" class="menu-checkbox" />
+    <div class="container header-inner">
+
+      <a href="landingpage.php" class="logo" aria-label="LiftToBig - pagina inicial">
+        <span class="logo-icon" aria-hidden="true">LB</span>
+        LiftToBig
+      </a>
+
+      <label for="menu-toggle" class="nav-toggle">
+        <span class="visually-hidden">Abrir/fechar menu</span>
+      </label>
+
+      <nav class="main-nav" aria-label="Navegacao principal">
+        <ul class="nav-links">
+          <?php foreach ($navLinks as $key => $link): ?>
+            <li>
+              <a href="<?= htmlspecialchars($link['href']) ?>" class="<?= $activePage === $key ? 'active' : '' ?>">
+                <?= htmlspecialchars($link['label']) ?>
+              </a>
+            </li>
+          <?php endforeach; ?>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="login.php" class="nav-signin">Entrar</a>
+        <a href="register.php" class="btn btn-primary btn-sm">Join Now</a>
+      </div>
+
+    </div>
+  </header>

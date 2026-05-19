@@ -1,48 +1,9 @@
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aulas — LiftToBig</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/base.css" />
-  <link rel="stylesheet" href="css/components.css" />
-  <link rel="stylesheet" href="css/classes.css" />
-  <link rel="stylesheet" href="css/responsive.css"/>
-</head>
-<body>
-
-   <header class="site-header">
-  <input type="checkbox" id="menu-toggle" class="menu-checkbox" />
-  <div class="container header-inner">
-
-    <a href="landingpage.html" class="logo" aria-label="LiftToBig — página inicial">
-      <span class="logo-icon" aria-hidden="true">LB</span>
-      LiftToBig
-    </a>
-
-    <label for="menu-toggle" class="nav-toggle">
-      <span class="visually-hidden">Abrir/fechar menu</span>
-    </label>
-
-    <nav class="main-nav" aria-label="Navegação principal">
-      <ul class="nav-links">
-        <li><a href="landingpage.html">Home</a></li>
-        <li><a href="classes.html" class="active" >Aulas</a></li>
-        <li><a href="trainers.html">Treinadores</a></li>
-        <li><a href="schedule.html">Horário</a></li>
-      </ul>
-    </nav>
-
-    <div class="nav-actions">
-      <a href="login.html" class="nav-signin">Entrar</a>
-      <a href="register.html" class="btn btn-primary btn-sm">Join Now</a>
-    </div>
-
-  </div>
-</header>
+<?php
+$pageTitle = 'Aulas - LiftToBig';
+$pageStyles = ['css/classes.css'];
+$activePage = 'classes';
+require __DIR__ . '/templates/header.php';
+?>
 
   <main>
     <section class="classes-hero">
@@ -238,71 +199,4 @@
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-grid">
-
-      <div class="footer-brand">
-        <a href="landingpage.html" class="logo">
-          <span class="logo-icon">LB</span>
-          LiftToBig
-        </a>
-        <p>
-          Eleva a tua jornada de fitness com tecnologia e comunidade.
-          Os teus objetivos, o nosso foco.
-        </p>
-        <nav>
-          <ul class="footer-social">
-            <li><a href="#">f</a></li>
-            <li><a href="#">&#9419;</a></li>
-            <li><a href="#">X</a></li>
-          </ul>
-        </nav>
-      </div>
-
-      <div class="footer-col">
-        <h4>Links Rápidos</h4>
-        <ul>
-          <li><a href="classes.html">Ver Aulas</a></li>
-          <li><a href="trainers.html">Encontrar Treinador</a></li>
-          <li><a href="schedule.html">O Meu Horário</a></li>
-          <li><a href="equipment.html">Estado do Ginásio</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h4>Suporte</h4>
-        <ul>
-          <li><a href="#">Centro de Ajuda</a></li>
-          <li><a href="#">Planos de Membro</a></li>
-          <li><a href="#">Protocolos de Segurança</a></li>
-          <li><a href="#">Contacta-nos</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h4>Contacto</h4>
-        <address>
-          <p class="footer-contact-item">
-            <span class="contact-icon">&#9679;</span>
-            FEUP
-          </p>
-          <p class="footer-contact-item">
-            <span class="contact-icon">&#9743;</span>
-            912 345 678
-          </p>
-          <p class="footer-contact-item">
-            <span class="contact-icon">&#9993;</span>
-            lifttobig@gmail.com
-          </p>
-        </address>
-      </div>
-
-    </div>
-
-    <div class="footer-bottom">
-      <p>&copy; 2025 LiftToBig. Todos os direitos reservados. &mdash; Projeto académico LTW.</p>
-    </div>
-  </footer>
-
-</body>
-</html>
+<?php require __DIR__ . '/templates/footer.php'; ?>
