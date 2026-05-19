@@ -42,6 +42,14 @@
   font-size: .8rem;
 }
 
+.logo-image {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  display: block;
+}
+
 .nav-links {
   display: flex;
   align-items: center;

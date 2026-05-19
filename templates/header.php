@@ -33,7 +33,7 @@ $navLinks = [
     <div class="container header-inner">
 
       <a href="landingpage.php" class="logo" aria-label="LiftToBig - pagina inicial">
-        <span class="logo-icon" aria-hidden="true">LB</span>
+        <img src="img/logo.jpg" alt="" class="logo-image" aria-hidden="true" />
         LiftToBig
       </a>
 
