@@ -3,6 +3,7 @@ $pageTitle = 'Entrar - LiftToBig';
 $pageStyles = ['../css/login.css'];
 $activePage = 'login';
 require __DIR__ . '/../templates/header.php';
+require __DIR__ . '/db.php';
 ?>
 
   <main>

@@ -1,4 +1,5 @@
 <?php
+require __DIR__ . '/db.php';
 $errors = [];
 $old = [
   'first_name' => '',
@@ -27,7 +28,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 
   if ($errors === []) {
-    // Aqui fica a criação da conta quando ligares o formulário à base de dados.
+    $db   = getDB();
+    $name = $old['first_name'] . ' ' . $old['last_name'];
+    $hash = password_hash($password, PASSWORD_BCRYPT);
+
+    $check = $db->prepare('SELECT id FROM user WHERE email = ?');
+    $check->execute([$old['email']]);
+    if ($check->fetch()) {
+      $errors[] = 'Este email já está registado.';
+    } else {
+      $stmt = $db->prepare('
+        INSERT INTO user (name, email, password_hash, role)
+        VALUES (?, ?, ?, ?)
+      ');
+      $stmt->execute([$name, $old['email'], $hash, 'member']);
+      header('Location: login.php');
+      exit;
+    }
   }
 }
 
