@@ -12,16 +12,22 @@ Como agora as páginas usam templates PHP, é preciso abrir através de um servi
 php -S localhost:8000
 ```
 
-Depois abrir `http://localhost:8000/landingpage.php` no browser.
+Depois abrir `http://localhost:8000/pages/landingpage.php` no browser.
 
 
 ## Estrutura de Ficheiros
 
 ```
 /
-├── landingpage.php    ← Landing page (página inicial)
-├── classes.php        ← Listagem de aulas 
-├── login.php          ← Página de login
+├── pages/
+│   ├── index.php       ← Redireciona para a landing page
+│   ├── landingpage.php ← Landing page (página inicial)
+│   ├── classes.php     ← Listagem de aulas
+│   ├── class.php       ← Detalhe de uma aula
+│   ├── trainers.php    ← Listagem de treinadores
+│   ├── trainer.php     ← Perfil de um treinador
+│   ├── login.php       ← Página de login
+│   └── register.php    ← Página de registo
 ├── templates/
 │   ├── header.php     ← Cabeçalho, navegação e imports CSS comuns
 │   └── footer.php     ← Rodapé comum
@@ -29,9 +35,11 @@ Depois abrir `http://localhost:8000/landingpage.php` no browser.
 ├── css/
 │   ├── base.css        ← Variáveis, reset e estilos de elementos HTML
 │   ├── components.css  ← Componentes reutilizáveis (botões, cards, badges, forms…)
-│   ├── index.css       ← Estilos específicos da landing page
+│   ├── landingpage.css ← Estilos específicos da landing page
 │   ├── classes.css     ← Estilos específicos da página de aulas
-│   └── login.css    ← Estilos específicos da página de login
+│   ├── class.css       ← Estilos específicos do detalhe de uma aula
+│   ├── trainers.css    ← Estilos específicos das páginas de treinadores
+│   └── login.css       ← Estilos específicos da página de login/registo
 │
 └── img/                ← Imagens 
     ├── hero-athlete.jpg
@@ -47,9 +55,9 @@ Depois abrir `http://localhost:8000/landingpage.php` no browser.
 
 ## Páginas para a 1ª Entrega
 
-| `landingpage.php` | [nome] | ✅ PHP + HTML + CSS |
-| `classes.php` | [nome] |  ✅ PHP + HTML + CSS |
-| `login.php` | [nome] | ✅ PHP + HTML + CSS |
+| `pages/landingpage.php` | [nome] | ✅ PHP + HTML + CSS |
+| `pages/classes.php` | [nome] |  ✅ PHP + HTML + CSS |
+| `pages/login.php` | [nome] | ✅ PHP + HTML + CSS |
 
 ## Organização do CSS
 

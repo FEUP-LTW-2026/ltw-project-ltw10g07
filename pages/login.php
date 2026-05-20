@@ -1,8 +1,8 @@
 <?php
 $pageTitle = 'Entrar - LiftToBig';
-$pageStyles = ['css/login.css'];
+$pageStyles = ['../css/login.css'];
 $activePage = 'login';
-require __DIR__ . '/templates/header.php';
+require __DIR__ . '/../templates/header.php';
 ?>
 
   <main>
@@ -39,4 +39,4 @@ require __DIR__ . '/templates/header.php';
     </section>
   </main>
 
-<?php require __DIR__ . '/templates/footer.php'; ?>
+<?php require __DIR__ . '/../templates/footer.php'; ?>

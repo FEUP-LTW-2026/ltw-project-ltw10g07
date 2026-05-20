@@ -256,10 +256,26 @@
   color: var(--color-success);
   border-color: #bbf7d0;
 }
+.badge-success {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+  border-color: #bbf7d0;
+}
 .badge-amber {
   background: var(--color-warning-bg);
   color: var(--color-warning);
   border-color: #fed7aa;
+}
+.badge-warning,
+.badge-accent {
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+  border-color: #fed7aa;
+}
+.badge-danger {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fecaca;
 }
 
 /* Avatares simples, normalmente fotos de treinadores. */

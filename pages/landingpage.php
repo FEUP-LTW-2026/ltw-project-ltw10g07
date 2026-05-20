@@ -1,8 +1,8 @@
 <?php
 $pageTitle = 'LiftToBig - Ginasio & Gestao Online';
-$pageStyles = ['css/index.css'];
+$pageStyles = ['../css/landingpage.css'];
 $activePage = 'home';
-require __DIR__ . '/templates/header.php';
+require __DIR__ . '/../templates/header.php';
 ?>
 
 
@@ -55,7 +55,7 @@ require __DIR__ . '/templates/header.php';
         <!-- Imagem principal -->
         <div class="hero-image-wrap" aria-hidden="true">
          
-            <img src="img/hero-athlete.jpg" alt="Atleta a treinar no ginásio" class="hero-img" />
+            <img src="../img/hero-athlete.jpg" alt="Atleta a treinar no ginásio" class="hero-img" />
           
 
           <!-- Card flutuante -->
@@ -94,7 +94,7 @@ require __DIR__ . '/templates/header.php';
           <li class="class-card">
             <div class="class-img-wrap">
               
-              <img src="img/powerhit.jpg" alt="Aula de Power HIIT" />
+              <img src="../img/powerhit.jpg" alt="Aula de Power HIIT" />
               <div class="class-badge-img">
                 <span class="badge badge-blue">Cardio</span>
               </div>
@@ -118,7 +118,7 @@ require __DIR__ . '/templates/header.php';
           <!--Yoga-->
           <li class="class-card">
             <div class="class-img-wrap">
-              <img src="img/yoga.jpg" alt="yoga" />
+              <img src="../img/yoga.jpg" alt="yoga" />
               <div class="class-badge-img">
                 <span class="badge badge-green">Yoga</span>
               </div>
@@ -141,7 +141,7 @@ require __DIR__ . '/templates/header.php';
           <!--Zumba -->
           <li class="class-card">
             <div class="class-img-wrap">
-              <img src="img/zumba.jpg" alt="zumba" />
+              <img src="../img/zumba.jpg" alt="zumba" />
               <div class="class-badge-img">
                 <span class="badge badge-amber">Cardio</span>
               </div>
@@ -187,7 +187,7 @@ require __DIR__ . '/templates/header.php';
         <ul class="trainers-grid">
 
           <li class="trainer-card">
-            <img src="img/rui-costa.jpg" alt="Rui Costa" class="avatar" />
+            <img src="../img/rui-costa.jpg" alt="Rui Costa" class="avatar" />
             <div class="trainer-info">
               <h3>Rui Costa</h3>
               <p class="trainer-specialty">Personal Trainer · HIIT</p>
@@ -196,7 +196,7 @@ require __DIR__ . '/templates/header.php';
           </li>
 
           <li class="trainer-card">
-            <img src="img/andre.jpg" alt="André Brás" class="avatar" />
+            <img src="../img/andre.jpg" alt="André Brás" class="avatar" />
             <div class="trainer-info">
               <h3>André Brás</h3>
               <p class="trainer-specialty">Força &amp; Condicionamento</p>
@@ -205,7 +205,7 @@ require __DIR__ . '/templates/header.php';
           </li>
 
           <li class="trainer-card">
-            <img src="img/tomas.jpg" alt="Tomás" class="avatar" />
+            <img src="../img/tomas.jpg" alt="Tomás" class="avatar" />
             <div class="trainer-info">
               <h3>Tomás </h3>
               <p class="trainer-specialty">Yoga Master</p>
@@ -241,4 +241,4 @@ require __DIR__ . '/templates/header.php';
   </main>
 
 
-<?php require __DIR__ . '/templates/footer.php'; ?>
+<?php require __DIR__ . '/../templates/footer.php'; ?>

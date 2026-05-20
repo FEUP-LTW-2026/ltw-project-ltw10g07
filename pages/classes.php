@@ -1,8 +1,8 @@
 <?php
 $pageTitle = 'Aulas - LiftToBig';
-$pageStyles = ['css/classes.css'];
+$pageStyles = ['../css/classes.css'];
 $activePage = 'classes';
-require __DIR__ . '/templates/header.php';
+require __DIR__ . '/../templates/header.php';
 ?>
 
   <main>
@@ -78,7 +78,7 @@ require __DIR__ . '/templates/header.php';
           
           <li class="class-card">
             <div class="class-img-wrap">
-              <img src="img/hiit.jpg" alt="HIIT Intensity Max" />
+              <img src="../img/hiit.jpg" alt="HIIT Intensity Max" />
               <span class="badge badge-accent card-status">4 vagas</span>
             </div>
             <div class="class-card-body">
@@ -90,14 +90,14 @@ require __DIR__ . '/templates/header.php';
               <p class="class-time">08:30 - 45 min</p>
               <div class="class-card-footer">
                 <span class="trainer-name">Rui Costa</span>
-                <a href="#" class="btn btn-outline btn-sm">Ver Detalhes</a>
+                <a href="class.php?id=1" class="btn btn-outline btn-sm">Ver Detalhes</a>
               </div>
             </div>
           </li>
 
           <li class="class-card">
             <div class="class-img-wrap">
-              <img src="img/yoga.jpg" alt="Zen Yoga Flow" />
+              <img src="../img/yoga.jpg" alt="Zen Yoga Flow" />
               <span class="badge badge-success card-status">12 vagas</span>
             </div>
             <div class="class-card-body">
@@ -109,14 +109,14 @@ require __DIR__ . '/templates/header.php';
               <p class="class-time">10:00 - 60 min</p>
               <div class="class-card-footer">
                 <span class="trainer-name">Tomás</span>
-                <a href="#" class="btn btn-outline btn-sm">Ver Detalhes</a>
+                <a href="class.php?id=2" class="btn btn-outline btn-sm">Ver Detalhes</a>
               </div>
             </div>
           </li>
 
           <li class="class-card">
             <div class="class-img-wrap">
-              <img src="img/cycling.jpg" alt="Cycle Rush 300" />
+              <img src="../img/cycling.jpg" alt="Cycle Rush 300" />
               <span class="badge badge-accent card-status">6 vagas</span>
             </div>
             <div class="class-card-body">
@@ -128,14 +128,14 @@ require __DIR__ . '/templates/header.php';
               <p class="class-time">17:00 - 45 min</p>
               <div class="class-card-footer">
                 <span class="trainer-name">André Brás</span>
-                <a href="#" class="btn btn-outline btn-sm">Ver Detalhes</a>
+                <a href="class.php?id=4" class="btn btn-outline btn-sm">Ver Detalhes</a>
               </div>
             </div>
           </li>
 
           <li class="class-card">
             <div class="class-img-wrap">
-              <img src="img/mobility.jpg" alt="Mobility & Core" />
+              <img src="../img/mobility.jpg" alt="Mobility & Core" />
               <span class="badge badge-success card-status">8 vagas</span>
             </div>
             <div class="class-card-body">
@@ -147,14 +147,14 @@ require __DIR__ . '/templates/header.php';
               <p class="class-time">18:30 - 40 min</p>
               <div class="class-card-footer">
                 <span class="trainer-name">Tomás</span>
-                <a href="#" class="btn btn-outline btn-sm">Ver Detalhes</a>
+                <a href="class.php?id=5" class="btn btn-outline btn-sm">Ver Detalhes</a>
               </div>
             </div>
           </li>
 
           <li class="class-card">
             <div class="class-img-wrap">
-              <img src="img/barbell.jpg" alt="Power Barbell" />
+              <img src="../img/barbell.jpg" alt="Power Barbell" />
               <span class="badge badge-danger card-status">2 vagas</span>
             </div>
             <div class="class-card-body">
@@ -166,14 +166,14 @@ require __DIR__ . '/templates/header.php';
               <p class="class-time">12:15 - 50 min</p>
               <div class="class-card-footer">
                 <span class="trainer-name">André Brás</span>
-                <a href="#" class="btn btn-outline btn-sm">Ver Detalhes</a>
+                <a href="class.php?id=3" class="btn btn-outline btn-sm">Ver Detalhes</a>
               </div>
             </div>
           </li>
 
           <li class="class-card">
             <div class="class-img-wrap">
-              <img src="img/boxing.jpg" alt="Boxing" />
+              <img src="../img/boxing.jpg" alt="Boxing" />
               <span class="badge badge-accent card-status">5 vagas</span>
             </div>
             <div class="class-card-body">
@@ -185,7 +185,7 @@ require __DIR__ . '/templates/header.php';
               <p class="class-time">19:00 - 60 min</p>
               <div class="class-card-footer">
                 <span class="trainer-name">Rui Costa</span>
-                <a href="#" class="btn btn-outline btn-sm">Ver Detalhes</a>
+                <a href="class.php?id=6" class="btn btn-outline btn-sm">Ver Detalhes</a>
               </div>
             </div>
           </li>
@@ -199,4 +199,4 @@ require __DIR__ . '/templates/header.php';
     </section>
   </main>
 
-<?php require __DIR__ . '/templates/footer.php'; ?>
+<?php require __DIR__ . '/../templates/footer.php'; ?>

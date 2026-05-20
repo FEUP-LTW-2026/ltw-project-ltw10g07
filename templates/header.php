@@ -19,12 +19,12 @@ $navLinks = [
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/base.css" />
-  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/components.css" />
   <?php foreach ($pageStyles as $style): ?>
     <link rel="stylesheet" href="<?= htmlspecialchars($style) ?>" />
   <?php endforeach; ?>
-  <link rel="stylesheet" href="css/responsive.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
 </head>
 <body>
 
@@ -33,7 +33,7 @@ $navLinks = [
     <div class="container header-inner">
 
       <a href="landingpage.php" class="logo" aria-label="LiftToBig - pagina inicial">
-        <img src="img/logo.jpg" alt="" class="logo-image" aria-hidden="true" />
+        <img src="../img/logo.jpg" alt="" class="logo-image" aria-hidden="true" />
         LiftToBig
       </a>
 
