@@ -2,46 +2,12 @@
 $pageTitle = 'Treinadores - LiftToBig';
 $pageStyles = ['../css/trainers.css'];
 $activePage = 'trainers';
+require_once __DIR__ . '/../database/connection.php';
+require_once __DIR__ . '/../database/Trainer.php';
+require_once __DIR__ . '/../templates/trainers.php';
 
-// Dados mockados — trocar por query à BD depois
-$trainers = [
-  [
-    'id'         => 1,
-    'name'       => 'Rui Costa',
-    'slug'       => 'rui-costa',
-    'photo'      => '../img/rui-costa.jpg',
-    'specialty'  => 'Personal Trainer · HIIT',
-    'rating'     => 4.9,
-    'sessions'   => 312,
-    'experience' => '8 anos',
-    'badges'     => ['HIIT', 'Cardio', 'Perda de Peso'],
-    'bio'        => 'Especialista em treino de alta intensidade com foco em resultados rápidos e sustentáveis. Certificado pela NSCA.',
-  ],
-  [
-    'id'         => 2,
-    'name'       => 'André Brás',
-    'slug'       => 'andre-bras',
-    'photo'      => '../img/andre.jpg',
-    'specialty'  => 'Força & Condicionamento',
-    'rating'     => 5.0,
-    'sessions'   => 487,
-    'experience' => '12 anos',
-    'badges'     => ['Força', 'Powerlifting', 'Hipertrofia'],
-    'bio'        => 'Ex-atleta de powerlifting, agora dedicado a ajudar outros a atingirem o seu máximo potencial de força e massa muscular.',
-  ],
-  [
-    'id'         => 3,
-    'name'       => 'Tomás Ferreira',
-    'slug'       => 'tomas-ferreira',
-    'photo'      => '../img/tomas.jpg',
-    'specialty'  => 'Yoga Master',
-    'rating'     => 4.8,
-    'sessions'   => 256,
-    'experience' => '10 anos',
-    'badges'     => ['Yoga', 'Mobilidade', 'Meditação'],
-    'bio'        => 'Mestre em Hatha e Vinyasa Yoga, certificado pela Yoga Alliance. Apaixonado por bem-estar mental e físico.',
-  ],
-];
+$db = getDB();
+$trainers = Trainer::getAll($db);
 
 require __DIR__ . '/../templates/header.php';
 ?>
@@ -99,48 +65,7 @@ require __DIR__ . '/../templates/header.php';
 
         <ul class="trainers-grid">
           <?php foreach ($trainers as $trainer): ?>
-          <li class="trainer-card-full">
-            <div class="trainer-photo-wrap">
-              <img src="<?= htmlspecialchars($trainer['photo']) ?>" alt="<?= htmlspecialchars($trainer['name']) ?>" class="trainer-photo" />
-            </div>
-            <div class="trainer-body">
-              <div class="trainer-header">
-                <div>
-                  <h3><?= htmlspecialchars($trainer['name']) ?></h3>
-                  <p class="trainer-specialty"><?= htmlspecialchars($trainer['specialty']) ?></p>
-                </div>
-                <span class="trainer-rating">&#9733; <?= number_format($trainer['rating'], 1) ?></span>
-              </div>
-
-              <p class="trainer-bio"><?= htmlspecialchars($trainer['bio']) ?></p>
-
-              <div class="trainer-badges">
-                <?php foreach ($trainer['badges'] as $badge): ?>
-                  <span class="badge badge-blue"><?= htmlspecialchars($badge) ?></span>
-                <?php endforeach; ?>
-              </div>
-
-              <div class="trainer-stats">
-                <div class="trainer-stat">
-                  <span class="stat-value"><?= $trainer['sessions'] ?>+</span>
-                  <span class="stat-label">Sessões</span>
-                </div>
-                <div class="trainer-stat">
-                  <span class="stat-value"><?= htmlspecialchars($trainer['experience']) ?></span>
-                  <span class="stat-label">Experiência</span>
-                </div>
-                <div class="trainer-stat">
-                  <span class="stat-value">&#9733; <?= number_format($trainer['rating'], 1) ?></span>
-                  <span class="stat-label">Avaliação</span>
-                </div>
-              </div>
-
-              <div class="trainer-actions">
-                <a href="trainer.php?id=<?= $trainer['id'] ?>" class="btn btn-outline btn-sm">Ver Perfil</a>
-                <a href="classes.php?trainer=<?= urlencode($trainer['name']) ?>" class="btn btn-primary btn-sm">Ver Aulas</a>
-              </div>
-            </div>
-          </li>
+            <?php drawTrainerCard($trainer); ?>
           <?php endforeach; ?>
         </ul>
 

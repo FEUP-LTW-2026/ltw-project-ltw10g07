@@ -1,7 +1,11 @@
 <?php
+require_once __DIR__ . '/../utils/session.php';
+
 $pageTitle = $pageTitle ?? 'LiftToBig';
 $pageStyles = $pageStyles ?? [];
 $activePage = $activePage ?? '';
+$isLoggedIn = isLoggedIn();
+$userName = getUserName();
 
 $navLinks = [
   'home' => ['label' => 'Home', 'href' => 'landingpage.php'],
@@ -54,8 +58,13 @@ $navLinks = [
       </nav>
 
       <div class="nav-actions">
-        <a href="login.php" class="nav-signin">Entrar</a>
-        <a href="register.php" class="btn btn-primary btn-sm">Join Now</a>
+        <?php if ($isLoggedIn): ?>
+          <span class="nav-user">Olá, <?= htmlspecialchars($userName ?? 'membro') ?></span>
+          <a href="../actions/action_logout.php" class="btn btn-outline btn-sm">Sair</a>
+        <?php else: ?>
+          <a href="login.php" class="nav-signin">Entrar</a>
+          <a href="register.php" class="btn btn-primary btn-sm">Join Now</a>
+        <?php endif; ?>
       </div>
 
     </div>

@@ -68,3 +68,5 @@ O CSS está dividido em 3 camadas:
 2. **`css/components.css`** — componentes reutilizáveis partilhados entre todas as páginas.
 
 3. **`css/[pagina].css`** — estilos específicos de cada página. Mantido o mais pequeno possível.
+
+Não foi implementado a criação de contas para Trainers/Staff, foram injetados os dados, ainda vai ser implementado.

@@ -1,52 +1,14 @@
 <?php
-require __DIR__ . '/db.php';
-$errors = [];
+require_once __DIR__ . '/../utils/session.php';
+
 $old = [
   'first_name' => '',
   'last_name' => '',
   'email' => '',
   'phone' => '',
 ];
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $old = [
-    'first_name' => trim($_POST['first_name'] ?? ''),
-    'last_name' => trim($_POST['last_name'] ?? ''),
-    'email' => trim($_POST['email'] ?? ''),
-    'phone' => trim($_POST['phone'] ?? ''),
-  ];
-
-  $password = $_POST['password'] ?? '';
-  $passwordConfirm = $_POST['password_confirm'] ?? '';
-
-  if ($password !== $passwordConfirm) {
-    $errors[] = 'As palavras-passe não coincidem.';
-  }
-
-  if (strlen($password) < 8) {
-    $errors[] = 'A palavra-passe deve ter pelo menos 8 caracteres.';
-  }
-
-  if ($errors === []) {
-    $db   = getDB();
-    $name = $old['first_name'] . ' ' . $old['last_name'];
-    $hash = password_hash($password, PASSWORD_BCRYPT);
-
-    $check = $db->prepare('SELECT id FROM user WHERE email = ?');
-    $check->execute([$old['email']]);
-    if ($check->fetch()) {
-      $errors[] = 'Este email já está registado.';
-    } else {
-      $stmt = $db->prepare('
-        INSERT INTO user (name, email, password_hash, role)
-        VALUES (?, ?, ?, ?)
-      ');
-      $stmt->execute([$name, $old['email'], $hash, 'member']);
-      header('Location: login.php');
-      exit;
-    }
-  }
-}
+$old = getOldInput($old);
+$errors = getFlashMessages('errors');
 
 $pageTitle = 'Criar Conta - LiftToBig';
 $pageStyles = ['../css/login.css'];
@@ -74,7 +36,7 @@ require __DIR__ . '/../templates/header.php';
             </div>
           <?php endif; ?>
 
-          <form action="register.php" method="POST" class="auth-form">
+          <form action="../actions/action_register.php" method="POST" class="auth-form">
 
             <div class="form-row">
               <div class="form-group">

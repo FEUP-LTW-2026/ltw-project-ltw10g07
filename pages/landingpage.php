@@ -2,6 +2,13 @@
 $pageTitle = 'LiftToBig - Ginasio & Gestao Online';
 $pageStyles = ['../css/landingpage.css'];
 $activePage = 'home';
+require_once __DIR__ . '/../database/connection.php';
+require_once __DIR__ . '/../database/Trainer.php';
+require_once __DIR__ . '/../templates/trainers.php';
+
+$db = getDB();
+$featuredTrainers = Trainer::getFeatured($db);
+
 require __DIR__ . '/../templates/header.php';
 ?>
 
@@ -185,36 +192,9 @@ require __DIR__ . '/../templates/header.php';
 
         <!-- Grid de trainers à direita -->
         <ul class="trainers-grid">
-
-          <li class="trainer-card">
-            <img src="../img/rui-costa.jpg" alt="Rui Costa" class="avatar" />
-            <div class="trainer-info">
-              <h3>Rui Costa</h3>
-              <p class="trainer-specialty">Personal Trainer · HIIT</p>
-              <p class="top-rated-tag">&#9733; Top Rated (4.9)</p>
-            </div>
-          </li>
-
-          <li class="trainer-card">
-            <img src="../img/andre.jpg" alt="André Brás" class="avatar" />
-            <div class="trainer-info">
-              <h3>André Brás</h3>
-              <p class="trainer-specialty">Força &amp; Condicionamento</p>
-              <p class="top-rated-tag">&#9733; Top Rated (5)</p>
-            </div>
-          </li>
-
-          <li class="trainer-card">
-            <img src="../img/tomas.jpg" alt="Tomás" class="avatar" />
-            <div class="trainer-info">
-              <h3>Tomás </h3>
-              <p class="trainer-specialty">Yoga Master</p>
-              <p class="top-rated-tag">&#9733; Top Rated (4.8)</p>
-            </div>
-          </li>
-
-         
-
+          <?php foreach ($featuredTrainers as $trainer): ?>
+            <?php drawTrainerPreviewCard($trainer); ?>
+          <?php endforeach; ?>
         </ul>
 
       </div>

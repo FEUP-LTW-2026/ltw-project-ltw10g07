@@ -86,6 +86,13 @@
 }
 .nav-signin:hover { color: var(--color-primary); }
 
+.nav-user {
+  font-size: .875rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
 .site-footer {
   background: var(--color-bg);
   border-top: 1px solid var(--color-border);

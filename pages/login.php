@@ -1,9 +1,14 @@
 <?php
+require_once __DIR__ . '/../utils/session.php';
+
+$old = getOldInput(['email' => '']);
+$errors = getFlashMessages('errors');
+$successMessages = getFlashMessages('success');
+
 $pageTitle = 'Entrar - LiftToBig';
 $pageStyles = ['../css/login.css'];
 $activePage = 'login';
 require __DIR__ . '/../templates/header.php';
-require __DIR__ . '/db.php';
 ?>
 
   <main>
@@ -16,10 +21,26 @@ require __DIR__ . '/db.php';
         </div>
 
         <div class="auth-form-wrapper">
-          <form action="#" method="POST" class="auth-form">
+          <?php if ($errors !== []): ?>
+            <div class="form-alert form-alert-error" role="alert">
+              <?php foreach ($errors as $error): ?>
+                <p><?= htmlspecialchars($error) ?></p>
+              <?php endforeach; ?>
+            </div>
+          <?php endif; ?>
+
+          <?php if ($successMessages !== []): ?>
+            <div class="form-alert form-alert-success" role="status">
+              <?php foreach ($successMessages as $message): ?>
+                <p><?= htmlspecialchars($message) ?></p>
+              <?php endforeach; ?>
+            </div>
+          <?php endif; ?>
+
+          <form action="../actions/action_login.php" method="POST" class="auth-form">
             <div class="form-group">
               <label for="email">Email</label>
-              <input type="email" id="email" name="email" placeholder="exemplo@email.com" required />
+              <input type="email" id="email" name="email" placeholder="exemplo@email.com" value="<?= htmlspecialchars($old['email']) ?>" required />
             </div>
 
             <div class="form-group">
