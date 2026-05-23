@@ -19,6 +19,12 @@ Depois abrir `http://localhost:8000/pages/landingpage.php` no browser.
 
 ```
 /
+├── actions/
+│   ├── action_login.php    ← Processa o formulário de login
+│   ├── action_logout.php   ← Termina a sessão do utilizador
+│   ├── action_register.php ← Processa o formulário de registo
+│   └── action_update_account.php ← Atualiza os detalhes da conta
+│
 ├── pages/
 │   ├── index.php       ← Redireciona para a landing page
 │   ├── landingpage.php ← Landing page (página inicial)
@@ -27,10 +33,22 @@ Depois abrir `http://localhost:8000/pages/landingpage.php` no browser.
 │   ├── trainers.php    ← Listagem de treinadores
 │   ├── trainer.php     ← Perfil de um treinador
 │   ├── login.php       ← Página de login
-│   └── register.php    ← Página de registo
+│   ├── register.php    ← Página de registo
+│   └── account.php     ← Página de edição da conta
 ├── templates/
-│   ├── header.php     ← Cabeçalho, navegação e imports CSS comuns
-│   └── footer.php     ← Rodapé comum
+│   ├── header.php      ← Cabeçalho, navegação e imports CSS comuns
+│   ├── footer.php      ← Rodapé comum
+│   └── trainers.php    ← Template com dados/listagem de treinadores
+│
+├── database/
+│   ├── connection.php  ← Ligação à base de dados SQLite
+│   ├── database.sql    ← Script de criação/inicialização da base de dados
+│   ├── ltw.db          ← Base de dados SQLite do projeto
+│   ├── Trainer.php     ← Modelo e operações relacionadas com treinadores
+│   └── User.php        ← Modelo e operações relacionadas com utilizadores
+│
+├── utils/
+│   └── session.php     ← Funções auxiliares para gestão de sessões
 │
 ├── css/
 │   ├── base.css        ← Variáveis, reset e estilos de elementos HTML
@@ -39,17 +57,24 @@ Depois abrir `http://localhost:8000/pages/landingpage.php` no browser.
 │   ├── classes.css     ← Estilos específicos da página de aulas
 │   ├── class.css       ← Estilos específicos do detalhe de uma aula
 │   ├── trainers.css    ← Estilos específicos das páginas de treinadores
-│   └── login.css       ← Estilos específicos da página de login/registo
+│   ├── login.css       ← Estilos específicos da página de login/registo
+│   ├── account.css     ← Estilos específicos da página de conta
+│   └── responsive.css  ← Ajustes de responsividade partilhados
 │
 └── img/                ← Imagens 
     ├── hero-athlete.jpg
+    ├── barbell.jpg
+    ├── logo.jpg
     ├── powerhit.jpg
     ├── yoga.jpg
     ├── zumba.jpg
+    ├── cycling.jpg
+    ├── hiit.jpg
+    ├── mobility.jpg
+    ├── boxing.jpg
     ├── rui-costa.jpg
     ├── andre.jpg
     └── tomas.jpg
-    └── ...
 ```
 
 

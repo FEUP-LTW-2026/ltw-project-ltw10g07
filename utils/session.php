@@ -60,6 +60,11 @@ function getUserName(): ?string {
     return $_SESSION['user_name'] ?? null;
 }
 
+function getUserId(): ?int {
+    startSession();
+    return isset($_SESSION['user_id']) ? (int) $_SESSION['user_id'] : null;
+}
+
 function getUserRole(): ?string {
     startSession();
     return $_SESSION['user_role'] ?? null;

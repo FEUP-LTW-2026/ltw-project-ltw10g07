@@ -59,8 +59,16 @@ $navLinks = [
 
       <div class="nav-actions">
         <?php if ($isLoggedIn): ?>
-          <span class="nav-user">Olá, <?= htmlspecialchars($userName ?? 'membro') ?></span>
-          <a href="../actions/action_logout.php" class="btn btn-outline btn-sm">Sair</a>
+          <details class="account-menu">
+            <summary class="account-menu-toggle" aria-label="Abrir menu da conta">
+              <span class="account-menu-icon" aria-hidden="true"></span>
+              <span class="nav-user">Olá, <?= htmlspecialchars($userName ?? 'membro') ?></span>
+            </summary>
+            <div class="account-menu-panel">
+              <a href="account.php" class="<?= $activePage === 'account' ? 'active' : '' ?>">Editar conta</a>
+              <a href="../actions/action_logout.php">Sair</a>
+            </div>
+          </details>
         <?php else: ?>
           <a href="login.php" class="nav-signin">Entrar</a>
           <a href="register.php" class="btn btn-primary btn-sm">Join Now</a>
