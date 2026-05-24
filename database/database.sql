@@ -1,6 +1,7 @@
 PRAGMA foreign_keys = ON;
 
 DROP TABLE IF EXISTS review;
+DROP TABLE IF EXISTS trainer_review;
 DROP TABLE IF EXISTS enrollment;
 DROP TABLE IF EXISTS class_session;
 DROP TABLE IF EXISTS class;
@@ -27,6 +28,19 @@ CREATE TABLE trainer (
   certifications TEXT,
   rating REAL DEFAULT 0,
   FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
+);
+
+CREATE TABLE trainer_review (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  trainer_id INTEGER NOT NULL,
+  rating INTEGER NOT NULL CHECK (rating BETWEEN 0 AND 5),
+  comment TEXT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+  FOREIGN KEY (trainer_id) REFERENCES trainer(id) ON DELETE CASCADE,
+  UNIQUE(user_id, trainer_id)
 );
 
 CREATE TABLE class (

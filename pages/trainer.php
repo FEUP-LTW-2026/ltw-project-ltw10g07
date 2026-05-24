@@ -1,127 +1,64 @@
 <?php
-$pageTitle = 'Treinador - LiftToBig';
-$pageStyles = ['../css/trainers.css'];
-$activePage = 'trainers';
+require_once __DIR__ . '/../database/connection.php';
+require_once __DIR__ . '/../database/Trainer.php';
+require_once __DIR__ . '/../database/TrainerReview.php';
+require_once __DIR__ . '/../utils/session.php';
 
-// Dados mockados — trocar por query à BD depois
-$trainers = [
-  1 => [
-    'id'           => 1,
-    'name'         => 'Rui Costa',
-    'photo'        => '../img/rui-costa.jpg',
-    'specialty'    => 'Personal Trainer · HIIT',
-    'rating'       => 4.9,
-    'reviews_count'=> 87,
-    'sessions'     => 312,
-    'experience'   => '8 anos',
-    'badges'       => ['HIIT', 'Cardio', 'Perda de Peso'],
-    'bio'          => 'Especialista em treino de alta intensidade com foco em resultados rápidos e sustentáveis. Certificado pela NSCA, com formação em nutrição desportiva e biomecânica do movimento.',
-    'certifications' => ['NSCA – Certified Personal Trainer', 'Nutrição Desportiva (ISEF)', 'First Aid & CPR'],
-    'schedule'     => [
-      ['day' => 'Segunda', 'time' => '07:00 – 09:00'],
-      ['day' => 'Terça',   'time' => '18:00 – 21:00'],
-      ['day' => 'Quinta',  'time' => '07:00 – 09:00'],
-      ['day' => 'Sábado',  'time' => '09:00 – 12:00'],
-    ],
-    'classes' => [
-      ['name' => 'HIIT Intensity Max', 'time' => '08:30', 'duration' => '45 min', 'spots' => 4],
-      ['name' => 'Boxing Fundamentals', 'time' => '19:00', 'duration' => '60 min', 'spots' => 5],
-    ],
-    'reviews' => [
-      ['author' => 'Sofia C.', 'rating' => 5, 'text' => 'O Rui é incrível! Em 3 meses perdi 8kg e ganhei imenso condicionamento. Super motivador.'],
-      ['author' => 'Miguel R.', 'rating' => 5, 'text' => 'Treinos intensos mas muito bem estruturados. Nota-se que sabe o que faz.'],
-      ['author' => 'Ana L.',   'rating' => 4, 'text' => 'Muito bom treinador. As aulas de HIIT são desafiadoras mas valeu cada segundo.'],
-    ],
-  ],
-  2 => [
-    'id'           => 2,
-    'name'         => 'André Brás',
-    'photo'        => '../img/andre.jpg',
-    'specialty'    => 'Força & Condicionamento',
-    'rating'       => 5.0,
-    'reviews_count'=> 124,
-    'sessions'     => 487,
-    'experience'   => '12 anos',
-    'badges'       => ['Força', 'Powerlifting', 'Hipertrofia'],
-    'bio'          => 'Ex-atleta de powerlifting com participações em campeonatos nacionais. Agora dedica-se a ajudar outros a atingirem o seu máximo potencial de força e massa muscular, com metodologias baseadas em evidência.',
-    'certifications' => ['CSCS – Certified Strength & Conditioning Specialist', 'Powerlifting Coach Level 2 (FPP)', 'Corrective Exercise Specialist'],
-    'schedule'     => [
-      ['day' => 'Segunda',  'time' => '09:00 – 13:00'],
-      ['day' => 'Quarta',   'time' => '09:00 – 13:00'],
-      ['day' => 'Sexta',    'time' => '09:00 – 13:00'],
-      ['day' => 'Sábado',   'time' => '10:00 – 13:00'],
-    ],
-    'classes' => [
-      ['name' => 'Power Barbell', 'time' => '12:15', 'duration' => '50 min', 'spots' => 2],
-      ['name' => 'Cycle Rush 300', 'time' => '17:00', 'duration' => '45 min', 'spots' => 6],
-    ],
-    'reviews' => [
-      ['author' => 'Carlos M.', 'rating' => 5, 'text' => 'O André transformou completamente o meu agachamento. Técnica impecável, paciência infinita.'],
-      ['author' => 'Pedro S.',  'rating' => 5, 'text' => 'Melhor treinador de força que já tive. Programação inteligente e resultados reais.'],
-      ['author' => 'Joana F.',  'rating' => 5, 'text' => 'Comecei do zero e em 6 meses já faço 100kg no supino. Recomendo a toda a gente!'],
-    ],
-  ],
-  3 => [
-    'id'           => 3,
-    'name'         => 'Tomás Ferreira',
-    'photo'        => '../img/tomas.jpg',
-    'specialty'    => 'Yoga Master',
-    'rating'       => 4.8,
-    'reviews_count'=> 63,
-    'sessions'     => 256,
-    'experience'   => '10 anos',
-    'badges'       => ['Yoga', 'Mobilidade', 'Meditação'],
-    'bio'          => 'Mestre em Hatha e Vinyasa Yoga, certificado pela Yoga Alliance com 500 horas. Apaixonado pelo equilíbrio entre mente e corpo, oferece aulas que combinam movimento, respiração e consciência plena.',
-    'certifications' => ['Yoga Alliance RYT-500', 'Mindfulness-Based Stress Reduction (MBSR)', 'Mobility & Flexibility Specialist'],
-    'schedule'     => [
-      ['day' => 'Terça',   'time' => '07:00 – 10:00'],
-      ['day' => 'Quinta',  'time' => '07:00 – 10:00'],
-      ['day' => 'Sábado',  'time' => '08:00 – 11:00'],
-      ['day' => 'Domingo', 'time' => '09:00 – 11:00'],
-    ],
-    'classes' => [
-      ['name' => 'Zen Yoga Flow',  'time' => '10:00', 'duration' => '60 min', 'spots' => 12],
-      ['name' => 'Mobility & Core', 'time' => '18:30', 'duration' => '40 min', 'spots' => 8],
-    ],
-    'reviews' => [
-      ['author' => 'Rita A.',    'rating' => 5, 'text' => 'As aulas do Tomás são uma experiência única. Saio sempre renovada e em paz.'],
-      ['author' => 'Beatriz N.', 'rating' => 5, 'text' => 'Melhorei muito a minha flexibilidade e a minha postura em poucos meses.'],
-      ['author' => 'Diogo P.',   'rating' => 4, 'text' => 'Excelente para descomprimir do stress do trabalho. Muito recomendado.'],
-    ],
-  ],
-];
+$db = getDB();
+$trainerId = isset($_GET['id']) ? (int) $_GET['id'] : 1;
+$trainer = Trainer::findById($db, $trainerId);
 
-// Obter o ID do treinador da URL, default 1
-$trainer_id = isset($_GET['id']) ? (int) $_GET['id'] : 1;
-$trainer    = $trainers[$trainer_id] ?? $trainers[1];
+if ($trainer === null) {
+  header('Location: trainers.php');
+  exit;
+}
+
+$reviews = TrainerReview::getForTrainer($db, $trainerId);
+$existingReview = isLoggedIn() ? TrainerReview::findByUserAndTrainer($db, (int) getUserId(), $trainerId) : null;
+$old = getOldInput([
+  'rating' => $existingReview['rating'] ?? '5',
+  'comment' => $existingReview['comment'] ?? '',
+]);
+$errors = getFlashMessages('errors');
+$success = getFlashMessages('success');
+$canReview = isLoggedIn() && getUserRole() === 'member';
 
 $pageTitle = htmlspecialchars($trainer['name']) . ' - LiftToBig';
+$pageStyles = ['../css/trainers.css'];
+$activePage = 'trainers';
 
 require __DIR__ . '/../templates/header.php';
 ?>
 
   <main>
 
-    <!-- Perfil principal -->
     <section class="trainer-profile-hero" aria-labelledby="trainer-name-heading">
       <div class="container trainer-profile-inner">
 
         <div class="trainer-profile-photo-wrap">
-          <img
-            src="<?= htmlspecialchars($trainer['photo']) ?>"
-            alt="<?= htmlspecialchars($trainer['name']) ?>"
-            class="trainer-profile-photo"
-          />
+          <?php if (!empty($trainer['photo'])): ?>
+            <img
+              src="<?= htmlspecialchars($trainer['photo']) ?>"
+              alt="<?= htmlspecialchars($trainer['name']) ?>"
+              class="trainer-profile-photo"
+            />
+          <?php else: ?>
+            <div class="trainer-profile-photo trainer-profile-initials" aria-hidden="true">
+              <?= htmlspecialchars($trainer['initials']) ?>
+            </div>
+          <?php endif; ?>
         </div>
 
         <div class="trainer-profile-info">
           <a href="trainers.php" class="back-link">&#8592; Todos os Treinadores</a>
 
-          <div class="trainer-profile-badges">
-            <?php foreach ($trainer['badges'] as $badge): ?>
-              <span class="badge badge-blue"><?= htmlspecialchars($badge) ?></span>
-            <?php endforeach; ?>
-          </div>
+          <?php if ($trainer['badges'] !== []): ?>
+            <div class="trainer-profile-badges">
+              <?php foreach ($trainer['badges'] as $badge): ?>
+                <span class="badge badge-blue"><?= htmlspecialchars($badge) ?></span>
+              <?php endforeach; ?>
+            </div>
+          <?php endif; ?>
 
           <h1 id="trainer-name-heading"><?= htmlspecialchars($trainer['name']) ?></h1>
           <p class="trainer-profile-specialty"><?= htmlspecialchars($trainer['specialty']) ?></p>
@@ -129,10 +66,10 @@ require __DIR__ . '/../templates/header.php';
           <div class="trainer-profile-stats">
             <div class="profile-stat">
               <span class="stat-value">&#9733; <?= number_format($trainer['rating'], 1) ?></span>
-              <span class="stat-label"><?= $trainer['reviews_count'] ?> avaliações</span>
+              <span class="stat-label"><?= (int) $trainer['reviews_count'] ?> avaliações</span>
             </div>
             <div class="profile-stat">
-              <span class="stat-value"><?= $trainer['sessions'] ?>+</span>
+              <span class="stat-value"><?= (int) $trainer['sessions'] ?>+</span>
               <span class="stat-label">Sessões realizadas</span>
             </div>
             <div class="profile-stat">
@@ -145,88 +82,141 @@ require __DIR__ . '/../templates/header.php';
 
           <div class="trainer-profile-actions">
             <a href="classes.php?trainer=<?= urlencode($trainer['name']) ?>" class="btn btn-primary">Ver Aulas Disponíveis</a>
-            <a href="register.php" class="btn btn-outline">Reservar Consulta</a>
+            <?php if (isLoggedIn()): ?>
+              <a href="#review-form" class="btn btn-outline">Avaliar Treinador</a>
+            <?php else: ?>
+              <a href="login.php" class="btn btn-outline">Entrar para Avaliar</a>
+            <?php endif; ?>
           </div>
         </div>
 
       </div>
     </section>
 
-    <!-- Detalhes: certificações + horário + aulas -->
     <section class="trainer-details-section">
       <div class="container trainer-details-grid">
 
-        <!-- Certificações -->
         <div class="trainer-detail-block">
           <h2>Certificações</h2>
-          <ul class="certifications-list">
-            <?php foreach ($trainer['certifications'] as $cert): ?>
-              <li>
-                <span class="cert-icon" aria-hidden="true">&#10003;</span>
-                <?= htmlspecialchars($cert) ?>
-              </li>
-            <?php endforeach; ?>
-          </ul>
+          <?php if ($trainer['certifications'] !== []): ?>
+            <ul class="certifications-list">
+              <?php foreach ($trainer['certifications'] as $cert): ?>
+                <li>
+                  <span class="cert-icon" aria-hidden="true">&#10003;</span>
+                  <?= htmlspecialchars($cert) ?>
+                </li>
+              <?php endforeach; ?>
+            </ul>
+          <?php else: ?>
+            <p class="empty-state">Sem certificações registadas.</p>
+          <?php endif; ?>
         </div>
 
-        <!-- Horário -->
-        <div class="trainer-detail-block">
-          <h2>Disponibilidade</h2>
-          <ul class="schedule-list">
-            <?php foreach ($trainer['schedule'] as $slot): ?>
-              <li class="schedule-item">
-                <span class="schedule-day"><?= htmlspecialchars($slot['day']) ?></span>
-                <span class="schedule-time"><?= htmlspecialchars($slot['time']) ?></span>
-              </li>
-            <?php endforeach; ?>
-          </ul>
-        </div>
-
-        <!-- Aulas -->
         <div class="trainer-detail-block">
           <h2>Aulas Esta Semana</h2>
-          <ul class="trainer-classes-list">
-            <?php foreach ($trainer['classes'] as $class): ?>
-              <li class="trainer-class-item">
-                <div class="trainer-class-info">
-                  <h3><?= htmlspecialchars($class['name']) ?></h3>
-                  <p><?= htmlspecialchars($class['time']) ?> · <?= htmlspecialchars($class['duration']) ?></p>
-                </div>
-                <div class="trainer-class-spots">
-                  <span class="badge <?= $class['spots'] <= 3 ? 'badge-danger' : 'badge-green' ?>">
-                    <?= $class['spots'] ?> vagas
-                  </span>
-                  <a href="classes.php" class="btn btn-outline btn-sm">Inscrever</a>
-                </div>
-              </li>
-            <?php endforeach; ?>
-          </ul>
+          <?php if ($trainer['classes'] !== []): ?>
+            <ul class="trainer-classes-list">
+              <?php foreach ($trainer['classes'] as $class): ?>
+                <li class="trainer-class-item">
+                  <div class="trainer-class-info">
+                    <h3><?= htmlspecialchars($class['name']) ?></h3>
+                    <p><?= htmlspecialchars($class['time']) ?> · <?= htmlspecialchars($class['duration']) ?></p>
+                  </div>
+                  <div class="trainer-class-spots">
+                    <span class="badge <?= $class['spots'] <= 3 ? 'badge-danger' : 'badge-green' ?>">
+                      <?= (int) $class['spots'] ?> vagas
+                    </span>
+                    <a href="class.php?id=<?= (int) $class['id'] ?>" class="btn btn-outline btn-sm">Ver</a>
+                  </div>
+                </li>
+              <?php endforeach; ?>
+            </ul>
+          <?php else: ?>
+            <p class="empty-state">Ainda não existem aulas registadas para este treinador.</p>
+          <?php endif; ?>
         </div>
 
       </div>
     </section>
 
-    <!-- Reviews -->
     <section class="trainer-reviews-section" aria-labelledby="reviews-heading">
-      <div class="container">
-        <h2 id="reviews-heading">O que dizem os membros</h2>
+      <div class="container trainer-reviews-layout">
+        <div>
+          <h2 id="reviews-heading">O que dizem os membros</h2>
 
-        <ul class="reviews-grid">
-          <?php foreach ($trainer['reviews'] as $review): ?>
-          <li class="review-card">
-            <div class="review-header">
-              <div class="review-avatar"><?= mb_substr($review['author'], 0, 1) ?></div>
-              <div>
-                <p class="review-author"><?= htmlspecialchars($review['author']) ?></p>
-                <p class="review-stars">
-                  <?php for ($i = 0; $i < $review['rating']; $i++): ?>&#9733;<?php endfor; ?>
-                </p>
-              </div>
+          <?php if ($reviews !== []): ?>
+            <ul class="reviews-grid">
+              <?php foreach ($reviews as $review): ?>
+                <li class="review-card">
+                  <div class="review-header">
+                    <?php if (!empty($review['author_photo'])): ?>
+                      <img src="<?= htmlspecialchars($review['author_photo']) ?>" alt="<?= htmlspecialchars($review['author']) ?>" class="review-avatar review-avatar-img" />
+                    <?php else: ?>
+                      <div class="review-avatar" aria-hidden="true"><?= htmlspecialchars($review['author_initials']) ?></div>
+                    <?php endif; ?>
+                    <div>
+                      <p class="review-author"><?= htmlspecialchars($review['author']) ?></p>
+                      <p class="review-stars" aria-label="<?= (int) $review['rating'] ?> em 5 estrelas">
+                        <?php for ($i = 0; $i < 5; $i++): ?><?= $i < (int) $review['rating'] ? '&#9733;' : '&#9734;' ?><?php endfor; ?>
+                      </p>
+                    </div>
+                  </div>
+                  <p class="review-text"><?= htmlspecialchars($review['comment']) ?></p>
+                </li>
+              <?php endforeach; ?>
+            </ul>
+          <?php else: ?>
+            <p class="empty-state">Ainda não há avaliações. Sê a primeira pessoa a deixar feedback.</p>
+          <?php endif; ?>
+        </div>
+
+        <aside class="review-form-card" id="review-form" aria-labelledby="review-form-heading">
+          <h2 id="review-form-heading"><?= $existingReview ? 'Atualizar avaliação' : 'Avaliar treinador' ?></h2>
+
+          <?php if ($errors !== []): ?>
+            <div class="form-alert form-alert-error" role="alert">
+              <?php foreach ($errors as $error): ?>
+                <p><?= htmlspecialchars($error) ?></p>
+              <?php endforeach; ?>
             </div>
-            <p class="review-text"><?= htmlspecialchars($review['text']) ?></p>
-          </li>
-          <?php endforeach; ?>
-        </ul>
+          <?php endif; ?>
+
+          <?php if ($success !== []): ?>
+            <div class="form-alert form-alert-success" role="status">
+              <?php foreach ($success as $message): ?>
+                <p><?= htmlspecialchars($message) ?></p>
+              <?php endforeach; ?>
+            </div>
+          <?php endif; ?>
+
+          <?php if ($canReview): ?>
+            <form action="../actions/action_review_trainer.php" method="POST" class="trainer-review-form">
+              <input type="hidden" name="trainer_id" value="<?= (int) $trainer['id'] ?>" />
+
+              <fieldset class="rating-fieldset">
+                <legend>Rating</legend>
+                <input type="hidden" name="rating" value="0" />
+                <div class="star-rating" aria-label="Escolher avaliação de 1 a 5 estrelas">
+                  <?php for ($rating = 5; $rating >= 1; $rating--): ?>
+                    <input type="radio" id="rating-<?= $rating ?>" name="rating" value="<?= $rating ?>" <?= (string) $old['rating'] === (string) $rating ? 'checked' : '' ?> />
+                    <label for="rating-<?= $rating ?>" aria-label="<?= $rating ?> estrelas">&#9733;</label>
+                  <?php endfor; ?>
+                </div>
+              </fieldset>
+
+              <div class="form-group">
+                <label for="comment">Comentário</label>
+                <textarea id="comment" name="comment" maxlength="700" placeholder="Como foi a tua experiência com este treinador?" required><?= htmlspecialchars((string) $old['comment']) ?></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-full">Publicar avaliação</button>
+            </form>
+          <?php elseif (isLoggedIn()): ?>
+            <p class="empty-state">Só contas de membro podem avaliar treinadores.</p>
+          <?php else: ?>
+            <a href="login.php" class="btn btn-primary btn-full">Entrar para avaliar</a>
+          <?php endif; ?>
+        </aside>
       </div>
     </section>
 

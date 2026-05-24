@@ -75,6 +75,21 @@
   border: 3px solid var(--color-primary-light);
 }
 
+.avatar-initials,
+.trainer-photo-initials,
+.trainer-profile-initials {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-weight: 800;
+}
+
+.trainer-photo-initials {
+  font-size: 1.25rem;
+}
+
 .trainer-body { flex: 1; min-width: 0; }
 
 .trainer-header {
@@ -166,6 +181,10 @@
   box-shadow: var(--shadow-lg);
 }
 
+.trainer-profile-initials {
+  font-size: 4rem;
+}
+
 .back-link {
   display: inline-block;
   font-size: .85rem;
@@ -233,7 +252,7 @@
 
 .trainer-details-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 2rem;
   align-items: start;
 }
@@ -319,6 +338,11 @@
   flex-shrink: 0;
 }
 
+.empty-state {
+  font-size: .875rem;
+  color: var(--color-text-secondary);
+}
+
 /* Reviews */
 .trainer-reviews-section {
   padding: var(--space-xl) 0;
@@ -328,9 +352,16 @@
 
 .trainer-reviews-section h2 { margin-bottom: 2rem; }
 
+.trainer-reviews-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 2rem;
+  align-items: start;
+}
+
 .reviews-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 1.25rem;
 }
 
@@ -363,6 +394,11 @@
   flex-shrink: 0;
 }
 
+.review-avatar-img {
+  object-fit: cover;
+  background: transparent;
+}
+
 .review-author {
   font-size: .875rem;
   font-weight: 700;
@@ -379,6 +415,78 @@
   font-size: .875rem;
   color: var(--color-text-secondary);
   line-height: 1.6;
+}
+
+.review-form-card {
+  position: sticky;
+  top: 84px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 1.5rem;
+}
+
+.review-form-card h2 {
+  font-size: 1.15rem;
+  margin-bottom: 1rem;
+}
+
+.trainer-review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.rating-fieldset {
+  border: 0;
+  padding: 0;
+}
+
+.rating-fieldset legend {
+  display: block;
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: .35rem;
+}
+
+.star-rating {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  gap: .2rem;
+}
+
+.star-rating input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.star-rating label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  margin: 0;
+  color: var(--color-border-strong);
+  cursor: pointer;
+  font-size: 1.55rem;
+  font-weight: 800;
+  line-height: 1;
+  transition: color .15s, transform .15s;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input:checked ~ label {
+  color: var(--color-warning);
+}
+
+.star-rating label:hover {
+  transform: translateY(-1px);
 }
 
 /* CTA reutilizado */
@@ -409,7 +517,9 @@
   .trainer-profile-inner   { grid-template-columns: 1fr; }
   .trainer-profile-photo   { max-width: 220px; }
   .trainer-details-grid    { grid-template-columns: 1fr; }
+  .trainer-reviews-layout  { grid-template-columns: 1fr; }
   .reviews-grid            { grid-template-columns: 1fr; }
+  .review-form-card        { position: static; }
 }
 
 @media (max-width: 640px) {

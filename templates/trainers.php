@@ -3,7 +3,11 @@ declare(strict_types=1);
 
 function drawTrainerPreviewCard(array $trainer): void { ?>
   <li class="trainer-card">
-    <img src="<?= htmlspecialchars($trainer['photo']) ?>" alt="<?= htmlspecialchars($trainer['name']) ?>" class="avatar" />
+    <?php if (!empty($trainer['photo'])): ?>
+      <img src="<?= htmlspecialchars($trainer['photo']) ?>" alt="<?= htmlspecialchars($trainer['name']) ?>" class="avatar" />
+    <?php else: ?>
+      <span class="avatar avatar-initials" aria-hidden="true"><?= htmlspecialchars($trainer['initials']) ?></span>
+    <?php endif; ?>
     <div class="trainer-info">
       <h3><?= htmlspecialchars($trainer['name']) ?></h3>
       <p class="trainer-specialty"><?= htmlspecialchars($trainer['specialty']) ?></p>
@@ -15,7 +19,11 @@ function drawTrainerPreviewCard(array $trainer): void { ?>
 function drawTrainerCard(array $trainer): void { ?>
   <li class="trainer-card-full">
     <div class="trainer-photo-wrap">
-      <img src="<?= htmlspecialchars($trainer['photo']) ?>" alt="<?= htmlspecialchars($trainer['name']) ?>" class="trainer-photo" />
+      <?php if (!empty($trainer['photo'])): ?>
+        <img src="<?= htmlspecialchars($trainer['photo']) ?>" alt="<?= htmlspecialchars($trainer['name']) ?>" class="trainer-photo" />
+      <?php else: ?>
+        <span class="trainer-photo trainer-photo-initials" aria-hidden="true"><?= htmlspecialchars($trainer['initials']) ?></span>
+      <?php endif; ?>
     </div>
     <div class="trainer-body">
       <div class="trainer-header">
