@@ -6,6 +6,7 @@ $pageStyles = $pageStyles ?? [];
 $activePage = $activePage ?? '';
 $isLoggedIn = isLoggedIn();
 $userName = getUserName();
+$userRole = getUserRole();
 
 $navLinks = [
   'home' => ['label' => 'Home', 'href' => 'landingpage.php'],
@@ -65,6 +66,9 @@ $navLinks = [
               <span class="nav-user">Olá, <?= htmlspecialchars($userName ?? 'membro') ?></span>
             </summary>
             <div class="account-menu-panel">
+              <?php if ($userRole === 'trainer' || $userRole === 'admin'): ?>
+                <a href="publish_class.php" class="<?= $activePage === 'publish-class' ? 'active' : '' ?>">Publicar aula</a>
+              <?php endif; ?>
               <a href="account.php" class="<?= $activePage === 'account' ? 'active' : '' ?>">Editar conta</a>
               <a href="../actions/action_logout.php">Sair</a>
             </div>

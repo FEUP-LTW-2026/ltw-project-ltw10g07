@@ -1,0 +1,153 @@
+/* Estilos específicos da página para publicar aulas. */
+
+.publish-class {
+  padding: 4rem 0 7rem;
+  background: var(--color-bg-soft);
+}
+
+.publish-class-inner {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  gap: 3rem;
+  align-items: start;
+}
+
+.publish-class-heading {
+  max-width: 500px;
+  padding-top: 4rem;
+}
+
+.publish-class-heading h1 {
+  margin-top: .85rem;
+  font-size: 2.6rem;
+}
+
+.publish-class-heading p {
+  margin-top: .8rem;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: .5em;
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+  border: 1px solid #bfdbfe;
+  border-radius: var(--radius-full);
+  padding: .3em .85em;
+}
+
+.publish-class-summary {
+  display: grid;
+  gap: .8rem;
+  margin-top: 2rem;
+}
+
+.publish-class-summary div {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  color: var(--color-text-secondary);
+  font-weight: 600;
+}
+
+.publish-class-summary strong {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: #fff;
+  font-size: .9rem;
+}
+
+.publish-class-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 2rem;
+}
+
+.publish-class-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.publish-class-form fieldset {
+  display: grid;
+  gap: 1rem;
+  border: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.publish-class-form fieldset + fieldset {
+  border-top: 1px solid var(--color-border);
+  padding-top: 1.4rem;
+}
+
+.publish-class-form legend {
+  font-size: .9rem;
+  font-weight: 800;
+  color: var(--color-text);
+  margin-bottom: .85rem;
+}
+
+.publish-class-form input[type="file"] {
+  padding: .55em .8em;
+}
+
+.publish-class-form fieldset:disabled {
+  opacity: .65;
+}
+
+.publish-class-form button:disabled {
+  cursor: not-allowed;
+  opacity: .65;
+}
+
+.publish-class .form-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .75rem;
+  border-top: 1px solid var(--color-border);
+  padding-top: 1.4rem;
+}
+
+@media (max-width: 900px) {
+  .publish-class-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .publish-class-heading {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .publish-class {
+    padding: 3rem 0 5rem;
+  }
+
+  .publish-class-heading h1 {
+    font-size: 2rem;
+  }
+
+  .publish-class-panel {
+    padding: 1.25rem;
+  }
+
+  .publish-class .form-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

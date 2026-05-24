@@ -35,7 +35,6 @@ require __DIR__ . '/../templates/header.php';
       <div class="container account-inner">
 
         <div class="account-heading">
-          <span class="badge badge-blue">Conta</span>
           <h1 id="account-heading">Editar detalhes da conta</h1>
           <p>Atualiza os teus dados pessoais e, se quiseres, define uma nova palavra-passe.</p>
         </div>
