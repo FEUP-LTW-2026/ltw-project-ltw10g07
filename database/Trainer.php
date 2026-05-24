@@ -51,6 +51,34 @@ class Trainer {
         return $trainers;
     }
 
+    public static function search(PDO $db, string $query): array {
+        $searchTerm = '%' . trim($query) . '%';
+        $stmt = $db->prepare('
+            SELECT
+                trainer.id,
+                user.name,
+                user.photo,
+                trainer.bio,
+                trainer.specializations,
+                trainer.rating
+            FROM trainer
+            JOIN user ON user.id = trainer.user_id
+            WHERE user.name LIKE ?
+               OR trainer.specializations LIKE ?
+               OR trainer.bio LIKE ?
+            ORDER BY trainer.rating DESC, user.name ASC
+        ');
+        $stmt->execute([$searchTerm, $searchTerm, $searchTerm]);
+
+        $trainers = [];
+
+        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $trainer) {
+            $trainers[] = self::formatTrainer($trainer);
+        }
+
+        return $trainers;
+    }
+
     public static function findById(PDO $db, int $id): ?array {
         $stmt = $db->prepare('
             SELECT

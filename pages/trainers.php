@@ -7,7 +7,9 @@ require_once __DIR__ . '/../database/Trainer.php';
 require_once __DIR__ . '/../templates/trainers.php';
 
 $db = getDB();
-$trainers = Trainer::getAll($db);
+$searchQuery = trim($_GET['q'] ?? '');
+$isSearch = $searchQuery !== '';
+$trainers = $isSearch ? Trainer::search($db, $searchQuery) : Trainer::getAll($db);
 
 require __DIR__ . '/../templates/header.php';
 ?>
@@ -17,57 +19,55 @@ require __DIR__ . '/../templates/header.php';
     <!-- Hero -->
     <section class="trainers-hero" aria-labelledby="trainers-hero-heading">
       <div class="container">
-        <h1 id="trainers-hero-heading">Os Nossos <span>Treinadores</span>.</h1>
-        <p class="hero-subtitle">
-          Profissionais certificados, apaixonados pelo que fazem e totalmente dedicados
-          ao teu sucesso. Escolhe o teu mentor e começa hoje.
-        </p>
+        <?php if ($isSearch): ?>
+          <a href="trainers.php" class="back-link">&#8592; Todos os Treinadores</a>
+          <h1 id="trainers-hero-heading">Resultados para <span><?= htmlspecialchars($searchQuery) ?></span>.</h1>
+          <p class="hero-subtitle">
+            Encontrámos <?= count($trainers) ?> treinador<?= count($trainers) === 1 ? '' : 'es' ?>
+            compatíve<?= count($trainers) === 1 ? 'l' : 'is' ?> com a tua pesquisa.
+          </p>
+        <?php else: ?>
+          <h1 id="trainers-hero-heading">Os Nossos <span>Treinadores</span>.</h1>
+          <p class="hero-subtitle">
+            Profissionais certificados, apaixonados pelo que fazem e totalmente dedicados
+            ao teu sucesso. Escolhe o teu mentor e começa hoje.
+          </p>
+        <?php endif; ?>
 
         <!-- Filtros -->
-        <div class="trainers-filters">
-          <div class="filter-item">
-            <label for="filter-specialty">Especialidade</label>
-            <select id="filter-specialty">
-              <option>Todas as Especialidades</option>
-              <option>HIIT</option>
-              <option>Força</option>
-              <option>Yoga</option>
-              <option>Pilates</option>
-              <option>Boxe</option>
-              <option>Nutrição</option>
-            </select>
-          </div>
-          <div class="filter-item">
-            <label for="filter-rating">Avaliação</label>
-            <select id="filter-rating">
-              <option>Qualquer Avaliação</option>
-              <option>5 estrelas</option>
-              <option>4.5+</option>
-              <option>4.0+</option>
-            </select>
-          </div>
-          <div class="filter-item">
-            <label for="filter-sort">Ordenar por</label>
-            <select id="filter-sort">
-              <option>Mais Populares</option>
-              <option>Melhor Avaliação</option>
-              <option>Mais Sessões</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </section>
+        <form class="trainers-search-form" action="trainers.php" method="GET" role="search">
+          <label for="trainer-search">Pesquisar treinadores</label>
+          <input
+            type="search"
+            id="trainer-search"
+            name="q"
+            value="<?= htmlspecialchars($searchQuery) ?>"
+            placeholder="Nome, especialidade ou objetivo..."
+          />
+          <button type="submit" class="btn btn-primary btn-sm">Pesquisar</button>
+        </form>
+
+       
+    </section
 
     <!-- Grid de Treinadores -->
     <section class="trainers-grid-section" aria-labelledby="trainers-list-heading">
       <div class="container">
         <h2 id="trainers-list-heading" class="visually-hidden">Lista de treinadores</h2>
 
-        <ul class="trainers-grid">
-          <?php foreach ($trainers as $trainer): ?>
-            <?php drawTrainerCard($trainer); ?>
-          <?php endforeach; ?>
-        </ul>
+        <?php if ($trainers !== []): ?>
+          <ul class="trainers-grid">
+            <?php foreach ($trainers as $trainer): ?>
+              <?php drawTrainerCard($trainer); ?>
+            <?php endforeach; ?>
+          </ul>
+        <?php else: ?>
+          <div class="empty-state trainers-empty-state">
+            <h2>Nenhum treinador encontrado.</h2>
+            <p>Tenta pesquisar por nome, especialidade ou objetivo de treino.</p>
+            <a href="trainers.php" class="btn btn-outline btn-sm">Ver todos os treinadores</a>
+          </div>
+        <?php endif; ?>
 
       </div>
     </section>

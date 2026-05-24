@@ -35,18 +35,17 @@ require __DIR__ . '/../templates/header.php';
             Desbloqueia o teu potencial com treinadores de excelência,
             equipamento de última geração e uma comunidade que evolui contigo.
           </p>
-
-          <div class="hero-search" role="search">
-            <label for="hero-search-input" >Pesquisar aulas ou treinadores</label>
+          <form class="hero-search" role="search" action="trainers.php" method="GET">
+            <label for="hero-search-input" >Pesquisar treinadores</label>
             <span aria-hidden="true" style="color:var(--color-text-muted);font-size:.95rem">&#9906;</span>
             <input
               type="search"
               id="hero-search-input"
               name="q"
-              placeholder="Pesquisar aulas ou treinadores..."
+              placeholder="Pesquisar treinadores..."
             />
             <button type="submit" class="btn btn-primary btn-sm">Pesquisar</button>
-          </div>
+          </form>
 
           <div class="hero-members">
             <div class="member-avatars" aria-hidden="true">
