@@ -4,7 +4,7 @@ declare(strict_types=1);
 class User {
     public static function findById(PDO $db, int $id): ?array {
         $stmt = $db->prepare('
-            SELECT id, name, email, password_hash, role, photo, is_active, created_at
+            SELECT id, name, username, email, password_hash, role, photo, is_active, created_at
             FROM user
             WHERE id = ?
         ');
@@ -17,7 +17,7 @@ class User {
 
     public static function findByEmail(PDO $db, string $email): ?array {
         $stmt = $db->prepare('
-            SELECT id, name, email, password_hash, role, is_active
+            SELECT id, name, username, email, password_hash, role, is_active
             FROM user
             WHERE email = ?
         ');
@@ -28,21 +28,34 @@ class User {
         return $user ?: null;
     }
 
-    public static function create(PDO $db, string $name, string $email, string $passwordHash, string $role = 'member'): void {
+    public static function findByUsername(PDO $db, string $username): ?array {
         $stmt = $db->prepare('
-            INSERT INTO user (name, email, password_hash, role)
-            VALUES (?, ?, ?, ?)
+            SELECT id, name, username, email, password_hash, role, is_active
+            FROM user
+            WHERE username = ?
         ');
-        $stmt->execute([$name, $email, $passwordHash, $role]);
+        $stmt->execute([$username]);
+
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $user ?: null;
     }
 
-    public static function updateProfile(PDO $db, int $id, string $name, string $email): void {
+    public static function create(PDO $db, string $name, string $username, string $email, string $passwordHash, string $role = 'member'): void {
+        $stmt = $db->prepare('
+            INSERT INTO user (name, username, email, password_hash, role)
+            VALUES (?, ?, ?, ?, ?)
+        ');
+        $stmt->execute([$name, $username, $email, $passwordHash, $role]);
+    }
+
+    public static function updateProfile(PDO $db, int $id, string $name, string $username, string $email): void {
         $stmt = $db->prepare('
             UPDATE user
-            SET name = ?, email = ?
+            SET name = ?, username = ?, email = ?
             WHERE id = ?
         ');
-        $stmt->execute([$name, $email, $id]);
+        $stmt->execute([$name, $username, $email, $id]);
     }
 
     public static function updatePassword(PDO $db, int $id, string $passwordHash): void {

@@ -4,6 +4,7 @@ require_once __DIR__ . '/../utils/session.php';
 $old = [
   'first_name' => '',
   'last_name' => '',
+  'username' => '',
   'email' => '',
   'phone' => '',
 ];
@@ -47,6 +48,11 @@ require __DIR__ . '/../templates/header.php';
                 <label for="last_name">Apelido</label>
                 <input type="text" id="last_name" name="last_name" placeholder="O teu apelido" value="<?= htmlspecialchars($old['last_name']) ?>" required />
               </div>
+            </div>
+
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" id="username" name="username" placeholder="o_teu_username" value="<?= htmlspecialchars($old['username']) ?>" required />
             </div>
 
             <div class="form-group">

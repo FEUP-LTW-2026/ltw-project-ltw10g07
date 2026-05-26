@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../utils/session.php';
 
-$old = getOldInput(['email' => '']);
+$old = getOldInput(['login' => '']);
 $errors = getFlashMessages('errors');
 $successMessages = getFlashMessages('success');
 
@@ -39,8 +39,8 @@ require __DIR__ . '/../templates/header.php';
 
           <form action="../actions/action_login.php" method="POST" class="auth-form">
             <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" id="email" name="email" placeholder="exemplo@email.com" value="<?= htmlspecialchars($old['email']) ?>" required />
+              <label for="login">Email ou username</label>
+              <input type="text" id="login" name="login" placeholder="exemplo@email.com ou o_teu_username" value="<?= htmlspecialchars($old['login']) ?>" required />
             </div>
 
             <div class="form-group">

@@ -10,12 +10,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$email = trim($_POST['email'] ?? '');
+$login = trim($_POST['login'] ?? '');
 $password = $_POST['password'] ?? '';
 $errors = [];
 
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    $errors[] = 'O email não é válido.';
+if ($login === '') {
+    $errors[] = 'O email ou username é obrigatório.';
 }
 
 if ($password === '') {
@@ -24,10 +24,12 @@ if ($password === '') {
 
 if ($errors === []) {
     $db = getDB();
-    $user = User::findByEmail($db, $email);
+    $user = filter_var($login, FILTER_VALIDATE_EMAIL)
+        ? User::findByEmail($db, $login)
+        : User::findByUsername($db, strtolower($login));
 
     if (!$user || !password_verify($password, $user['password_hash'])) {
-        $errors[] = 'Email ou palavra-passe incorretos.';
+        $errors[] = 'Email, username ou palavra-passe incorretos.';
     } elseif ((int) $user['is_active'] !== 1) {
         $errors[] = 'Esta conta está desativada.';
     } else {
@@ -37,7 +39,7 @@ if ($errors === []) {
     }
 }
 
-setOldInput(['email' => $email]);
+setOldInput(['login' => $login]);
 setFlashMessages('errors', $errors);
 header('Location: ../pages/login.php');
 exit;

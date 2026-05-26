@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $userId = getUserId();
 $old = [
     'name' => trim($_POST['name'] ?? ''),
+    'username' => strtolower(trim($_POST['username'] ?? '')),
     'email' => trim($_POST['email'] ?? ''),
 ];
 $currentPassword = $_POST['current_password'] ?? '';
@@ -27,6 +28,10 @@ $errors = [];
 
 if ($old['name'] === '') {
     $errors[] = 'O nome é obrigatório.';
+}
+
+if (!preg_match('/^[A-Za-z0-9_.-]{3,30}$/', $old['username'])) {
+    $errors[] = 'O username deve ter 3 a 30 caracteres e só pode conter letras, números, ".", "_" ou "-".';
 }
 
 if (!filter_var($old['email'], FILTER_VALIDATE_EMAIL)) {
@@ -60,9 +65,12 @@ if ($user === null || (int) $user['is_active'] !== 1) {
 
 if ($errors === []) {
     $existingUser = User::findByEmail($db, $old['email']);
+    $existingUsername = User::findByUsername($db, $old['username']);
 
     if ($existingUser !== null && (int) $existingUser['id'] !== $userId) {
         $errors[] = 'Este email já está associado a outra conta.';
+    } elseif ($existingUsername !== null && (int) $existingUsername['id'] !== $userId) {
+        $errors[] = 'Este username já está associado a outra conta.';
     }
 }
 
@@ -71,7 +79,7 @@ if ($errors === [] && $wantsPasswordChange && !password_verify($currentPassword,
 }
 
 if ($errors === []) {
-    User::updateProfile($db, $userId, $old['name'], $old['email']);
+    User::updateProfile($db, $userId, $old['name'], $old['username'], $old['email']);
 
     if ($wantsPasswordChange) {
         User::updatePassword($db, $userId, password_hash($newPassword, PASSWORD_DEFAULT));

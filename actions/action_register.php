@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $old = [
     'first_name' => trim($_POST['first_name'] ?? ''),
     'last_name' => trim($_POST['last_name'] ?? ''),
+    'username' => strtolower(trim($_POST['username'] ?? '')),
     'email' => trim($_POST['email'] ?? ''),
     'phone' => trim($_POST['phone'] ?? ''),
 ];
@@ -27,6 +28,10 @@ if ($old['first_name'] === '') {
 
 if ($old['last_name'] === '') {
     $errors[] = 'O apelido é obrigatório.';
+}
+
+if (!preg_match('/^[A-Za-z0-9_.-]{3,30}$/', $old['username'])) {
+    $errors[] = 'O username deve ter 3 a 30 caracteres e só pode conter letras, números, ".", "_" ou "-".';
 }
 
 if (!filter_var($old['email'], FILTER_VALIDATE_EMAIL)) {
@@ -44,14 +49,17 @@ if (strlen($password) < 8) {
 if ($errors === []) {
     $db = getDB();
     $existingUser = User::findByEmail($db, $old['email']);
+    $existingUsername = User::findByUsername($db, $old['username']);
 
     if ($existingUser !== null) {
         $errors[] = 'Este email já está registado.';
+    } elseif ($existingUsername !== null) {
+        $errors[] = 'Este username já está registado.';
     } else {
         $name = $old['first_name'] . ' ' . $old['last_name'];
         $hash = password_hash($password, PASSWORD_DEFAULT);
 
-        User::create($db, $name, $old['email'], $hash);
+        User::create($db, $name, $old['username'], $old['email'], $hash);
 
         setFlashMessages('success', ['Conta criada com sucesso. Já podes entrar.']);
         header('Location: ../pages/login.php');

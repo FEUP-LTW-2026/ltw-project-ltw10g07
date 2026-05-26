@@ -19,6 +19,7 @@ if ($user === null) {
 
 $old = getOldInput([
   'name' => $user['name'],
+  'username' => $user['username'],
   'email' => $user['email'],
 ]);
 $errors = getFlashMessages('errors');
@@ -60,6 +61,11 @@ require __DIR__ . '/../templates/header.php';
             <div class="form-group">
               <label for="name">Nome</label>
               <input type="text" id="name" name="name" value="<?= htmlspecialchars($old['name']) ?>" required />
+            </div>
+
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" id="username" name="username" value="<?= htmlspecialchars($old['username']) ?>" required />
             </div>
 
             <div class="form-group">
