@@ -6,8 +6,9 @@ require_once __DIR__ . '/../database/ClassCatalog.php';
 require_once __DIR__ . '/../database/Trainer.php';
 require_once __DIR__ . '/../utils/session.php';
 
-if (!isLoggedIn()) {
-    header('Location: ../pages/login.php');
+if (!isLoggedIn() || !in_array(getUserRole(), ['trainer', 'admin'], true)) {
+    setFlashMessages('errors', ['Não tens permissões para publicar aulas.']);
+    header('Location: ../pages/landingpage.php');
     exit;
 }
 
@@ -17,16 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $role = getUserRole();
-
-if ($role !== 'trainer' && $role !== 'admin') {
-    setFlashMessages('errors', ['Apenas treinadores e admins podem publicar aulas.']);
-    header('Location: ../pages/publish_class.php');
-    exit;
-}
-
 $name = trim($_POST['name'] ?? '');
 $type = trim($_POST['type'] ?? '');
-$intensity = $_POST['intensity'] ?? '';
+$intensity = trim($_POST['intensity'] ?? '');
 $description = trim($_POST['description'] ?? '');
 $duration = (int) ($_POST['duration'] ?? 0);
 $capacity = (int) ($_POST['capacity'] ?? 0);
@@ -84,22 +78,29 @@ if ($errors !== []) {
     exit;
 }
 
-ClassCatalog::createWithSession(
-    $db,
-    $trainerId,
-    $name,
-    $description,
-    $type,
-    $intensity,
-    $duration,
-    $capacity,
-    '../img/hiit.jpg',
-    $sessionDate,
-    $startTime,
-    $endTime,
-    $room
-);
+try {
+    ClassCatalog::createWithSession(
+        $db,
+        $trainerId,
+        $name,
+        $description,
+        $type,
+        $intensity,
+        $duration,
+        $capacity,
+        '../img/hiit.jpg',
+        $sessionDate,
+        $startTime,
+        $endTime,
+        $room
+    );
 
-setFlashMessages('success', ['Aula publicada com sucesso.']);
-header('Location: ../pages/classes.php');
-exit;
+    setFlashMessages('success', ['Aula publicada com sucesso.']);
+    header('Location: ../pages/classes.php');
+    exit;
+} catch (Throwable $exception) {
+    setOldInput($_POST);
+    setFlashMessages('errors', ['Ocorreu um erro ao publicar a aula. Tenta novamente.']);
+    header('Location: ../pages/publish_class.php');
+    exit;
+}
