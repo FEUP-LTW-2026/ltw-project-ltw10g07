@@ -36,6 +36,10 @@ $stmt = $db->prepare('
     LEFT JOIN class_session ON class_session.class_id = class.id
     LEFT JOIN enrollment ON enrollment.session_id = class_session.id AND enrollment.status = \'active\'
     WHERE class.trainer_id = ?
+      AND (
+        class_session.id IS NULL
+        OR datetime(class_session.session_date || " " || class_session.end_time) >= datetime("now", "-23 hours")
+      )
     GROUP BY
       class.id,
       class.name,
