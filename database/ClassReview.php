@@ -10,7 +10,7 @@ class ClassReview {
         WHERE enrollment.user_id = ?
           AND class_session.class_id = ?
           AND enrollment.status = 'active'
-          AND datetime(class_session.session_date || ' ' || class_session.end_time) < datetime('now')
+          AND datetime(class_session.session_date || ' ' || class_session.end_time) < datetime('now', '+1 hour')
         LIMIT 1
     ");
     $stmt->execute([$userId, $classId]);

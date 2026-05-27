@@ -1,6 +1,9 @@
 <?php
 declare(strict_types=1);
 
+ini_set('display_errors', '1');
+error_reporting(E_ALL);
+
 date_default_timezone_set('Europe/Lisbon');
 
 require_once __DIR__ . '/../utils/session.php';
@@ -296,7 +299,18 @@ require __DIR__ . '/../templates/header.php';
           <?php endif; ?>
         </h2>
 
-        <?php if ($canReview): ?>
+        <?php if ($userReview && isLoggedIn() && getUserRole() === 'member'): ?>
+          <form action="../actions/action_review_class.php" method="POST" style="margin-bottom:1rem">
+            <input type="hidden" name="class_id" value="<?= $class_id ?>">
+            <input type="hidden" name="delete_review" value="1">
+            <button type="submit" class="btn btn-danger btn-sm"
+              onclick="return confirm('Tens a certeza que queres remover a tua avaliação?')">
+              Remover a minha avaliação
+            </button>
+          </form>
+        <?php endif; ?>
+
+        <?php if ($canReview || $userReview): ?>
           <div class="review-form-wrap">
             <h3><?= $userReview ? 'Editar a tua avaliação' : 'Deixa a tua avaliação' ?></h3>
             <form action="../actions/action_review_class.php" method="POST" class="review-form">
