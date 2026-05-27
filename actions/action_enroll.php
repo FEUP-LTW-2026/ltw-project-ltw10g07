@@ -12,9 +12,13 @@ if (!isLoggedIn()) {
     exit;
 }
 
+// Opcional: Se quiseres deixar os PTs/Admins testarem as inscrições, comenta este bloco!
 if (getUserRole() !== 'member') {
     setFlashMessages('errors', ['Apenas membros do ginásio se podem inscrever em aulas.']);
-    header('Location: ../pages/classes.php');
+    // Mandar de volta para a mesma página, em vez da lista geral
+    $classId = isset($_POST['class_id']) ? (int) $_POST['class_id'] : 1;
+    $sessionId = isset($_POST['session_id']) ? (int) $_POST['session_id'] : 0;
+    header('Location: ../pages/class.php?id=' . $classId . '&session_id=' . $sessionId);
     exit;
 }
 
@@ -28,7 +32,7 @@ verifyCsrfToken('../pages/classes.php');
 // 2. Recolher parâmetros do formulário
 $sessionId = isset($_POST['session_id']) ? (int) $_POST['session_id'] : 0;
 $classId   = isset($_POST['class_id']) ? (int) $_POST['class_id'] : 1;
-$action    = $_POST['action'] ?? 'enroll'; // 'enroll' ou 'cancel'
+$action    = $_POST['action'] ?? 'enroll';
 
 if ($sessionId <= 0) {
     setFlashMessages('errors', ['Sessão inválida.']);
@@ -40,7 +44,6 @@ try {
     $db = getDB();
     $userId = getUserId();
 
-    // 3. Obter dados da sessão e capacidade máxima da aula
     $stmt = $db->prepare('
         SELECT cs.id, c.capacity, c.name
         FROM class_session cs
@@ -56,67 +59,55 @@ try {
         exit;
     }
 
-    // 4. Verificar se o utilizador já tem alguma inscrição nesta sessão
     $stmt = $db->prepare('SELECT id, status FROM enrollment WHERE user_id = ? AND session_id = ?');
     $stmt->execute([$userId, $sessionId]);
     $existingEnrollment = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // ==========================================
-    // LOGICA DE INSCRIÇÃO (enroll)
-    // ==========================================
     if ($action === 'enroll') {
         if ($existingEnrollment && $existingEnrollment['status'] === 'active') {
             setFlashMessages('errors', ['Já estás inscrito nesta sessão!']);
-            header('Location: ../pages/class.php?id=' . $classId);
+            header('Location: ../pages/class.php?id=' . $classId . '&session_id=' . $sessionId);
             exit;
         }
 
-        // Contar quantas pessoas ativas estão inscritas na sessão
         $stmt = $db->prepare('SELECT COUNT(*) FROM enrollment WHERE session_id = ? AND status = \'active\'');
         $stmt->execute([$sessionId]);
         $currentEnrollments = (int) $stmt->fetchColumn();
 
         if ($currentEnrollments >= (int) $session['capacity']) {
             setFlashMessages('errors', ['Lamento, mas esta aula já atingiu a capacidade máxima de vagas.']);
-            header('Location: ../pages/class.php?id=' . $classId);
+            header('Location: ../pages/class.php?id=' . $classId . '&session_id=' . $sessionId);
             exit;
         }
 
         if ($existingEnrollment && $existingEnrollment['status'] === 'cancelled') {
-            // Reativar inscrição existente
             $stmt = $db->prepare('UPDATE enrollment SET status = \'active\', created_at = CURRENT_TIMESTAMP WHERE id = ?');
             $stmt->execute([$existingEnrollment['id']]);
         } else {
-            // Criar nova inscrição do zero
             $stmt = $db->prepare('INSERT INTO enrollment (user_id, session_id, status) VALUES (?, ?, \'active\')');
             $stmt->execute([$userId, $sessionId]);
         }
 
         setFlashMessages('success', ['Inscrição confirmada na aula de ' . $session['name'] . '!']);
     }
-    // ==========================================
-    // LOGICA DE CANCELAMENTO (cancel)
-    // ==========================================
     elseif ($action === 'cancel') {
         if (!$existingEnrollment || $existingEnrollment['status'] === 'cancelled') {
             setFlashMessages('errors', ['Não tens nenhuma inscrição ativa nesta sessão para poder cancelar.']);
-            header('Location: ../pages/class.php?id=' . $classId);
+            header('Location: ../pages/class.php?id=' . $classId . '&session_id=' . $sessionId);
             exit;
         }
 
-        // Mudar o estado para cancelado
         $stmt = $db->prepare('UPDATE enrollment SET status = \'cancelled\' WHERE id = ?');
         $stmt->execute([$existingEnrollment['id']]);
-
         setFlashMessages('success', ['Inscrição cancelada com sucesso.']);
     }
 
-    // Redireciona de volta para os detalhes da aula atualizada
-    header('Location: ../pages/class.php?id=' . $classId);
+    // REDIRECIONAMENTO CORRIGIDO: Agora mantém-te na sessão exata onde clicaste!
+    header('Location: ../pages/class.php?id=' . $classId . '&session_id=' . $sessionId);
     exit;
 
 } catch (Exception $e) {
     setFlashMessages('errors', ['Ocorreu um erro ao processar a tua inscrição. Tenta novamente.']);
-    header('Location: ../pages/class.php?id=' . $classId);
+    header('Location: ../pages/class.php?id=' . $classId . '&session_id=' . $sessionId);
     exit;
 }

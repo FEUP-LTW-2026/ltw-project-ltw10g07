@@ -81,7 +81,7 @@ require __DIR__ . '/../templates/header.php';
           <p class="trainer-profile-bio"><?= htmlspecialchars($trainer['bio']) ?></p>
 
           <div class="trainer-profile-actions">
-            <a href="classes.php?trainer=<?= urlencode($trainer['name']) ?>" class="btn btn-primary">Ver Aulas Disponíveis</a>
+            <a href="classes.php?trainer_id=<?= (int)$trainer['id'] ?>" class="btn btn-primary">Ver Aulas Disponíveis</a>
             <?php if (isLoggedIn()): ?>
               <a href="#review-form" class="btn btn-outline">Avaliar Treinador</a>
             <?php else: ?>
