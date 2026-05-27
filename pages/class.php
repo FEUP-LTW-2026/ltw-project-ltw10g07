@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../utils/session.php';
 require_once __DIR__ . '/../database/connection.php';
+require_once __DIR__ . '/../utils/security.php'; // ADICIONADO: Importar as funções de segurança
 
 $errors = getFlashMessages('errors');
 $success = getFlashMessages('success');
@@ -189,6 +190,7 @@ require __DIR__ . '/../templates/header.php';
                 <div style="display: flex; gap: 0.5rem;">
                     <a href="edit_class.php?id=<?= (int)$classData['id'] ?>" class="btn btn-outline btn-sm" style="flex: 1; text-align: center;">Editar Aula</a>
                     <form action="../actions/action_delete_class.php" method="POST" style="flex: 1; margin: 0;" onsubmit="return confirm('ATENÇÃO: Queres apagar esta aula e todas as sessões?');">
+                        <?= csrfInput() ?> <!-- ADICIONADO: Token CSRF -->
                         <input type="hidden" name="class_id" value="<?= (int)$classData['id'] ?>">
                         <button type="submit" class="btn btn-danger btn-sm" style="width: 100%; background: #dc2626; border: none; color: white;">Eliminar Aula</button>
                     </form>
@@ -198,6 +200,7 @@ require __DIR__ . '/../templates/header.php';
 
           <?php if ($main_session_id > 0): ?>
             <form action="../actions/action_enroll.php" method="POST">
+              <?= csrfInput() ?> <!-- ADICIONADO: Token CSRF -->
               <input type="hidden" name="session_id" value="<?= $main_session_id ?>" />
               <input type="hidden" name="class_id" value="<?= (int)$classData['id'] ?>" />
               

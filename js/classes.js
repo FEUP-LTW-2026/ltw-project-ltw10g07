@@ -6,7 +6,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const timeSelect = document.getElementById('filter-time');
     const classesContainer = document.getElementById('classes-container');
 
-    // Chamar a API inicial
+    // 1. Ler o URL à procura do ID do treinador
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('trainer_id')) {
+        trainerSelect.value = urlParams.get('trainer_id');
+    }
+
+    // 2. Chamar a API inicial
     fetchClasses();
 
     function fetchClasses() {

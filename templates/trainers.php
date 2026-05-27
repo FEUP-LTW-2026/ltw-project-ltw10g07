@@ -59,7 +59,7 @@ function drawTrainerCard(array $trainer): void { ?>
 
       <div class="trainer-actions">
         <a href="trainer.php?id=<?= (int) $trainer['id'] ?>" class="btn btn-outline btn-sm">Ver Perfil</a>
-        <a href="classes.php?trainer=<?= urlencode($trainer['name']) ?>" class="btn btn-primary btn-sm">Ver Aulas</a>
+        <a href="classes.php?trainer_id=<?= (int) $trainer['id'] ?>" class="btn btn-primary btn-sm">Ver Aulas</a>
       </div>
     </div>
   </li>
