@@ -53,6 +53,37 @@
   gap: .75rem;
 }
 
+.account-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.account-avatar-placeholder {
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 2.2rem;
+  font-weight: 800;
+}
+
+.account-avatar-wrap {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: .75rem;
+}
+
+.avatar-upload-form { display: flex; flex-direction: column; gap: .3rem; }
+.avatar-upload-btn  { cursor: pointer; }
+.avatar-upload-hint { font-size: .75rem; color: var(--color-text-muted); }
+
 @media (max-width: 900px) {
   .account-inner {
     grid-template-columns: 1fr;

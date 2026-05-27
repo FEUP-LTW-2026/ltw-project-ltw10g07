@@ -36,16 +36,52 @@ require __DIR__ . '/../templates/header.php';
     <section class="account" aria-labelledby="account-heading">
       <div class="container account-inner">
 
+        <!-- Coluna esquerda -->
         <div class="account-heading">
-          <h1 id="account-heading">Editar detalhes da conta</h1>
-          <p>Atualiza os teus dados pessoais e, se quiseres, define uma nova palavra-passe.</p>
+          <h1 id="account-heading">A tua conta</h1>
+          <p>Atualiza os teus dados pessoais, foto de perfil e palavra-passe.</p>
+
+          <div class="account-avatar-wrap">
+            <?php if (!empty($user['photo'])): ?>
+              <img
+                src="<?= htmlspecialchars($user['photo']) ?>"
+                alt="Foto de perfil de <?= htmlspecialchars($user['name']) ?>"
+                class="account-avatar"
+                id="avatar-preview"
+              />
+            <?php else: ?>
+              <div class="account-avatar account-avatar-placeholder" id="avatar-preview" aria-hidden="true">
+                <?= htmlspecialchars(mb_strtoupper(mb_substr($user['name'], 0, 1))) ?>
+              </div>
+            <?php endif; ?>
+
+            <form
+              action="../actions/action_upload_photo.php"
+              method="POST"
+              enctype="multipart/form-data"
+              class="avatar-upload-form"
+              id="avatar-upload-form"
+            >
+              <label for="photo" class="btn btn-outline btn-sm avatar-upload-btn" title="Alterar foto de perfil">
+                Alterar foto
+              </label>
+              <input
+                type="file"
+                id="photo"
+                name="photo"
+                accept="image/jpeg,image/png,image/webp"
+                class="visually-hidden"
+                aria-label="Carregar nova foto de perfil"
+              />
+              <p class="avatar-upload-hint">JPEG, PNG ou WebP · máx. 2 MB</p>
+            </form>
+          </div>
         </div>
 
         <div class="account-panel">
           <?php drawFlashMessages($errors, $success); ?>
 
           <form action="../actions/action_update_account.php" method="POST" class="account-form">
-            <?= csrfInput() ?>
             <div class="form-group">
               <label for="name">Nome</label>
               <input type="text" id="name" name="name" value="<?= htmlspecialchars($old['name']) ?>" required />
@@ -90,5 +126,17 @@ require __DIR__ . '/../templates/header.php';
       </div>
     </section>
   </main>
+<script>
+  document.getElementById('photo').addEventListener('change', function () {
+    const file = this.files[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      alert('O ficheiro é demasiado grande (máx. 2 MB).');
+      this.value = '';
+      return;
+    }
+    document.getElementById('avatar-upload-form').submit();
+  });
+</script>
 
 <?php require __DIR__ . '/../templates/footer.php'; ?>
