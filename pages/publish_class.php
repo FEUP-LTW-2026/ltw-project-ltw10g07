@@ -8,7 +8,7 @@ if (!isLoggedIn()) {
 }
 
 $userRole = getUserRole();
-$canPublishClass = $userRole === 'trainer' || $userRole === 'admin';
+$canPublishClass = $userRole === 'trainer';
 $errors = getFlashMessages('errors');
 $success = getFlashMessages('success');
 

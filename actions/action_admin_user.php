@@ -44,6 +44,25 @@ $isActive = isset($_POST['is_active']) ? 1 : 0;
 $password = $_POST['password'] ?? '';
 $userId = isset($_POST['user_id']) ? (int) $_POST['user_id'] : 0;
 
+if ($action === 'delete') {
+    if ($userId <= 0) {
+        redirectAdminUsers(['Utilizador inválido.']);
+    }
+
+    if ($userId === getUserId()) {
+        redirectAdminUsers(['Não podes remover a tua própria conta de admin.']);
+    }
+
+    $user = User::findById($db, $userId);
+
+    if ($user === null) {
+        redirectAdminUsers(['Utilizador não encontrado.']);
+    }
+
+    User::delete($db, $userId);
+    redirectAdminUsers([], ['Conta removida com sucesso.']);
+}
+
 if (!in_array($role, $roles, true)) {
     $errors[] = 'O tipo de utilizador selecionado não é válido.';
 }

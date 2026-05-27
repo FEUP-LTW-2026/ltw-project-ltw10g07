@@ -7,6 +7,7 @@ error_reporting(E_ALL);
 require_once __DIR__ . '/../database/connection.php';
 require_once __DIR__ . '/../database/User.php';
 require_once __DIR__ . '/../utils/session.php';
+require_once __DIR__ . '/../utils/security.php';
 
 if (!isLoggedIn()) {
     header('Location: ../pages/login.php');
@@ -17,6 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ../pages/account.php');
     exit;
 }
+
+verifyCsrfToken('../pages/account.php');
 
 $errors  = [];
 $userId  = (int) getUserId();

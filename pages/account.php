@@ -25,6 +25,9 @@ $old = getOldInput([
 ]);
 $errors = getFlashMessages('errors');
 $success = getFlashMessages('success');
+$userInitial = function_exists('mb_substr')
+  ? mb_strtoupper(mb_substr($user['name'], 0, 1))
+  : strtoupper(substr($user['name'], 0, 1));
 
 $pageTitle = 'Editar Conta - LiftToBig';
 $pageStyles = ['../css/account.css'];
@@ -51,7 +54,7 @@ require __DIR__ . '/../templates/header.php';
               />
             <?php else: ?>
               <div class="account-avatar account-avatar-placeholder" id="avatar-preview" aria-hidden="true">
-                <?= htmlspecialchars(mb_strtoupper(mb_substr($user['name'], 0, 1))) ?>
+                <?= htmlspecialchars($userInitial) ?>
               </div>
             <?php endif; ?>
 
@@ -62,6 +65,7 @@ require __DIR__ . '/../templates/header.php';
               class="avatar-upload-form"
               id="avatar-upload-form"
             >
+              <?= csrfInput() ?>
               <label for="photo" class="btn btn-outline btn-sm avatar-upload-btn" title="Alterar foto de perfil">
                 Alterar foto
               </label>
@@ -82,6 +86,7 @@ require __DIR__ . '/../templates/header.php';
           <?php drawFlashMessages($errors, $success); ?>
 
           <form action="../actions/action_update_account.php" method="POST" class="account-form">
+            <?= csrfInput() ?>
             <div class="form-group">
               <label for="name">Nome</label>
               <input type="text" id="name" name="name" value="<?= htmlspecialchars($old['name']) ?>" required />

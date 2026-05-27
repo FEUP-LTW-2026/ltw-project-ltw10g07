@@ -18,15 +18,6 @@ $equipment = Equipment::getAll($db);
 $errors = getFlashMessages('errors');
 $success = getFlashMessages('success');
 
-$trainersStmt = $db->query('
-  SELECT trainer.id, user.name
-  FROM trainer
-  JOIN user ON user.id = trainer.user_id
-  WHERE user.is_active = 1
-  ORDER BY user.name ASC
-');
-$trainers = $trainersStmt->fetchAll(PDO::FETCH_ASSOC);
-
 $statusLabels = [
   'available' => 'Disponível',
   'in_use' => 'Em uso',
@@ -178,7 +169,21 @@ require __DIR__ . '/../templates/header.php';
                     Conta ativa
                   </label>
                 </div>
-                <button type="submit" class="btn btn-outline">Guardar utilizador</button>
+                <div class="admin-actions">
+                  <button type="submit" class="btn btn-outline">Guardar utilizador</button>
+                  <?php if ((int) $user['id'] !== (int) getUserId()): ?>
+                    <button
+                      type="submit"
+                      class="btn btn-ghost"
+                      name="action"
+                      value="delete"
+                      formnovalidate
+                      onclick="return confirm('Tens a certeza que queres remover esta conta? Esta ação não pode ser desfeita.');"
+                    >
+                      Remover conta
+                    </button>
+                  <?php endif; ?>
+                </div>
               </form>
             <?php endforeach; ?>
             <p class="admin-empty" data-user-empty hidden>Nenhum utilizador encontrado.</p>
@@ -189,7 +194,7 @@ require __DIR__ . '/../templates/header.php';
           <div class="admin-section-header">
             <div>
               <h2>Catálogo de aulas</h2>
-              <p>Cria aulas, edita detalhes e atribui treinadores.</p>
+              <p>Cria aulas e edita os detalhes gerais do catálogo.</p>
             </div>
           </div>
 
@@ -203,17 +208,6 @@ require __DIR__ . '/../templates/header.php';
                   <label for="new-class-name">Nome</label>
                   <input type="text" id="new-class-name" name="name" required />
                 </div>
-                <div class="form-group">
-                  <label for="new-class-trainer">Treinador</label>
-                  <select id="new-class-trainer" name="trainer_id">
-                    <option value="">Sem treinador</option>
-                    <?php foreach ($trainers as $trainer): ?>
-                      <option value="<?= (int) $trainer['id'] ?>"><?= htmlspecialchars($trainer['name']) ?></option>
-                    <?php endforeach; ?>
-                  </select>
-                </div>
-              </div>
-              <div class="form-row">
                 <div class="form-group">
                   <label for="new-class-type">Tipo</label>
                   <input type="text" id="new-class-type" name="type" required />
@@ -255,24 +249,13 @@ require __DIR__ . '/../templates/header.php';
                 <input type="hidden" name="class_id" value="<?= (int) $class['id'] ?>" />
                 <div class="admin-card-title">
                   <h3><?= htmlspecialchars($class['name']) ?></h3>
-                  <span class="admin-pill"><?= htmlspecialchars($class['trainer_name'] ?? 'Sem treinador') ?></span>
+                  <span class="admin-pill"><?= htmlspecialchars($class['type']) ?></span>
                 </div>
                 <div class="form-row">
                   <div class="form-group">
                     <label for="class-name-<?= (int) $class['id'] ?>">Nome</label>
                     <input type="text" id="class-name-<?= (int) $class['id'] ?>" name="name" value="<?= htmlspecialchars($class['name']) ?>" required />
                   </div>
-                  <div class="form-group">
-                    <label for="class-trainer-<?= (int) $class['id'] ?>">Treinador</label>
-                    <select id="class-trainer-<?= (int) $class['id'] ?>" name="trainer_id">
-                      <option value="">Sem treinador</option>
-                      <?php foreach ($trainers as $trainer): ?>
-                        <option value="<?= (int) $trainer['id'] ?>" <?= (int) ($class['trainer_id'] ?? 0) === (int) $trainer['id'] ? 'selected' : '' ?>><?= htmlspecialchars($trainer['name']) ?></option>
-                      <?php endforeach; ?>
-                    </select>
-                  </div>
-                </div>
-                <div class="form-row">
                   <div class="form-group">
                     <label for="class-type-<?= (int) $class['id'] ?>">Tipo</label>
                     <input type="text" id="class-type-<?= (int) $class['id'] ?>" name="type" value="<?= htmlspecialchars($class['type']) ?>" required />

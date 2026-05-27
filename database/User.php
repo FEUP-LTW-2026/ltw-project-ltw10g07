@@ -130,4 +130,9 @@ class User {
         $stmt = $db->prepare('DELETE FROM trainer WHERE user_id = ?');
         $stmt->execute([$userId]);
     }
+
+    public static function delete(PDO $db, int $id): void {
+        $stmt = $db->prepare('DELETE FROM user WHERE id = ?');
+        $stmt->execute([$id]);
+    }
 }

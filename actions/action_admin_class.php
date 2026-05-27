@@ -34,7 +34,7 @@ verifyCsrfToken('../pages/admin.php#classes');
 $db = getDB();
 $action = $_POST['action'] ?? '';
 $classId = isset($_POST['class_id']) ? (int) $_POST['class_id'] : 0;
-$trainerId = isset($_POST['trainer_id']) && $_POST['trainer_id'] !== '' ? (int) $_POST['trainer_id'] : null;
+$trainerId = null;
 $name = trim($_POST['name'] ?? '');
 $description = trim($_POST['description'] ?? '');
 $type = trim($_POST['type'] ?? '');

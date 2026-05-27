@@ -67,7 +67,7 @@ $navLinks = [
               <span class="nav-user">Olá, <?= htmlspecialchars($userName ?? 'membro') ?></span>
             </summary>
             <div class="account-menu-panel">
-              <?php if ($userRole === 'trainer' || $userRole === 'admin'): ?>
+              <?php if ($userRole === 'trainer'): ?>
                 <a href="publish_class.php" class="<?= $activePage === 'publish-class' ? 'active' : '' ?>">Publicar aula</a>
               <?php endif; ?>
               <?php if ($userRole === 'trainer'): ?>
@@ -77,7 +77,9 @@ $navLinks = [
               <?php if ($userRole === 'admin'): ?>
                 <a href="admin.php" class="<?= $activePage === 'admin' ? 'active' : '' ?>">Admin</a>
               <?php endif; ?>
-              <a href="account.php" class="<?= $activePage === 'account' ? 'active' : '' ?>">Editar conta</a>
+              <?php if ($userRole !== 'admin'): ?>
+                <a href="account.php" class="<?= $activePage === 'account' ? 'active' : '' ?>">Editar conta</a>
+              <?php endif; ?>
               <form action="../actions/action_logout.php" method="POST" class="account-menu-form">
                 <?= csrfInput() ?>
                 <button type="submit">Sair</button>

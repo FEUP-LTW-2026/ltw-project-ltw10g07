@@ -7,7 +7,7 @@ require_once __DIR__ . '/../database/Trainer.php';
 require_once __DIR__ . '/../utils/session.php';
 require_once __DIR__ . '/../utils/security.php';
 
-if (!isLoggedIn() || !in_array(getUserRole(), ['trainer', 'admin'], true)) {
+if (!isLoggedIn() || getUserRole() !== 'trainer') {
     setFlashMessages('errors', ['Não tens permissões para publicar aulas.']);
     header('Location: ../pages/landingpage.php');
     exit;
