@@ -26,6 +26,16 @@
   display: block;
 }
 
+.class-image-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg);
+  color: var(--color-text-muted);
+  font-size: 4rem;
+  font-weight: 800;
+}
+
 .class-hero-badges {
   position: absolute;
   top: 1rem;
@@ -147,42 +157,15 @@
   border-bottom: 1px solid var(--color-border);
 }
 
-.expect-list,
 .next-sessions-list {
   display: flex;
   flex-direction: column;
   gap: .75rem;
 }
 
-.expect-list li {
-  display: flex;
-  align-items: flex-start;
-  gap: .6rem;
-  font-size: .9rem;
-  color: var(--color-text-secondary);
-}
-
-.expect-icon {
-  color: var(--color-primary);
-  font-size: .75rem;
-  margin-top: .25rem;
-}
-
-.requirements-box {
-  margin-top: 1.25rem;
-  padding: 1rem;
-  background: var(--color-primary-light);
-  border: 1px solid #bfdbfe;
-  border-radius: var(--radius-md);
-}
-
-.requirements-box h3 {
-  font-size: .9rem;
-  margin-bottom: .4rem;
-}
-
-.requirements-box p {
+.class-detail-block p {
   font-size: .875rem;
+  line-height: 1.7;
   color: var(--color-text-secondary);
 }
 

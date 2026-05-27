@@ -41,78 +41,7 @@ $category = $classData['type'];
 $intensity = $classData['intensity'] ?? 'Média';
 $duration = ((int) ($classData['duration'] ?? 45)) . ' min';
 $description = $classData['description'] ?: 'Esta aula ainda não tem descrição.';
-$photo = $classData['image'] ?: '../img/hiit.jpg';
-$whatToExpect = ['Aquecimento geral guiado', 'Bloco de exercícios principal', 'Arrefecimento e alongamentos'];
-$requirements = 'Trazer roupa confortável de treino, toalha e água.';
-$calories = '300-450 kcal';
-
-if (str_contains(strtolower($className), 'hiit')) {
-    $photo = '../img/hiit.jpg';
-    $category = 'Cardio';
-    $whatToExpect = [
-        'Aquecimento dinâmico de 5 minutos',
-        'Blocos de trabalho de 40s com 20s de recuperação',
-        'Exercícios de força e cardio alternados',
-        'Arrefecimento e alongamentos finais',
-    ];
-    $requirements = 'Nível intermédio recomendado. Trazer garrafa de água e toalha.';
-    $calories = '400-600 kcal';
-} elseif (str_contains(strtolower($className), 'yoga')) {
-    $photo = '../img/yoga.jpg';
-    $category = 'Yoga';
-    $whatToExpect = [
-        'Respiração e meditação de abertura (5 min)',
-        'Sequência de aquecimento Surya Namaskar',
-        'Fluxo de posturas em pé e equilíbrio',
-        'Posturas de chão e relaxamento final (Savasana)',
-    ];
-    $requirements = 'Todos os níveis bem-vindos. Trazer tapete (disponível para aluguer no ginásio).';
-    $calories = '150-250 kcal';
-} elseif (str_contains(strtolower($className), 'barbell') || str_contains(strtolower($className), 'força')) {
-    $photo = '../img/barbell.jpg';
-    $category = 'Força';
-    $whatToExpect = [
-        'Mobilidade articular e ativação muscular',
-        'Trabalho técnico nos movimentos principais',
-        'Séries de hipertrofia e força',
-        'Arrefecimento com foam rolling',
-    ];
-    $requirements = 'Nível intermédio/avançado. Recomendado calçado de levantamento.';
-    $calories = '300-450 kcal';
-} elseif (str_contains(strtolower($className), 'cycle') || str_contains(strtolower($className), 'cycling')) {
-    $photo = '../img/cycling.jpg';
-    $category = 'Cycling';
-    $whatToExpect = [
-        'Ajuste da bicicleta e aquecimento progressivo',
-        'Blocos de cadência com subidas e sprints',
-        'Trabalho cardiovascular de intensidade média',
-        'Retorno à calma com mobilidade leve',
-    ];
-    $requirements = 'Todos os níveis. Trazer água e toalha. Chegar 5 minutos antes para ajustar a bicicleta.';
-    $calories = '350-550 kcal';
-} elseif (str_contains(strtolower($className), 'mobility') || str_contains(strtolower($className), 'core') || str_contains(strtolower($className), 'flexibilidade')) {
-    $photo = '../img/mobility.jpg';
-    $category = 'Flexibilidade';
-    $whatToExpect = [
-        'Ativação respiratória e mobilidade inicial',
-        'Exercícios de core anti-rotação e estabilidade',
-        'Sequências de mobilidade para ancas, ombros e coluna',
-        'Alongamentos finais guiados',
-    ];
-    $requirements = 'Todos os níveis. Recomendado para quem passa muito tempo sentado ou treina força regularmente.';
-    $calories = '120-220 kcal';
-} elseif (str_contains(strtolower($className), 'boxing') || str_contains(strtolower($className), 'boxe')) {
-    $photo = '../img/boxing.jpg';
-    $category = 'Boxe';
-    $whatToExpect = [
-        'Aquecimento com corda e footwork',
-        'Técnica de jab, direto, esquivas e combinações',
-        'Rounds no saco com foco em ritmo e potência',
-        'Condicionamento final e alongamentos',
-    ];
-    $requirements = 'Nível iniciante/intermédio. Luvas disponíveis no ginásio, mas podes trazer as tuas.';
-    $calories = '450-650 kcal';
-}
+$photo = trim((string) ($classData['image'] ?? ''));
 
 $intensityBadge = $intensity === 'Alta' ? 'badge-amber' : ($intensity === 'Baixa' ? 'badge-green' : 'badge-blue');
 $categoryBadge = $category === 'Flexibilidade' ? 'badge-green' : 'badge-blue';
@@ -159,7 +88,13 @@ require __DIR__ . '/../templates/header.php';
       <div class="container class-hero-inner">
 
         <div class="class-hero-image-wrap">
-          <img src="<?= htmlspecialchars($photo) ?>" alt="<?= htmlspecialchars($className) ?>" class="class-hero-img" />
+          <?php if ($photo !== ''): ?>
+            <img src="<?= htmlspecialchars($photo) ?>" alt="<?= htmlspecialchars($className) ?>" class="class-hero-img" />
+          <?php else: ?>
+            <div class="class-hero-img class-image-placeholder" aria-hidden="true">
+              <?= htmlspecialchars(strtoupper(substr($className, 0, 1))) ?>
+            </div>
+          <?php endif; ?>
           <div class="class-hero-badges">
             <span class="badge <?= $categoryBadge ?>"><?= htmlspecialchars($category) ?></span>
             <span class="badge <?= $intensityBadge ?>"><?= htmlspecialchars($intensity) ?></span>
@@ -183,10 +118,6 @@ require __DIR__ . '/../templates/header.php';
             <div class="class-meta-item">
               <span class="meta-icon" aria-hidden="true">&#128101;</span>
               <span><?= $spotsLeft ?> vagas disponíveis</span>
-            </div>
-            <div class="class-meta-item">
-              <span class="meta-icon" aria-hidden="true">&#128293;</span>
-              <span>~<?= htmlspecialchars($calories) ?></span>
             </div>
           </div>
 
@@ -257,20 +188,8 @@ require __DIR__ . '/../templates/header.php';
       <div class="container class-details-grid">
 
         <div class="class-detail-block">
-          <h2>O que podes esperar</h2>
-          <ul class="expect-list">
-            <?php foreach ($whatToExpect as $item): ?>
-              <li>
-                <span class="expect-icon" aria-hidden="true">&#9654;</span>
-                <?= htmlspecialchars($item) ?>
-              </li>
-            <?php endforeach; ?>
-          </ul>
-
-          <div class="requirements-box">
-            <h3>&#8505; Requisitos</h3>
-            <p><?= htmlspecialchars($requirements) ?></p>
-          </div>
+          <h2>Descrição</h2>
+          <p><?= htmlspecialchars($description) ?></p>
         </div>
 
         <div class="class-detail-block">

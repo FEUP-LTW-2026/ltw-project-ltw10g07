@@ -45,13 +45,15 @@ document.addEventListener('DOMContentLoaded', function() {
         classes.forEach(c => {
             // Calcular a cor da badge da intensidade
             const badgeColor = c.intensity === 'Alta' ? 'badge-amber' : (c.intensity === 'Baixa' ? 'badge-green' : 'badge-blue');
-            const image = c.image ? c.image : '../img/hiit.jpg';
+            const imageMarkup = c.image
+                ? `<img src="${c.image}" alt="${c.name}" />`
+                : `<div class="class-image-placeholder" aria-hidden="true">${c.name.charAt(0).toUpperCase()}</div>`;
             const trainerName = c.trainer_name ? c.trainer_name : 'Ginásio';
 
             html += `
                 <li class="class-card">
                     <div class="class-img-wrap">
-                        <img src="${image}" alt="${c.name}" />
+                        ${imageMarkup}
                     </div>
                     <div class="class-card-body">
                         <div class="class-card-tags">

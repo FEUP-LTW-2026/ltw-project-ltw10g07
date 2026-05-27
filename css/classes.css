@@ -134,6 +134,18 @@
   object-fit: cover;
 }
 
+.class-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-soft);
+  color: var(--color-text-muted);
+  font-size: 3rem;
+  font-weight: 800;
+}
+
 .card-status {
   position: absolute;
   top: 1rem;

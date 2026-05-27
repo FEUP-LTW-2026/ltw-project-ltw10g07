@@ -156,7 +156,13 @@ require __DIR__ . '/../templates/header.php';
                 ?>
                 <li class="class-card">
                   <div class="class-img-wrap">
-                    <img src="<?= htmlspecialchars($class['image'] ?: '../img/hiit.jpg') ?>" alt="<?= htmlspecialchars($class['name']) ?>" />
+                    <?php if (!empty($class['image'])): ?>
+                      <img src="<?= htmlspecialchars($class['image']) ?>" alt="<?= htmlspecialchars($class['name']) ?>" />
+                    <?php else: ?>
+                      <div class="class-image-placeholder" aria-hidden="true">
+                        <?= htmlspecialchars(strtoupper(substr($class['name'], 0, 1))) ?>
+                      </div>
+                    <?php endif; ?>
                     <span class="badge badge-success card-status">
                       <?= max(0, (int) $class['capacity'] - (int) $class['active_enrollments']) ?> vagas
                     </span>

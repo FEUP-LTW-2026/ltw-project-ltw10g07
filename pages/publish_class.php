@@ -60,7 +60,7 @@ require __DIR__ . '/../templates/header.php';
 
               <div class="form-group">
                 <label for="name">Nome da aula</label>
-                <input type="text" id="name" name="name" placeholder="Ex: HIIT Intensity Max" required />
+                <input type="text" id="name" name="name" placeholder="Nome da aula" required />
               </div>
 
               <div class="form-row">

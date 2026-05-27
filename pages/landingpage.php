@@ -3,11 +3,13 @@ $pageTitle = 'LiftToBig - Ginasio & Gestao Online';
 $pageStyles = ['../css/landingpage.css'];
 $activePage = 'home';
 require_once __DIR__ . '/../database/connection.php';
+require_once __DIR__ . '/../database/ClassCatalog.php';
 require_once __DIR__ . '/../database/Trainer.php';
 require_once __DIR__ . '/../templates/trainers.php';
 
 $db = getDB();
 $featuredTrainers = Trainer::getFeatured($db);
+$featuredClasses = array_slice(ClassCatalog::getAll($db), 0, 3);
 
 require __DIR__ . '/../templates/header.php';
 ?>
@@ -95,80 +97,48 @@ require __DIR__ . '/../templates/header.php';
           <a href="classes.php" class="link-more">Ver Horários &rsaquo;</a>
         </div>
 
-        <ul class="classes-grid">
-            <!--Power Hit-->
-          <li class="class-card">
-            <div class="class-img-wrap">
-              
-              <img src="../img/powerhit.jpg" alt="Aula de Power HIIT" />
-              <div class="class-badge-img">
-                <span class="badge badge-blue">Cardio</span>
-              </div>
-              <div class="class-name-overlay">
-                <h3>Power HIIT</h3>
-              </div>
-            </div>
+        <?php if ($featuredClasses !== []): ?>
+          <ul class="classes-grid">
+            <?php foreach ($featuredClasses as $class): ?>
+              <?php
+                $badgeClass = $class['intensity'] === 'Alta'
+                  ? 'badge-amber'
+                  : ($class['intensity'] === 'Baixa' ? 'badge-green' : 'badge-blue');
+              ?>
+              <li class="class-card">
+                <div class="class-img-wrap">
+                  <?php if (!empty($class['image'])): ?>
+                    <img src="<?= htmlspecialchars($class['image']) ?>" alt="<?= htmlspecialchars($class['name']) ?>" />
+                  <?php else: ?>
+                    <div class="class-image-placeholder" aria-hidden="true">
+                      <?= htmlspecialchars(strtoupper(substr($class['name'], 0, 1))) ?>
+                    </div>
+                  <?php endif; ?>
+                  <div class="class-badge-img">
+                    <span class="badge <?= $badgeClass ?>"><?= htmlspecialchars($class['type']) ?></span>
+                  </div>
+                  <div class="class-name-overlay">
+                    <h3><?= htmlspecialchars($class['name']) ?></h3>
+                  </div>
+                </div>
 
-            <div class="class-info">
-              <div class="class-meta-item">
-                <span class="meta-icon" aria-hidden="true">&#9202;</span>
-                <span>45m</span>
-              </div>
-              <div class="class-meta-item">
-                <span class="meta-icon" aria-hidden="true">&#128293;</span>
-                <span>Alta</span>
-              </div>
-              <a href="classes.php" class="btn btn-outline btn-sm" style="margin-left:auto">Inscrever</a>
-            </div>
-          </li>
-          <!--Yoga-->
-          <li class="class-card">
-            <div class="class-img-wrap">
-              <img src="../img/yoga.jpg" alt="yoga" />
-              <div class="class-badge-img">
-                <span class="badge badge-green">Yoga</span>
-              </div>
-              <div class="class-name-overlay">
-                <h3>Yoga</h3>
-              </div>
-            </div>
-            <div class="class-info">
-              <div class="class-meta-item">
-                <span class="meta-icon" aria-hidden="true">&#9202;</span>
-                <span>60m</span>
-              </div>
-              <div class="class-meta-item">
-                <span class="meta-icon" aria-hidden="true">&#127774;</span>
-                <span>Média</span>
-              </div>
-              <a href="classes.php" class="btn btn-outline btn-sm" style="margin-left:auto">Inscrever</a>
-            </div>
-          </li>
-          <!--Zumba -->
-          <li class="class-card">
-            <div class="class-img-wrap">
-              <img src="../img/zumba.jpg" alt="zumba" />
-              <div class="class-badge-img">
-                <span class="badge badge-amber">Cardio</span>
-              </div>
-              <div class="class-name-overlay">
-                <h3>Zumba</h3>
-              </div>
-            </div>
-            <div class="class-info">
-              <div class="class-meta-item">
-                <span class="meta-icon" aria-hidden="true">&#9202;</span>
-                <span>60m</span>
-              </div>
-              <div class="class-meta-item">
-               <span class="meta-icon" aria-hidden="true">&#127774;</span>
-                <span>Média</span>
-              </div>
-              <a href="classes.php" class="btn btn-outline btn-sm" style="margin-left:auto">Inscrever</a>
-            </div>
-          </li>
-
-        </ul>
+                <div class="class-info">
+                  <div class="class-meta-item">
+                    <span class="meta-icon" aria-hidden="true">&#9202;</span>
+                    <span><?= (int) $class['duration'] ?>m</span>
+                  </div>
+                  <div class="class-meta-item">
+                    <span class="meta-icon" aria-hidden="true">&#128293;</span>
+                    <span><?= htmlspecialchars($class['intensity']) ?></span>
+                  </div>
+                  <a href="class.php?id=<?= (int) $class['id'] ?>" class="btn btn-outline btn-sm" style="margin-left:auto">Ver aula</a>
+                </div>
+              </li>
+            <?php endforeach; ?>
+          </ul>
+        <?php else: ?>
+          <p>Ainda não existem aulas publicadas.</p>
+        <?php endif; ?>
       </div>
     </section>
 

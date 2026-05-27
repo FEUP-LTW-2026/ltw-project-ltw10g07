@@ -88,7 +88,7 @@ try {
         $intensity,
         $duration,
         $capacity,
-        '../img/hiit.jpg',
+        '',
         $sessionDate,
         $startTime,
         $endTime,

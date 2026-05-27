@@ -74,10 +74,6 @@ if ($capacity < 1 || $capacity > 80) {
     $errors[] = 'A capacidade deve estar entre 1 e 80 pessoas.';
 }
 
-if ($image === '') {
-    $image = '../img/hiit.jpg';
-}
-
 if ($errors !== []) {
     redirectAdminClasses($errors);
 }

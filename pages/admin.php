@@ -236,7 +236,7 @@ require __DIR__ . '/../templates/header.php';
               </div>
               <div class="form-group">
                 <label for="new-class-image">Imagem</label>
-                <input type="text" id="new-class-image" name="image" placeholder="../img/hiit.jpg" />
+                <input type="text" id="new-class-image" name="image" placeholder="Caminho da imagem (opcional)" />
               </div>
               <div class="form-group">
                 <label for="new-class-description">Descrição</label>
