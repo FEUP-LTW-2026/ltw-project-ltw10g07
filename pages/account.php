@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../database/connection.php';
 require_once __DIR__ . '/../database/User.php';
 require_once __DIR__ . '/../utils/session.php';
+require_once __DIR__ . '/../templates/flash_messages.php';
 
 if (!isLoggedIn()) {
   header('Location: login.php');
@@ -41,21 +42,7 @@ require __DIR__ . '/../templates/header.php';
         </div>
 
         <div class="account-panel">
-          <?php if ($errors !== []): ?>
-            <div class="form-alert form-alert-error" role="alert">
-              <?php foreach ($errors as $error): ?>
-                <p><?= htmlspecialchars($error) ?></p>
-              <?php endforeach; ?>
-            </div>
-          <?php endif; ?>
-
-          <?php if ($success !== []): ?>
-            <div class="form-alert form-alert-success" role="status">
-              <?php foreach ($success as $message): ?>
-                <p><?= htmlspecialchars($message) ?></p>
-              <?php endforeach; ?>
-            </div>
-          <?php endif; ?>
+          <?php drawFlashMessages($errors, $success); ?>
 
           <form action="../actions/action_update_account.php" method="POST" class="account-form">
             <div class="form-group">

@@ -64,5 +64,9 @@
     </div>
   </footer>
 
+<?php foreach (($pageScripts ?? []) as $script): ?>
+  <script src="<?= htmlspecialchars($script) ?>" defer></script>
+<?php endforeach; ?>
+
 </body>
 </html>

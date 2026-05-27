@@ -69,6 +69,9 @@ $navLinks = [
               <?php if ($userRole === 'trainer' || $userRole === 'admin'): ?>
                 <a href="publish_class.php" class="<?= $activePage === 'publish-class' ? 'active' : '' ?>">Publicar aula</a>
               <?php endif; ?>
+              <?php if ($userRole === 'admin'): ?>
+                <a href="admin.php" class="<?= $activePage === 'admin' ? 'active' : '' ?>">Admin</a>
+              <?php endif; ?>
               <a href="account.php" class="<?= $activePage === 'account' ? 'active' : '' ?>">Editar conta</a>
               <a href="../actions/action_logout.php">Sair</a>
             </div>

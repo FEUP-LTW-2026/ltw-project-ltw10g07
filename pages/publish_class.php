@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../utils/session.php';
+require_once __DIR__ . '/../templates/flash_messages.php';
 
 if (!isLoggedIn()) {
   header('Location: login.php');
@@ -8,6 +9,8 @@ if (!isLoggedIn()) {
 
 $userRole = getUserRole();
 $canPublishClass = $userRole === 'trainer' || $userRole === 'admin';
+$errors = getFlashMessages('errors');
+$success = getFlashMessages('success');
 
 $pageTitle = 'Publicar Aula - LiftToBig';
 $pageStyles = ['../css/publish_class.css'];
@@ -43,6 +46,8 @@ require __DIR__ . '/../templates/header.php';
         </div>
 
         <div class="publish-class-panel">
+          <?php drawFlashMessages($errors, $success); ?>
+
           <?php if (!$canPublishClass): ?>
             <div class="form-alert form-alert-error" role="alert">
               <p>Esta página é reservada a treinadores. A validação final pode ser ligada na action.</p>

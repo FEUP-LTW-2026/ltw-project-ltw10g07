@@ -2,6 +2,19 @@
 declare(strict_types=1);
 
 class Trainer {
+    public static function findByUserId(PDO $db, int $userId): ?array {
+        $stmt = $db->prepare('
+            SELECT id, user_id, bio, specializations, certifications, rating
+            FROM trainer
+            WHERE user_id = ?
+        ');
+        $stmt->execute([$userId]);
+
+        $trainer = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $trainer ?: null;
+    }
+
     public static function getAll(PDO $db): array {
         $stmt = $db->query('
             SELECT

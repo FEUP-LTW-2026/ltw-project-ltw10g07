@@ -13,17 +13,27 @@ php -S localhost:8000
 ```
 
 Depois abrir `http://localhost:8000/pages/landingpage.php` no browser.
+Também podes abrir `http://localhost:8000/`, que redireciona para a landing page.
 
 
 ## Estrutura de Ficheiros
 
 ```
 /
+├── index.php           ← Entrada do projeto; redireciona para pages/landingpage.php
+│
 ├── actions/
+│   ├── action_admin_class.php     ← Gestão admin do catálogo de aulas
+│   ├── action_admin_equipment.php ← Gestão admin do equipamento
+│   ├── action_admin_user.php      ← Gestão admin de utilizadores
+│   ├── action_create_class.php    ← Publicação de aulas por trainers/admins
 │   ├── action_login.php    ← Processa o formulário de login
 │   ├── action_logout.php   ← Termina a sessão do utilizador
 │   ├── action_register.php ← Processa o formulário de registo
 │   └── action_update_account.php ← Atualiza os detalhes da conta
+│
+├── api/
+│   └── admin_users.php ← Endpoint JSON/AJAX para pesquisa de utilizadores
 │
 ├── pages/
 │   ├── index.php       ← Redireciona para a landing page
@@ -34,16 +44,22 @@ Depois abrir `http://localhost:8000/pages/landingpage.php` no browser.
 │   ├── trainer.php     ← Perfil de um treinador
 │   ├── login.php       ← Página de login
 │   ├── register.php    ← Página de registo
-│   └── account.php     ← Página de edição da conta
+│   ├── account.php     ← Página de edição da conta
+│   ├── publish_class.php ← Página de publicação de aulas
+│   └── admin.php       ← Painel de administração
 ├── templates/
 │   ├── header.php      ← Cabeçalho, navegação e imports CSS comuns
 │   ├── footer.php      ← Rodapé comum
+│   ├── flash_messages.php ← Template reutilizável para mensagens de erro/sucesso
 │   └── trainers.php    ← Template com dados/listagem de treinadores
 │
 ├── database/
 │   ├── connection.php  ← Ligação à base de dados SQLite
 │   ├── database.sql    ← Script de criação/inicialização da base de dados
 │   ├── ltw.db          ← Base de dados SQLite do projeto
+│   ├── ClassCatalog.php ← Modelo e operações relacionadas com aulas
+│   ├── Equipment.php   ← Modelo e operações relacionadas com equipamento
+│   ├── TrainerReview.php ← Modelo e operações relacionadas com avaliações
 │   ├── Trainer.php     ← Modelo e operações relacionadas com treinadores
 │   └── User.php        ← Modelo e operações relacionadas com utilizadores
 │
@@ -51,6 +67,7 @@ Depois abrir `http://localhost:8000/pages/landingpage.php` no browser.
 │   └── session.php     ← Funções auxiliares para gestão de sessões
 │
 ├── css/
+│   ├── admin.css       ← Estilos específicos do painel admin
 │   ├── base.css        ← Variáveis, reset e estilos de elementos HTML
 │   ├── components.css  ← Componentes reutilizáveis (botões, cards, badges, forms…)
 │   ├── landingpage.css ← Estilos específicos da landing page
@@ -60,6 +77,9 @@ Depois abrir `http://localhost:8000/pages/landingpage.php` no browser.
 │   ├── login.css       ← Estilos específicos da página de login/registo
 │   ├── account.css     ← Estilos específicos da página de conta
 │   └── responsive.css  ← Ajustes de responsividade partilhados
+│
+├── javascript/
+│   └── admin.js        ← JS do painel admin, incluindo tabs e pesquisa AJAX
 │
 └── img/                ← Imagens 
     ├── hero-athlete.jpg
@@ -94,4 +114,4 @@ O CSS está dividido em 3 camadas:
 
 3. **`css/[pagina].css`** — estilos específicos de cada página. Mantido o mais pequeno possível.
 
-Não foi implementado a criação de contas para Trainers/Staff, foram injetados os dados, ainda vai ser implementado.
+O projeto já suporta contas `member`, `trainer` e `admin`. Admins conseguem gerir utilizadores, aulas e equipamento no painel de administração.

@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../utils/session.php';
+require_once __DIR__ . '/../templates/flash_messages.php';
 
 $old = getOldInput(['login' => '']);
 $errors = getFlashMessages('errors');
@@ -21,21 +22,7 @@ require __DIR__ . '/../templates/header.php';
         </div>
 
         <div class="auth-form-wrapper">
-          <?php if ($errors !== []): ?>
-            <div class="form-alert form-alert-error" role="alert">
-              <?php foreach ($errors as $error): ?>
-                <p><?= htmlspecialchars($error) ?></p>
-              <?php endforeach; ?>
-            </div>
-          <?php endif; ?>
-
-          <?php if ($successMessages !== []): ?>
-            <div class="form-alert form-alert-success" role="status">
-              <?php foreach ($successMessages as $message): ?>
-                <p><?= htmlspecialchars($message) ?></p>
-              <?php endforeach; ?>
-            </div>
-          <?php endif; ?>
+          <?php drawFlashMessages($errors, $successMessages); ?>
 
           <form action="../actions/action_login.php" method="POST" class="auth-form">
             <div class="form-group">

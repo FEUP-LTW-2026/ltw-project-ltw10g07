@@ -31,6 +31,14 @@ CREATE TABLE trainer (
   FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 );
 
+CREATE TABLE equipment (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  category TEXT NOT NULL,
+  status TEXT NOT NULL CHECK (status IN ('available', 'in_use', 'maintenance')),
+  location TEXT
+);
+
 CREATE TABLE trainer_review (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL,
