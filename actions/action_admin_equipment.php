@@ -4,6 +4,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../database/connection.php';
 require_once __DIR__ . '/../database/Equipment.php';
 require_once __DIR__ . '/../utils/session.php';
+require_once __DIR__ . '/../utils/security.php';
 
 function redirectAdminEquipment(array $errors = [], array $success = []): void {
     if ($errors !== []) {
@@ -27,6 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ../pages/admin.php');
     exit;
 }
+
+verifyCsrfToken('../pages/admin.php#equipment');
 
 $db = getDB();
 $action = $_POST['action'] ?? '';

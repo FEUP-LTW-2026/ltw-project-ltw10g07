@@ -33,6 +33,7 @@ require __DIR__ . '/../templates/header.php';
           <?php drawFlashMessages($errors); ?>
 
           <form action="../actions/action_register.php" method="POST" class="auth-form">
+            <?= csrfInput() ?>
 
             <div class="form-row">
               <div class="form-group">

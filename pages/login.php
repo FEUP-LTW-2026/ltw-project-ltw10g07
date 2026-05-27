@@ -25,6 +25,7 @@ require __DIR__ . '/../templates/header.php';
           <?php drawFlashMessages($errors, $successMessages); ?>
 
           <form action="../actions/action_login.php" method="POST" class="auth-form">
+            <?= csrfInput() ?>
             <div class="form-group">
               <label for="login">Email ou username</label>
               <input type="text" id="login" name="login" placeholder="exemplo@email.com ou o_teu_username" value="<?= htmlspecialchars($old['login']) ?>" required />

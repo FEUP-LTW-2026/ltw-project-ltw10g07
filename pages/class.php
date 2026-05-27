@@ -154,6 +154,7 @@ require __DIR__ . '/../templates/header.php';
               <h3 style="font-size: 0.95rem; margin-bottom: 0.75rem; color: #475569; text-transform: uppercase; letter-spacing: 0.5px;">Painel do Treinador</h3>
               <div style="display: flex; gap: 0.5rem;">
                 <form action="../actions/action_delete_class.php" method="POST" style="flex: 1; margin: 0;" onsubmit="return confirm('Tens a certeza que queres eliminar esta aula e todas as inscrições associadas?');">
+                  <?= csrfInput() ?>
                   <input type="hidden" name="class_id" value="<?= (int) $classData['id'] ?>">
                   <button type="submit" class="btn btn-danger btn-sm" style="width: 100%; background: #dc2626; border: none; color: white; cursor: pointer;">Eliminar Aula</button>
                 </form>
@@ -163,6 +164,7 @@ require __DIR__ . '/../templates/header.php';
 
           <?php if ($mainSessionId > 0): ?>
             <form action="../actions/action_enroll.php" method="POST">
+              <?= csrfInput() ?>
               <input type="hidden" name="session_id" value="<?= $mainSessionId ?>" />
               <input type="hidden" name="class_id" value="<?= (int) $classData['id'] ?>" />
 
@@ -246,6 +248,7 @@ require __DIR__ . '/../templates/header.php';
                     </span>
 
                     <form action="../actions/action_enroll.php" method="POST" style="display:inline;">
+                      <?= csrfInput() ?>
                       <input type="hidden" name="session_id" value="<?= $sessionId ?>" />
                       <input type="hidden" name="class_id" value="<?= (int) $classData['id'] ?>" />
 

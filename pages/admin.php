@@ -89,6 +89,7 @@ require __DIR__ . '/../templates/header.php';
 
           <div class="admin-grid">
             <form action="../actions/action_admin_user.php" method="POST" class="admin-card admin-form">
+              <?= csrfInput() ?>
               <input type="hidden" name="action" value="create" />
               <h3>Criar utilizador</h3>
               <div class="form-row">
@@ -136,6 +137,7 @@ require __DIR__ . '/../templates/header.php';
                 data-user-id="<?= (int) $user['id'] ?>"
                 data-user-card="<?= htmlspecialchars(strtolower($user['name'] . ' ' . $user['username'] . ' ' . $user['email'] . ' ' . ($roleLabels[$user['role']] ?? $user['role']))) ?>"
               >
+                <?= csrfInput() ?>
                 <input type="hidden" name="action" value="update" />
                 <input type="hidden" name="user_id" value="<?= (int) $user['id'] ?>" />
                 <div class="admin-card-title">
@@ -193,6 +195,7 @@ require __DIR__ . '/../templates/header.php';
 
           <div class="admin-grid">
             <form action="../actions/action_admin_class.php" method="POST" class="admin-card admin-form">
+              <?= csrfInput() ?>
               <input type="hidden" name="action" value="create" />
               <h3>Criar aula</h3>
               <div class="form-row">
@@ -247,6 +250,7 @@ require __DIR__ . '/../templates/header.php';
 
             <?php foreach ($classes as $class): ?>
               <form action="../actions/action_admin_class.php" method="POST" class="admin-card admin-form">
+                <?= csrfInput() ?>
                 <input type="hidden" name="action" value="update" />
                 <input type="hidden" name="class_id" value="<?= (int) $class['id'] ?>" />
                 <div class="admin-card-title">
@@ -319,6 +323,7 @@ require __DIR__ . '/../templates/header.php';
 
           <div class="admin-grid">
             <form action="../actions/action_admin_equipment.php" method="POST" class="admin-card admin-form">
+              <?= csrfInput() ?>
               <input type="hidden" name="action" value="create" />
               <h3>Adicionar equipamento</h3>
               <div class="form-row">
@@ -350,6 +355,7 @@ require __DIR__ . '/../templates/header.php';
 
             <?php foreach ($equipment as $item): ?>
               <form action="../actions/action_admin_equipment.php" method="POST" class="admin-card admin-form">
+                <?= csrfInput() ?>
                 <input type="hidden" name="action" value="update" />
                 <input type="hidden" name="equipment_id" value="<?= (int) $item['id'] ?>" />
                 <div class="admin-card-title">

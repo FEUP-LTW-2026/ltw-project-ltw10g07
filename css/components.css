@@ -143,17 +143,25 @@
   box-shadow: var(--shadow-md);
 }
 
-.account-menu-panel a {
+.account-menu-panel a,
+.account-menu-form button {
   display: block;
+  width: 100%;
   padding: .65rem .75rem;
+  border: 0;
   border-radius: var(--radius-sm);
+  background: transparent;
   font-size: .875rem;
   font-weight: 600;
+  font-family: var(--font-body);
+  text-align: left;
   color: var(--color-text-secondary);
+  cursor: pointer;
 }
 
 .account-menu-panel a:hover,
-.account-menu-panel a.active {
+.account-menu-panel a.active,
+.account-menu-form button:hover {
   color: var(--color-primary);
   background: var(--color-primary-light);
 }

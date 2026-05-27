@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../utils/session.php';
+require_once __DIR__ . '/../utils/security.php';
 
 $pageTitle = $pageTitle ?? 'LiftToBig';
 $pageStyles = $pageStyles ?? [];
@@ -69,11 +70,18 @@ $navLinks = [
               <?php if ($userRole === 'trainer' || $userRole === 'admin'): ?>
                 <a href="publish_class.php" class="<?= $activePage === 'publish-class' ? 'active' : '' ?>">Publicar aula</a>
               <?php endif; ?>
+              <?php if ($userRole === 'trainer'): ?>
+                <a href="trainer_dashboard.php" class="<?= $activePage === 'trainer-dashboard' ? 'active' : '' ?>">Painel treinador</a>
+                <a href="trainer_profile_edit.php" class="<?= $activePage === 'trainer-profile-edit' ? 'active' : '' ?>">Perfil treinador</a>
+              <?php endif; ?>
               <?php if ($userRole === 'admin'): ?>
                 <a href="admin.php" class="<?= $activePage === 'admin' ? 'active' : '' ?>">Admin</a>
               <?php endif; ?>
               <a href="account.php" class="<?= $activePage === 'account' ? 'active' : '' ?>">Editar conta</a>
-              <a href="../actions/action_logout.php">Sair</a>
+              <form action="../actions/action_logout.php" method="POST" class="account-menu-form">
+                <?= csrfInput() ?>
+                <button type="submit">Sair</button>
+              </form>
             </div>
           </details>
         <?php else: ?>

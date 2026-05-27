@@ -5,6 +5,7 @@ require_once __DIR__ . '/../database/connection.php';
 require_once __DIR__ . '/../database/Trainer.php';
 require_once __DIR__ . '/../database/TrainerReview.php';
 require_once __DIR__ . '/../utils/session.php';
+require_once __DIR__ . '/../utils/security.php';
 
 if (!isLoggedIn()) {
     header('Location: ../pages/login.php');
@@ -15,6 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ../pages/trainers.php');
     exit;
 }
+
+verifyCsrfToken('../pages/trainers.php');
 
 $trainerId = isset($_POST['trainer_id']) ? (int) $_POST['trainer_id'] : 0;
 $rating = isset($_POST['rating']) ? (int) $_POST['rating'] : -1;

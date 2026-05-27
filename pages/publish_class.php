@@ -55,6 +55,7 @@ require __DIR__ . '/../templates/header.php';
           <?php endif; ?>
 
           <form action="../actions/action_create_class.php" method="POST" enctype="multipart/form-data" class="publish-class-form">
+            <?= csrfInput() ?>
             <fieldset <?= !$canPublishClass ? 'disabled' : '' ?>>
               <legend>Dados da aula</legend>
 

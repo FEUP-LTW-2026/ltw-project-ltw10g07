@@ -5,6 +5,7 @@ require_once __DIR__ . '/../database/connection.php';
 require_once __DIR__ . '/../database/ClassCatalog.php';
 require_once __DIR__ . '/../database/Trainer.php';
 require_once __DIR__ . '/../utils/session.php';
+require_once __DIR__ . '/../utils/security.php';
 
 if (!isLoggedIn() || !in_array(getUserRole(), ['trainer', 'admin'], true)) {
     setFlashMessages('errors', ['Não tens permissões para publicar aulas.']);
@@ -16,6 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ../pages/publish_class.php');
     exit;
 }
+
+verifyCsrfToken('../pages/publish_class.php');
 
 $role = getUserRole();
 $name = trim($_POST['name'] ?? '');

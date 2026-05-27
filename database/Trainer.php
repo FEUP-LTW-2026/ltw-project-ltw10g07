@@ -15,6 +15,15 @@ class Trainer {
         return $trainer ?: null;
     }
 
+    public static function updatePublicProfile(PDO $db, int $trainerId, string $bio, string $specializations, string $certifications): void {
+        $stmt = $db->prepare('
+            UPDATE trainer
+            SET bio = ?, specializations = ?, certifications = ?
+            WHERE id = ?
+        ');
+        $stmt->execute([$bio, $specializations, $certifications, $trainerId]);
+    }
+
     public static function getAll(PDO $db): array {
         $stmt = $db->query('
             SELECT

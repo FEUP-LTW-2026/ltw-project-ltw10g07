@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../database/connection.php';
 require_once __DIR__ . '/../utils/session.php';
+require_once __DIR__ . '/../utils/security.php';
 
 // 1. Validar se o utilizador tem sessão iniciada e se é um membro
 if (!isLoggedIn()) {
@@ -21,6 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ../pages/classes.php');
     exit;
 }
+
+verifyCsrfToken('../pages/classes.php');
 
 // 2. Recolher parâmetros do formulário
 $sessionId = isset($_POST['session_id']) ? (int) $_POST['session_id'] : 0;

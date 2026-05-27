@@ -191,6 +191,7 @@ require __DIR__ . '/../templates/header.php';
 
           <?php if ($canReview): ?>
             <form action="../actions/action_review_trainer.php" method="POST" class="trainer-review-form">
+              <?= csrfInput() ?>
               <input type="hidden" name="trainer_id" value="<?= (int) $trainer['id'] ?>" />
 
               <fieldset class="rating-fieldset">

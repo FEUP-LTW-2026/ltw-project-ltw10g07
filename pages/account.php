@@ -45,6 +45,7 @@ require __DIR__ . '/../templates/header.php';
           <?php drawFlashMessages($errors, $success); ?>
 
           <form action="../actions/action_update_account.php" method="POST" class="account-form">
+            <?= csrfInput() ?>
             <div class="form-group">
               <label for="name">Nome</label>
               <input type="text" id="name" name="name" value="<?= htmlspecialchars($old['name']) ?>" required />

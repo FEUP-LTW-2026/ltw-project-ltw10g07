@@ -4,11 +4,14 @@ declare(strict_types=1);
 require_once __DIR__ . '/../database/connection.php';
 require_once __DIR__ . '/../database/User.php';
 require_once __DIR__ . '/../utils/session.php';
+require_once __DIR__ . '/../utils/security.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ../pages/register.php');
     exit;
 }
+
+verifyCsrfToken('../pages/register.php');
 
 $old = [
     'first_name' => trim($_POST['first_name'] ?? ''),
