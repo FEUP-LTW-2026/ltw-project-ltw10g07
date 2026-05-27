@@ -36,7 +36,10 @@ CREATE TABLE equipment (
   name TEXT NOT NULL,
   category TEXT NOT NULL,
   status TEXT NOT NULL CHECK (status IN ('available', 'in_use', 'maintenance')),
-  location TEXT
+  location TEXT,
+  quantity INTEGER NOT NULL DEFAULT 1 CHECK (quantity >= 0),
+  maintenance_quantity INTEGER NOT NULL DEFAULT 0 CHECK (maintenance_quantity >= 0),
+  rentable INTEGER NOT NULL DEFAULT 0 CHECK (rentable IN (0, 1))
 );
 
 CREATE TABLE trainer_review (

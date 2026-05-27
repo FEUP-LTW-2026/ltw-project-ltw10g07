@@ -49,15 +49,6 @@ require __DIR__ . '/../templates/header.php';
             <button type="submit" class="btn btn-primary btn-sm">Pesquisar</button>
           </form>
 
-          <div class="hero-members">
-            <div class="member-avatars" aria-hidden="true">
-              <div class="member-avatar-placeholder">SC</div>
-              <div class="member-avatar-placeholder">RM</div>
-              <div class="member-avatar-placeholder">AL</div>
-              <div class="member-avatar-placeholder">+</div>
-            </div>
-            <p><strong>2.400+</strong> membros inscritos este mês</p>
-          </div>
         </div>
 
         <!-- Imagem principal -->
@@ -73,8 +64,8 @@ require __DIR__ . '/../templates/header.php';
               Horas de Pico
             </p>
             <p class="float-card-body">
-              A zona de cardio está a 25% de ocupação.<br />
-              Hora perfeita para treinar!
+              50 passadeiras!<br />
+              Todas as horas são perfeitas para treinar!
             </p>
           </aside>
         </div>
@@ -170,22 +161,24 @@ require __DIR__ . '/../templates/header.php';
     </section>
 
 
-    <!-- ============================================================
-         CTA FINAL
-         ============================================================ -->
-    <section class="cta-section" aria-labelledby="cta-heading">
-      <div class="container">
-        <h2 id="cta-heading">Pronto para Encontrar o Teu Ritmo?</h2>
-        <p>
-          Junta-te a mais de 15.000 membros que transformaram as suas vidas.
-          Inscreve-te hoje e recebe a primeira consulta com personal trainer gratuita.
-        </p>
-        <div class="cta-buttons">
-          <a href="register.php" class="btn btn-primary btn-lg">Juntar à Comunidade</a>
-          <a href="classes.php" class="btn btn-ghost btn-lg">Ver Horários</a>
+    <?php if (!isLoggedIn()): ?>
+      <!-- ============================================================
+           CTA FINAL
+           ============================================================ -->
+      <section class="cta-section" aria-labelledby="cta-heading">
+        <div class="container">
+          <h2 id="cta-heading">Pronto para Encontrar o Teu Ritmo?</h2>
+          <p>
+            Junta-te a mais de 15.000 membros que transformaram as suas vidas.
+            Inscreve-te hoje e recebe a primeira consulta com personal trainer gratuita.
+          </p>
+          <div class="cta-buttons">
+            <a href="register.php" class="btn btn-primary btn-lg">Juntar à Comunidade</a>
+            <a href="classes.php" class="btn btn-ghost btn-lg">Ver Horários</a>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    <?php endif; ?>
 
   </main>
 

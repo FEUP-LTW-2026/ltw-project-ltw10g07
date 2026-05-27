@@ -333,6 +333,20 @@ require __DIR__ . '/../templates/header.php';
                   <input type="text" id="new-equipment-location" name="location" />
                 </div>
               </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="new-equipment-quantity">Quantidade total</label>
+                  <input type="number" id="new-equipment-quantity" name="quantity" min="0" value="1" required />
+                </div>
+                <div class="form-group">
+                  <label for="new-equipment-maintenance">Em manutenção</label>
+                  <input type="number" id="new-equipment-maintenance" name="maintenance_quantity" min="0" value="0" required />
+                </div>
+                <label class="admin-check">
+                  <input type="checkbox" name="rentable" />
+                  Alugável
+                </label>
+              </div>
               <button type="submit" class="btn btn-primary">Adicionar equipamento</button>
             </form>
 
@@ -343,7 +357,6 @@ require __DIR__ . '/../templates/header.php';
                 <input type="hidden" name="equipment_id" value="<?= (int) $item['id'] ?>" />
                 <div class="admin-card-title">
                   <h3><?= htmlspecialchars($item['name']) ?></h3>
-                  <span class="admin-pill"><?= htmlspecialchars($statusLabels[$item['status']] ?? $item['status']) ?></span>
                 </div>
                 <div class="form-row">
                   <div class="form-group">
@@ -368,6 +381,20 @@ require __DIR__ . '/../templates/header.php';
                     <label for="equipment-location-<?= (int) $item['id'] ?>">Localização</label>
                     <input type="text" id="equipment-location-<?= (int) $item['id'] ?>" name="location" value="<?= htmlspecialchars($item['location'] ?? '') ?>" />
                   </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="equipment-quantity-<?= (int) $item['id'] ?>">Quantidade total</label>
+                    <input type="number" id="equipment-quantity-<?= (int) $item['id'] ?>" name="quantity" min="0" value="<?= (int) ($item['quantity'] ?? 1) ?>" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="equipment-maintenance-<?= (int) $item['id'] ?>">Em manutenção</label>
+                    <input type="number" id="equipment-maintenance-<?= (int) $item['id'] ?>" name="maintenance_quantity" min="0" value="<?= (int) ($item['maintenance_quantity'] ?? 0) ?>" required />
+                  </div>
+                  <label class="admin-check">
+                    <input type="checkbox" name="rentable" <?= (int) ($item['rentable'] ?? 0) === 1 ? 'checked' : '' ?> />
+                    Alugável
+                  </label>
                 </div>
                 <div class="admin-actions">
                   <button type="submit" class="btn btn-outline">Guardar equipamento</button>

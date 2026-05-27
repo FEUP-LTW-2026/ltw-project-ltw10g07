@@ -13,7 +13,7 @@ $navLinks = [
   'home' => ['label' => 'Home', 'href' => 'landingpage.php'],
   'classes' => ['label' => 'Aulas', 'href' => 'classes.php'],
   'trainers' => ['label' => 'Treinadores', 'href' => 'trainers.php'],
-  'schedule' => ['label' => 'Horario', 'href' => 'schedule.php'],
+  'equipment' => ['label' => 'Equipamentos', 'href' => 'equipment.php'],
 ];
 ?>
 <!DOCTYPE html>

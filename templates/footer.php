@@ -3,7 +3,7 @@
 
       <div class="footer-brand">
         <a href="landingpage.php" class="logo">
-          <span class="logo-icon" aria-hidden="true">LB</span>
+          <img src="../img/logo.jpg" alt="" class="logo-image" aria-hidden="true" />
           LiftToBig
         </a>
         <p>
@@ -24,7 +24,6 @@
         <ul>
           <li><a href="classes.php">Ver Aulas</a></li>
           <li><a href="trainers.php">Encontrar Treinador</a></li>
-          <li><a href="schedule.php">O Meu Horario</a></li>
           <li><a href="equipment.php">Estado do Ginasio</a></li>
         </ul>
       </div>

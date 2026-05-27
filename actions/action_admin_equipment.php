@@ -38,6 +38,9 @@ $name = trim($_POST['name'] ?? '');
 $category = trim($_POST['category'] ?? '');
 $status = $_POST['status'] ?? '';
 $location = trim($_POST['location'] ?? '');
+$quantity = (int) ($_POST['quantity'] ?? 1);
+$maintenanceQuantity = (int) ($_POST['maintenance_quantity'] ?? 0);
+$rentable = isset($_POST['rentable']) ? 1 : 0;
 $errors = [];
 
 if ($action === 'delete') {
@@ -65,12 +68,24 @@ if (!in_array($status, ['available', 'in_use', 'maintenance'], true)) {
     $errors[] = 'O estado selecionado não é válido.';
 }
 
+if ($quantity < 0) {
+    $errors[] = 'A quantidade total não pode ser negativa.';
+}
+
+if ($maintenanceQuantity < 0) {
+    $errors[] = 'A quantidade em manutenção não pode ser negativa.';
+}
+
+if ($maintenanceQuantity > $quantity) {
+    $errors[] = 'A quantidade em manutenção não pode ser maior do que a quantidade total.';
+}
+
 if ($errors !== []) {
     redirectAdminEquipment($errors);
 }
 
 if ($action === 'create') {
-    Equipment::create($db, $name, $category, $status, $location);
+    Equipment::create($db, $name, $category, $status, $location, $quantity, $maintenanceQuantity, $rentable);
     redirectAdminEquipment([], ['Equipamento criado com sucesso.']);
 }
 
@@ -78,5 +93,5 @@ if ($equipmentId <= 0) {
     redirectAdminEquipment(['Equipamento inválido.']);
 }
 
-Equipment::update($db, $equipmentId, $name, $category, $status, $location);
+Equipment::update($db, $equipmentId, $name, $category, $status, $location, $quantity, $maintenanceQuantity, $rentable);
 redirectAdminEquipment([], ['Equipamento atualizado com sucesso.']);

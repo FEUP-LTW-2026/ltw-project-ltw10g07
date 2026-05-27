@@ -188,7 +188,6 @@ require __DIR__ . '/../templates/header.php';
             <div style="margin-top: 1.5rem; margin-bottom: 1.5rem; padding: 1rem; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px;">
                 <h3 style="font-size: 0.95rem; margin-bottom: 0.75rem; color: #475569;">⚙️ Painel do Treinador</h3>
                 <div style="display: flex; gap: 0.5rem;">
-                    <a href="edit_class.php?id=<?= (int)$classData['id'] ?>" class="btn btn-outline btn-sm" style="flex: 1; text-align: center;">Editar Aula</a>
                     <form action="../actions/action_delete_class.php" method="POST" style="flex: 1; margin: 0;" onsubmit="return confirm('ATENÇÃO: Queres apagar esta aula e todas as sessões?');">
                         <?= csrfInput() ?> <!-- ADICIONADO: Token CSRF -->
                         <input type="hidden" name="class_id" value="<?= (int)$classData['id'] ?>">

@@ -1,0 +1,221 @@
+.equipment-hero {
+  padding: 4rem 0 3rem;
+  background: var(--color-bg-soft);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.equipment-hero-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2rem;
+  align-items: end;
+}
+
+.equipment-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+  border: 1px solid #bfdbfe;
+  border-radius: var(--radius-full);
+  padding: .3em .85em;
+  margin-bottom: 1.25rem;
+}
+
+.equipment-hero h1 {
+  font-size: 3.25rem;
+  margin-bottom: 1rem;
+}
+
+.equipment-hero p {
+  max-width: 620px;
+}
+
+.equipment-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(120px, 1fr));
+  gap: .75rem;
+}
+
+.equipment-summary div {
+  padding: 1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+}
+
+.equipment-summary strong {
+  display: block;
+  font-size: 1.75rem;
+  line-height: 1;
+  margin-bottom: .35rem;
+}
+
+.equipment-summary span {
+  display: block;
+  font-size: .78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.equipment-section {
+  padding: 3rem 0 4rem;
+}
+
+.equipment-filters {
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) auto;
+  gap: 1rem;
+  align-items: end;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: var(--color-bg-soft);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.equipment-search label,
+.equipment-filter label {
+  display: block;
+  margin-bottom: .4rem;
+  font-size: .78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.equipment-search input,
+.equipment-filter select {
+  width: 100%;
+  min-height: 42px;
+  padding: .65rem .85rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.equipment-search input:focus,
+.equipment-filter select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.equipment-filter-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.equipment-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.equipment-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.25rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+}
+
+.equipment-card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: start;
+}
+
+.equipment-card-header p {
+  font-size: .78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: .35rem;
+}
+
+.equipment-card-header h3 {
+  font-size: 1.25rem;
+}
+
+.equipment-card-header strong {
+  min-width: 3rem;
+  height: 3rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+  font-size: 1.35rem;
+}
+
+.equipment-details {
+  display: grid;
+  gap: .75rem;
+}
+
+.equipment-details div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: .75rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.equipment-details dt {
+  color: var(--color-text-muted);
+  font-size: .85rem;
+}
+
+.equipment-details dd {
+  color: var(--color-text);
+  font-size: .9rem;
+  font-weight: 700;
+  text-align: right;
+}
+
+.equipment-card .btn {
+  margin-top: auto;
+}
+
+.equipment-empty {
+  padding: 3rem;
+  text-align: center;
+  background: var(--color-bg-soft);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.equipment-empty h2 {
+  margin-bottom: .75rem;
+}
+
+@media (max-width: 900px) {
+  .equipment-hero-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .equipment-summary,
+  .equipment-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .equipment-filters,
+  .equipment-filter-row {
+    grid-template-columns: 1fr;
+  }
+}
