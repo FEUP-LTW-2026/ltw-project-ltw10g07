@@ -8,75 +8,116 @@ $errors = getFlashMessages('errors');
 $success = getFlashMessages('success');
 
 $db = getDB();
-$classId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+
+// 1. LER O ID DA AULA E DA SESSÃO ESPECÍFICA QUE VEM DO HORÁRIO
+$class_id = isset($_GET['id']) ? (int) $_GET['id'] : 1;
+$target_session_id = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
 
 $stmt = $db->prepare('
-    SELECT
-        class.id,
-        class.name,
-        class.description,
-        class.type,
-        class.intensity,
-        class.duration,
-        class.capacity,
-        class.image,
-        trainer.id AS trainer_id,
-        user.name AS trainer_name,
-        user.photo AS trainer_photo
+    SELECT 
+        class.id, class.name, class.description, class.type, class.intensity, 
+        class.duration, class.capacity, class.image,
+        trainer.id AS trainer_id, user.name AS trainer_name, user.photo AS trainer_photo
     FROM class
     LEFT JOIN trainer ON trainer.id = class.trainer_id
     LEFT JOIN user ON user.id = trainer.user_id
     WHERE class.id = ?
 ');
-$stmt->execute([$classId]);
+$stmt->execute([$class_id]);
 $classData = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($classData === false) {
-    header('Location: classes.php');
-    exit;
+    $classData = [
+        'id' => $class_id,
+        'name' => 'Aula Não Encontrada',
+        'description' => 'Esta aula não existe.',
+        'type' => 'Geral', 'intensity' => 'Média', 'duration' => 45, 'capacity' => 20,
+        'image' => '../img/hiit.jpg', 'trainer_id' => null, 'trainer_name' => 'Treinador', 'trainer_photo' => null
+    ];
 }
 
 $className = $classData['name'];
-$category = $classData['type'];
+$classType = $classData['type'];
+$photo = $classData['image'] ?: '../img/hiit.jpg';
+$category = $classType;
 $intensity = $classData['intensity'] ?? 'Média';
-$duration = ((int) ($classData['duration'] ?? 45)) . ' min';
-$description = $classData['description'] ?: 'Esta aula ainda não tem descrição.';
-$photo = trim((string) ($classData['image'] ?? ''));
+$duration = ($classData['duration'] ?? 45) . ' min';
+$description = $classData['description'];
+$what_to_expect = ['Aquecimento geral guiado', 'Bloco de exercícios principal', 'Arrefecimento e alongamentos'];
+$requirements = 'Trazer roupa confortável de treino, toalha e água.';
+$calories = '300–450 kcal';
 
-$intensityBadge = $intensity === 'Alta' ? 'badge-amber' : ($intensity === 'Baixa' ? 'badge-green' : 'badge-blue');
-$categoryBadge = $category === 'Flexibilidade' ? 'badge-green' : 'badge-blue';
+if (str_contains(strtolower($className), 'hiit')) {
+    $photo = '../img/hiit.jpg'; $category = 'Cardio'; $calories = '400–600 kcal';
+    $what_to_expect = ['Aquecimento dinâmico de 5 min', 'Blocos de 40s/20s', 'Força e cardio', 'Alongamentos'];
+    $requirements = 'Nível intermédio recomendado. Trazer água e toalha.';
+} elseif (str_contains(strtolower($className), 'yoga')) {
+    $photo = '../img/yoga.jpg'; $category = 'Yoga'; $calories = '150–250 kcal';
+    $what_to_expect = ['Meditação', 'Surya Namaskar', 'Posturas', 'Savasana'];
+    $requirements = 'Todos os níveis bem-vindos. Trazer tapete.';
+} elseif (str_contains(strtolower($className), 'barbell') || str_contains(strtolower($className), 'força')) {
+    $photo = '../img/barbell.jpg'; $category = 'Força'; $calories = '300–450 kcal';
+    $what_to_expect = ['Mobilidade', 'Técnica', 'Séries de hipertrofia', 'Foam rolling'];
+    $requirements = 'Nível intermédio/avançado. Recomendado calçado de levantamento.';
+} elseif (str_contains(strtolower($className), 'cycle') || str_contains(strtolower($className), 'cycling')) {
+    $photo = '../img/cycling.jpg'; $category = 'Cycling'; $calories = '350–550 kcal';
+    $what_to_expect = ['Aquecimento', 'Subidas e sprints', 'Cardio', 'Mobilidade leve'];
+    $requirements = 'Trazer água e toalha. Chegar 5 min antes.';
+} elseif (str_contains(strtolower($className), 'mobility') || str_contains(strtolower($className), 'core')) {
+    $photo = '../img/mobility.jpg'; $category = 'Flexibilidade'; $calories = '120–220 kcal';
+    $what_to_expect = ['Mobilidade inicial', 'Core anti-rotação', 'Alongamentos guiados'];
+    $requirements = 'Todos os níveis.';
+} elseif (str_contains(strtolower($className), 'boxing') || str_contains(strtolower($className), 'boxe')) {
+    $photo = '../img/boxing.jpg'; $category = 'Boxe'; $calories = '450–650 kcal';
+    $what_to_expect = ['Corda e footwork', 'Combinações', 'Rounds no saco', 'Condicionamento'];
+    $requirements = 'Nível iniciante/intermédio. Podes trazer as tuas luvas.';
+}
 
-$stmt = $db->prepare('
-    SELECT id, session_date, start_time, room
-    FROM class_session
-    WHERE class_id = ?
-    ORDER BY session_date ASC, start_time ASC
-');
-$stmt->execute([(int) $classData['id']]);
+$intensity_badge = ($intensity === 'Alta') ? 'badge-amber' : (($intensity === 'Baixa') ? 'badge-green' : 'badge-blue');
+$category_badge  = ($category === 'Flexibilidade') ? 'badge-green' : 'badge-blue';
+
+// 2. BUSCAR AS SESSÕES DESTA AULA
+$stmt = $db->prepare('SELECT id, session_date, start_time, room FROM class_session WHERE class_id = ? ORDER BY session_date ASC, start_time ASC');
+$stmt->execute([(int)$classData['id']]);
 $realSessions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$mainSession = $realSessions[0] ?? null;
-$mainSessionId = $mainSession ? (int) $mainSession['id'] : 0;
+// 3. SELECIONAR A SESSÃO CORRETA (A que veio do URL, ou a próxima disponível)
+$mainSession = null;
+if ($target_session_id > 0) {
+    foreach ($realSessions as $s) {
+        if ((int)$s['id'] === $target_session_id) {
+            $mainSession = $s;
+            break;
+        }
+    }
+}
+if (!$mainSession && count($realSessions) > 0) {
+    $mainSession = $realSessions[0];
+}
+
+$main_session_id = $mainSession ? (int)$mainSession['id'] : 0;
 
 $currentEnrollments = 0;
-if ($mainSessionId > 0) {
+if ($main_session_id > 0) {
     $stmt = $db->prepare('SELECT COUNT(*) FROM enrollment WHERE session_id = ? AND status = \'active\'');
-    $stmt->execute([$mainSessionId]);
-    $currentEnrollments = (int) $stmt->fetchColumn();
+    $stmt->execute([$main_session_id]);
+    $currentEnrollments = (int)$stmt->fetchColumn();
 }
 
-$spotsTotal = (int) $classData['capacity'];
-$spotsLeft = max(0, $spotsTotal - $currentEnrollments);
-$occupancyPct = $spotsTotal > 0 ? (int) round((1 - $spotsLeft / $spotsTotal) * 100) : 0;
+$spots_total = (int)$classData['capacity'];
+$spots_left  = max(0, $spots_total - $currentEnrollments);
+$occupancy_pct = ($spots_total > 0) ? (int)round((1 - $spots_left / $spots_total) * 100) : 0;
 
 $isEnrolledInMain = false;
-if (isLoggedIn() && $mainSessionId > 0) {
+if (isLoggedIn() && $main_session_id > 0) {
     $stmt = $db->prepare('SELECT id FROM enrollment WHERE user_id = ? AND session_id = ? AND status = \'active\'');
-    $stmt->execute([getUserId(), $mainSessionId]);
-    $isEnrolledInMain = (bool) $stmt->fetch();
+    $stmt->execute([getUserId(), $main_session_id]);
+    if ($stmt->fetch()) {
+        $isEnrolledInMain = true;
+    }
 }
 
-$pageTitle = $className . ' - LiftToBig';
+$pageTitle = htmlspecialchars($className) . ' - LiftToBig';
 $pageStyles = ['../css/class.css'];
 $activePage = 'classes';
 
@@ -88,91 +129,85 @@ require __DIR__ . '/../templates/header.php';
       <div class="container class-hero-inner">
 
         <div class="class-hero-image-wrap">
-          <?php if ($photo !== ''): ?>
-            <img src="<?= htmlspecialchars($photo) ?>" alt="<?= htmlspecialchars($className) ?>" class="class-hero-img" />
-          <?php else: ?>
-            <div class="class-hero-img class-image-placeholder" aria-hidden="true">
-              <?= htmlspecialchars(strtoupper(substr($className, 0, 1))) ?>
-            </div>
-          <?php endif; ?>
+          <img src="<?= htmlspecialchars($photo) ?>" alt="<?= htmlspecialchars($className) ?>" class="class-hero-img" />
           <div class="class-hero-badges">
-            <span class="badge <?= $categoryBadge ?>"><?= htmlspecialchars($category) ?></span>
-            <span class="badge <?= $intensityBadge ?>"><?= htmlspecialchars($intensity) ?></span>
+            <span class="badge <?= $category_badge ?>"><?= htmlspecialchars($category) ?></span>
+            <span class="badge <?= $intensity_badge ?>"><?= htmlspecialchars($intensity) ?></span>
           </div>
         </div>
 
         <div class="class-hero-info">
-          <a href="classes.php" class="back-link">&#8592; Todas as Aulas</a>
+          <a href="classes.php" class="back-link">&#8592; Voltar ao Horário</a>
 
           <h1 id="class-name-heading"><?= htmlspecialchars($className) ?></h1>
 
-          <div class="class-hero-meta">
+          <div class="class-hero-meta" style="display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
             <div class="class-meta-item">
               <span class="meta-icon" aria-hidden="true">&#9202;</span>
               <span><?= htmlspecialchars($duration) ?></span>
             </div>
-            <div class="class-meta-item">
-              <span class="meta-icon" aria-hidden="true">&#128293;</span>
-              <span>Intensidade: <?= htmlspecialchars($intensity) ?></span>
+            
+            <?php if ($mainSession): ?>
+            <div class="class-meta-item" style="color: #4f46e5; font-weight: bold;">
+              <span class="meta-icon" aria-hidden="true">📅</span>
+              <span><?= htmlspecialchars($mainSession['session_date']) ?> às <?= htmlspecialchars(substr($mainSession['start_time'], 0, 5)) ?></span>
             </div>
-            <div class="class-meta-item">
-              <span class="meta-icon" aria-hidden="true">&#128101;</span>
-              <span><?= $spotsLeft ?> vagas disponíveis</span>
+            <div class="class-meta-item" style="color: #4f46e5; font-weight: bold;">
+              <span class="meta-icon" aria-hidden="true">📍</span>
+              <span><?= htmlspecialchars($mainSession['room']) ?></span>
             </div>
+            <?php endif; ?>
           </div>
 
           <p class="class-hero-description"><?= htmlspecialchars($description) ?></p>
 
           <?php if ($errors !== []): ?>
             <div class="form-alert form-alert-error" role="alert" style="margin-bottom: 1rem; padding: 0.5rem 1rem; background: #fee2e2; color: #991b1b; border-radius: 4px;">
-              <?php foreach ($errors as $error): ?>
-                <p><?= htmlspecialchars($error) ?></p>
-              <?php endforeach; ?>
+              <?php foreach ($errors as $error): ?><p><?= htmlspecialchars($error) ?></p><?php endforeach; ?>
             </div>
           <?php endif; ?>
 
           <?php if ($success !== []): ?>
             <div class="form-alert form-alert-success" role="status" style="margin-bottom: 1rem; padding: 0.5rem 1rem; background: #dcfce7; color: #166534; border-radius: 4px;">
-              <?php foreach ($success as $message): ?>
-                <p><?= htmlspecialchars($message) ?></p>
-              <?php endforeach; ?>
+              <?php foreach ($success as $message): ?><p><?= htmlspecialchars($message) ?></p><?php endforeach; ?>
             </div>
           <?php endif; ?>
 
-          <div class="occupancy-bar-wrap" aria-label="Ocupação da aula: <?= $occupancyPct ?>%">
+          <div class="occupancy-bar-wrap" aria-label="Ocupação da aula: <?= $occupancy_pct ?>%">
             <div class="occupancy-bar-header">
-              <span><?= $spotsLeft ?> vagas disponíveis</span>
-              <span><?= $occupancyPct ?>% ocupado</span>
+              <span><?= $spots_left ?> vagas disponíveis</span>
+              <span><?= $occupancy_pct ?>% ocupado</span>
             </div>
-            <div class="occupancy-bar" role="progressbar" aria-valuenow="<?= $occupancyPct ?>" aria-valuemin="0" aria-valuemax="100">
-              <div class="occupancy-fill" style="width: <?= $occupancyPct ?>%"></div>
+            <div class="occupancy-bar" role="progressbar" aria-valuenow="<?= $occupancy_pct ?>" aria-valuemin="0" aria-valuemax="100">
+              <div class="occupancy-fill" style="width: <?= $occupancy_pct ?>%"></div>
             </div>
           </div>
 
-          <?php if (isLoggedIn() && in_array(getUserRole(), ['trainer', 'admin'], true)): ?>
+          <?php if (isLoggedIn() && in_array(getUserRole(), ['trainer', 'admin'])): ?>
             <div style="margin-top: 1.5rem; margin-bottom: 1.5rem; padding: 1rem; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px;">
-              <h3 style="font-size: 0.95rem; margin-bottom: 0.75rem; color: #475569; text-transform: uppercase; letter-spacing: 0.5px;">Painel do Treinador</h3>
-              <div style="display: flex; gap: 0.5rem;">
-                <form action="../actions/action_delete_class.php" method="POST" style="flex: 1; margin: 0;" onsubmit="return confirm('Tens a certeza que queres eliminar esta aula e todas as inscrições associadas?');">
-                  <input type="hidden" name="class_id" value="<?= (int) $classData['id'] ?>">
-                  <button type="submit" class="btn btn-danger btn-sm" style="width: 100%; background: #dc2626; border: none; color: white; cursor: pointer;">Eliminar Aula</button>
-                </form>
-              </div>
+                <h3 style="font-size: 0.95rem; margin-bottom: 0.75rem; color: #475569;">⚙️ Painel do Treinador</h3>
+                <div style="display: flex; gap: 0.5rem;">
+                    <a href="edit_class.php?id=<?= (int)$classData['id'] ?>" class="btn btn-outline btn-sm" style="flex: 1; text-align: center;">Editar Aula</a>
+                    <form action="../actions/action_delete_class.php" method="POST" style="flex: 1; margin: 0;" onsubmit="return confirm('ATENÇÃO: Queres apagar esta aula e todas as sessões?');">
+                        <input type="hidden" name="class_id" value="<?= (int)$classData['id'] ?>">
+                        <button type="submit" class="btn btn-danger btn-sm" style="width: 100%; background: #dc2626; border: none; color: white;">Eliminar Aula</button>
+                    </form>
+                </div>
             </div>
           <?php endif; ?>
 
-          <?php if ($mainSessionId > 0): ?>
+          <?php if ($main_session_id > 0): ?>
             <form action="../actions/action_enroll.php" method="POST">
-              <input type="hidden" name="session_id" value="<?= $mainSessionId ?>" />
-              <input type="hidden" name="class_id" value="<?= (int) $classData['id'] ?>" />
-
+              <input type="hidden" name="session_id" value="<?= $main_session_id ?>" />
+              <input type="hidden" name="class_id" value="<?= (int)$classData['id'] ?>" />
+              
               <?php if ($isEnrolledInMain): ?>
                 <input type="hidden" name="action" value="cancel" />
-                <button type="submit" class="btn btn-danger btn-lg" style="background: #dc2626; border-color: #dc2626; color: white; cursor: pointer;">Cancelar Minha Inscrição</button>
+                <button type="submit" class="btn btn-danger btn-lg" style="background: #dc2626; border-color: #dc2626; color: white;">Cancelar Minha Inscrição</button>
               <?php else: ?>
                 <input type="hidden" name="action" value="enroll" />
-                <button type="submit" class="btn btn-primary btn-lg" <?= $spotsLeft === 0 ? 'disabled' : '' ?> style="cursor: pointer;">
-                  <?= $spotsLeft === 0 ? 'Aula Esgotada' : 'Inscrever-me Nesta Aula' ?>
+                <button type="submit" class="btn btn-primary btn-lg" <?= $spots_left === 0 ? 'disabled' : '' ?>>
+                  <?= $spots_left === 0 ? 'Sessão Esgotada' : 'Inscrever-me Nesta Sessão' ?>
                 </button>
               <?php endif; ?>
             </form>
@@ -180,94 +215,40 @@ require __DIR__ . '/../templates/header.php';
             <button class="btn btn-ghost btn-lg" disabled style="opacity: 0.6;">Sem sessões agendadas</button>
           <?php endif; ?>
         </div>
-
       </div>
     </section>
 
-    <section class="class-details">
+    <section class="class-details-section">
       <div class="container class-details-grid">
-
         <div class="class-detail-block">
-          <h2>Descrição</h2>
-          <p><?= htmlspecialchars($description) ?></p>
+          <h2>O que podes esperar</h2>
+          <ul class="expect-list">
+            <?php foreach ($what_to_expect as $item): ?>
+              <li><span class="expect-icon" aria-hidden="true">&#9654;</span> <?= htmlspecialchars($item) ?></li>
+            <?php endforeach; ?>
+          </ul>
+          <div class="requirements-box">
+            <h3>&#8505; Requisitos</h3>
+            <p><?= htmlspecialchars($requirements) ?></p>
+          </div>
         </div>
 
         <div class="class-detail-block">
           <h2>O Teu Treinador</h2>
           <div class="class-trainer-card">
             <?php if (!empty($classData['trainer_photo'])): ?>
-              <img src="<?= htmlspecialchars($classData['trainer_photo']) ?>" alt="<?= htmlspecialchars($classData['trainer_name'] ?? 'Treinador') ?>" class="avatar" />
+              <img src="<?= htmlspecialchars($classData['trainer_photo']) ?>" alt="Treinador" class="avatar" />
             <?php else: ?>
               <div class="avatar" style="display:inline-flex; align-items:center; justify-content:center; background:#4f46e5; color:white; font-weight:bold;">PT</div>
             <?php endif; ?>
             <div>
               <h3><?= htmlspecialchars($classData['trainer_name'] ?? 'Treinador Disponível') ?></h3>
               <?php if (!empty($classData['trainer_id'])): ?>
-                <a href="trainer.php?id=<?= (int) $classData['trainer_id'] ?>" class="btn btn-outline btn-sm" style="margin-top:.5rem">Ver Perfil</a>
+                <a href="trainer.php?id=<?= (int)$classData['trainer_id'] ?>" class="btn btn-outline btn-sm" style="margin-top:.5rem">Ver Perfil</a>
               <?php endif; ?>
             </div>
           </div>
         </div>
-
-        <div class="class-detail-block">
-          <h2>Próximas Sessões</h2>
-          <?php if ($realSessions !== []): ?>
-            <ul class="next-sessions-list">
-              <?php foreach ($realSessions as $session): ?>
-                <?php
-                  $sessionId = (int) $session['id'];
-                  $stmt = $db->prepare('SELECT COUNT(*) FROM enrollment WHERE session_id = ? AND status = \'active\'');
-                  $stmt->execute([$sessionId]);
-                  $sessionEnrollments = (int) $stmt->fetchColumn();
-                  $sessionSpotsLeft = max(0, $spotsTotal - $sessionEnrollments);
-
-                  $userEnrolledInThis = false;
-                  if (isLoggedIn()) {
-                      $stmt = $db->prepare('SELECT id FROM enrollment WHERE user_id = ? AND session_id = ? AND status = \'active\'');
-                      $stmt->execute([getUserId(), $sessionId]);
-                      $userEnrolledInThis = (bool) $stmt->fetch();
-                  }
-
-                  $displayDate = $session['session_date'];
-                  if ($displayDate === date('Y-m-d')) {
-                      $displayDate = 'Hoje';
-                  } elseif ($displayDate === date('Y-m-d', strtotime('+1 day'))) {
-                      $displayDate = 'Amanhã';
-                  }
-                ?>
-                <li class="next-session-item">
-                  <div class="session-datetime">
-                    <span class="session-date"><?= htmlspecialchars($displayDate) ?></span>
-                    <span class="session-time"><?= htmlspecialchars(substr($session['start_time'], 0, 5)) ?></span>
-                  </div>
-                  <div class="session-spots">
-                    <span class="badge <?= $sessionSpotsLeft <= 3 ? 'badge-danger' : ($sessionSpotsLeft <= 7 ? 'badge-amber' : 'badge-green') ?>">
-                      <?= $sessionSpotsLeft ?> vagas
-                    </span>
-
-                    <form action="../actions/action_enroll.php" method="POST" style="display:inline;">
-                      <input type="hidden" name="session_id" value="<?= $sessionId ?>" />
-                      <input type="hidden" name="class_id" value="<?= (int) $classData['id'] ?>" />
-
-                      <?php if ($userEnrolledInThis): ?>
-                        <input type="hidden" name="action" value="cancel" />
-                        <button type="submit" class="btn btn-sm" style="background: #dc2626; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; cursor: pointer;">Cancelar</button>
-                      <?php else: ?>
-                        <input type="hidden" name="action" value="enroll" />
-                        <button type="submit" class="btn btn-primary btn-sm" <?= $sessionSpotsLeft === 0 ? 'disabled' : '' ?> style="cursor: pointer;">
-                          <?= $sessionSpotsLeft === 0 ? 'Cheio' : 'Inscrever' ?>
-                        </button>
-                      <?php endif; ?>
-                    </form>
-                  </div>
-                </li>
-              <?php endforeach; ?>
-            </ul>
-          <?php else: ?>
-            <p style="color: var(--color-text-muted); font-size: 0.95rem;">Não existem mais sessões agendadas para esta aula.</p>
-          <?php endif; ?>
-        </div>
-
       </div>
     </section>
   </main>
