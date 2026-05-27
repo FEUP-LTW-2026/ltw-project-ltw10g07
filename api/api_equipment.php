@@ -25,13 +25,13 @@ try {
             category,
             status,
             location,
-            quantity,
+            total_quantity,
             maintenance_quantity,
-            rentable,
-            MAX(0, quantity - maintenance_quantity) AS available_units
+            rental_available,
+            MAX(0, total_quantity - maintenance_quantity) AS available_units
         FROM equipment
         WHERE status = "available"
-          AND quantity - maintenance_quantity > 0
+          AND total_quantity - maintenance_quantity > 0
     ';
     $params = [];
 
@@ -49,9 +49,9 @@ try {
     }
 
     if ($rentable === 'yes') {
-        $query .= ' AND rentable = 1';
+        $query .= ' AND rental_available = 1';
     } elseif ($rentable === 'no') {
-        $query .= ' AND rentable = 0';
+        $query .= ' AND rental_available = 0';
     }
 
     $query .= ' ORDER BY category ASC, name ASC';
@@ -68,9 +68,9 @@ try {
                 'category' => $item['category'],
                 'status' => $item['status'],
                 'location' => $item['location'] ?: 'Por definir',
-                'quantity' => (int) $item['quantity'],
+                'total_quantity' => (int) $item['total_quantity'],
                 'maintenance_quantity' => (int) $item['maintenance_quantity'],
-                'rentable' => (int) $item['rentable'] === 1,
+                'rental_available' => (int) $item['rental_available'] === 1,
                 'available_units' => (int) $item['available_units'],
             ];
         }, $stmt->fetchAll(PDO::FETCH_ASSOC)),

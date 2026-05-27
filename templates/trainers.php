@@ -48,10 +48,6 @@ function drawTrainerCard(array $trainer): void { ?>
           <span class="stat-label">Sessões</span>
         </div>
         <div class="trainer-stat">
-          <span class="stat-value"><?= htmlspecialchars($trainer['experience']) ?></span>
-          <span class="stat-label">Experiência</span>
-        </div>
-        <div class="trainer-stat">
           <span class="stat-value">&#9733; <?= number_format((float) $trainer['rating'], 1) ?></span>
           <span class="stat-label">Avaliação</span>
         </div>

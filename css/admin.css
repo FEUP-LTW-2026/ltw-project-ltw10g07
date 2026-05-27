@@ -131,6 +131,45 @@
   gap: 1rem;
 }
 
+.admin-rentals-card {
+  margin-bottom: 1rem;
+}
+
+.admin-rentals-card .admin-card-title {
+  align-items: center;
+}
+
+.admin-rentals-list {
+  display: grid;
+  gap: .75rem;
+  margin-top: 1rem;
+}
+
+.admin-rental-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .85rem;
+  background: var(--color-bg-soft);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.admin-rental-row div {
+  display: grid;
+  gap: .2rem;
+}
+
+.admin-rental-row div:last-child {
+  text-align: right;
+}
+
+.admin-rental-row span {
+  color: var(--color-text-secondary);
+  font-size: .85rem;
+  font-weight: 600;
+}
+
 .admin-card {
   padding: 1.25rem;
 }
@@ -205,6 +244,14 @@
 
   .admin-grid {
     grid-template-columns: 1fr;
+  }
+
+  .admin-rental-row {
+    flex-direction: column;
+  }
+
+  .admin-rental-row div:last-child {
+    text-align: left;
   }
 }
 

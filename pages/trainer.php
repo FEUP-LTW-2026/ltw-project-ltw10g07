@@ -72,10 +72,6 @@ require __DIR__ . '/../templates/header.php';
               <span class="stat-value"><?= (int) $trainer['sessions'] ?>+</span>
               <span class="stat-label">Sessões realizadas</span>
             </div>
-            <div class="profile-stat">
-              <span class="stat-value"><?= htmlspecialchars($trainer['experience']) ?></span>
-              <span class="stat-label">Experiência</span>
-            </div>
           </div>
 
           <p class="trainer-profile-bio"><?= htmlspecialchars($trainer['bio']) ?></p>

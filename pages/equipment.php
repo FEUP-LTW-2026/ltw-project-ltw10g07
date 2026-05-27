@@ -12,19 +12,42 @@ if (!isLoggedIn()) {
 }
 
 $db = getDB();
+$canRentEquipment = in_array(getUserRole(), ['member', 'trainer'], true);
+$isAdmin = getUserRole() === 'admin';
+$equipmentRentals = [];
+
+if ($isAdmin) {
+  $stmt = $db->query('
+    SELECT
+      equipment_rentals.equipment_id,
+      equipment_rentals.start_time,
+      equipment_rentals.end_time,
+      user.name AS user_name
+    FROM equipment_rentals
+    JOIN user ON user.id = equipment_rentals.user_id
+    WHERE equipment_rentals.status = "active"
+      AND DATE(equipment_rentals.start_time) = DATE("now", "localtime")
+    ORDER BY equipment_rentals.start_time ASC, user.name ASC
+  ');
+
+  foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $rental) {
+    $equipmentRentals[(int) $rental['equipment_id']][] = $rental;
+  }
+}
+
 $equipment = array_values(array_filter(Equipment::getAll($db), static function (array $item): bool {
-  $availableUnits = max(0, (int) ($item['quantity'] ?? 1) - (int) ($item['maintenance_quantity'] ?? 0));
+  $availableUnits = max(0, (int) ($item['total_quantity'] ?? 1) - (int) ($item['maintenance_quantity'] ?? 0));
 
   return $item['status'] === 'available' && $availableUnits > 0;
 }));
 
 $totalAvailable = array_sum(array_map(
-  static fn (array $item): int => max(0, (int) ($item['quantity'] ?? 1) - (int) ($item['maintenance_quantity'] ?? 0)),
+  static fn (array $item): int => max(0, (int) ($item['total_quantity'] ?? 1) - (int) ($item['maintenance_quantity'] ?? 0)),
   $equipment
 ));
 $rentableCount = count(array_filter(
   $equipment,
-  static fn (array $item): bool => (int) ($item['rentable'] ?? 0) === 1
+  static fn (array $item): bool => (int) ($item['rental_available'] ?? 0) === 1
 ));
 $categories = array_unique(array_map(static fn (array $item): string => $item['category'], $equipment));
 sort($categories);
@@ -99,10 +122,10 @@ require __DIR__ . '/../templates/header.php';
           <ul class="equipment-grid" id="equipment-grid">
             <?php foreach ($equipment as $item): ?>
               <?php
-                $quantity = (int) ($item['quantity'] ?? 1);
+                $totalQuantity = (int) ($item['total_quantity'] ?? 1);
                 $maintenanceQuantity = (int) ($item['maintenance_quantity'] ?? 0);
-                $availableUnits = max(0, $quantity - $maintenanceQuantity);
-                $isRentable = (int) ($item['rentable'] ?? 0) === 1;
+                $availableUnits = max(0, $totalQuantity - $maintenanceQuantity);
+                $isRentable = (int) ($item['rental_available'] ?? 0) === 1;
               ?>
               <li class="equipment-card">
                 <div class="equipment-card-header">
@@ -116,7 +139,7 @@ require __DIR__ . '/../templates/header.php';
                 <dl class="equipment-details">
                   <div>
                     <dt>Total</dt>
-                    <dd><?= $quantity ?></dd>
+                    <dd><?= $totalQuantity ?></dd>
                   </div>
                   <div>
                     <dt>Em manutenção</dt>
@@ -132,8 +155,33 @@ require __DIR__ . '/../templates/header.php';
                   </div>
                 </dl>
 
-                <?php if ($isRentable): ?>
-                  <button type="button" class="btn btn-primary btn-full" disabled>Aluguer em breve</button>
+                <?php if ($isRentable && $canRentEquipment): ?>
+                  <button type="button" class="btn btn-primary btn-full" data-rent-equipment data-equipment-id="<?= (int) $item['id'] ?>" data-equipment-name="<?= htmlspecialchars($item['name']) ?>">Alugar hoje</button>
+                <?php elseif ($isRentable && $isAdmin): ?>
+                  <?php $rentals = $equipmentRentals[(int) $item['id']] ?? []; ?>
+                  <button
+                    type="button"
+                    class="btn btn-outline btn-full"
+                    data-equipment-rentals-toggle
+                    aria-expanded="false"
+                  >
+                    Ver alugueres (<?= count($rentals) ?>)
+                  </button>
+                  <div class="equipment-admin-rentals" hidden>
+                    <h4>Alugueres de hoje</h4>
+                    <?php if ($rentals !== []): ?>
+                      <ul>
+                        <?php foreach ($rentals as $rental): ?>
+                          <li>
+                            <strong><?= htmlspecialchars($rental['user_name']) ?></strong>
+                            <span><?= htmlspecialchars(substr($rental['start_time'], 11, 5)) ?>-<?= htmlspecialchars(substr($rental['end_time'], 11, 5)) ?></span>
+                          </li>
+                        <?php endforeach; ?>
+                      </ul>
+                    <?php else: ?>
+                      <p>Sem alugueres ativos hoje.</p>
+                    <?php endif; ?>
+                  </div>
                 <?php else: ?>
                   <button type="button" class="btn btn-outline btn-full" disabled>Apenas uso no ginásio</button>
                 <?php endif; ?>
@@ -153,6 +201,23 @@ require __DIR__ . '/../templates/header.php';
         <?php endif; ?>
       </div>
     </section>
+
+    <div class="equipment-modal" id="equipment-rental-modal" hidden>
+      <div class="equipment-modal-backdrop" data-close-rental-modal></div>
+      <section class="equipment-modal-panel" role="dialog" aria-modal="true" aria-labelledby="rental-modal-title">
+        <button type="button" class="equipment-modal-close" data-close-rental-modal aria-label="Fechar">×</button>
+        <p class="equipment-eyebrow">Aluguer para hoje</p>
+        <h2 id="rental-modal-title">Escolhe uma hora</h2>
+        <p class="equipment-modal-copy" id="rental-modal-equipment"></p>
+        <div class="equipment-current-rental" id="equipment-current-rental" hidden>
+          <p id="equipment-current-rental-text"></p>
+          <button type="button" class="btn btn-outline btn-sm" id="cancel-equipment-rental">Cancelar aluguer</button>
+        </div>
+        <div class="equipment-slot-grid" id="equipment-slot-grid"></div>
+        <p class="equipment-rental-message" id="equipment-rental-message" role="status"></p>
+        <button type="button" class="btn btn-primary btn-full" id="confirm-equipment-rental" disabled>Confirmar aluguer</button>
+      </section>
+    </div>
   </main>
 
 <?php require __DIR__ . '/../templates/footer.php'; ?>

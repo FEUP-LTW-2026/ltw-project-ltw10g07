@@ -79,7 +79,6 @@ document.addEventListener('DOMContentLoaded', function () {
     stats.className = 'trainer-stats';
     [
       [String(trainer.sessions) + '+', 'Sessões'],
-      [trainer.experience, 'Experiência'],
       ['★ ' + Number(trainer.rating).toFixed(1), 'Avaliação'],
     ].forEach(([value, label]) => {
       const stat = document.createElement('div');

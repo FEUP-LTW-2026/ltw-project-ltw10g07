@@ -34,7 +34,7 @@ verifyCsrfToken('../pages/admin.php#classes');
 $db = getDB();
 $action = $_POST['action'] ?? '';
 $classId = isset($_POST['class_id']) ? (int) $_POST['class_id'] : 0;
-$trainerId = null;
+$trainerId = isset($_POST['trainer_id']) ? (int) $_POST['trainer_id'] : 0;
 $name = trim($_POST['name'] ?? '');
 $description = trim($_POST['description'] ?? '');
 $type = trim($_POST['type'] ?? '');
@@ -75,6 +75,17 @@ if ($duration < 15 || $duration > 180) {
 
 if ($capacity < 1 || $capacity > 80) {
     $errors[] = 'A capacidade deve estar entre 1 e 80 pessoas.';
+}
+
+if ($trainerId <= 0) {
+    $errors[] = 'Seleciona o treinador da aula.';
+} else {
+    $stmt = $db->prepare('SELECT COUNT(*) FROM trainer WHERE id = ?');
+    $stmt->execute([$trainerId]);
+
+    if ((int) $stmt->fetchColumn() === 0) {
+        $errors[] = 'O treinador selecionado não é válido.';
+    }
 }
 
 if ($errors !== []) {

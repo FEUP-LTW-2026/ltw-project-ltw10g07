@@ -2,6 +2,7 @@ PRAGMA foreign_keys = ON;
 
 DROP TABLE IF EXISTS review;
 DROP TABLE IF EXISTS trainer_review;
+DROP TABLE IF EXISTS equipment_rentals;
 DROP TABLE IF EXISTS enrollment;
 DROP TABLE IF EXISTS class_session;
 DROP TABLE IF EXISTS class;
@@ -37,10 +38,25 @@ CREATE TABLE equipment (
   category TEXT NOT NULL,
   status TEXT NOT NULL CHECK (status IN ('available', 'in_use', 'maintenance')),
   location TEXT,
-  quantity INTEGER NOT NULL DEFAULT 1 CHECK (quantity >= 0),
+  total_quantity INTEGER NOT NULL DEFAULT 1 CHECK (total_quantity >= 0),
   maintenance_quantity INTEGER NOT NULL DEFAULT 0 CHECK (maintenance_quantity >= 0),
-  rentable INTEGER NOT NULL DEFAULT 0 CHECK (rentable IN (0, 1))
+  rental_available INTEGER NOT NULL DEFAULT 0 CHECK (rental_available IN (0, 1))
 );
+
+CREATE TABLE equipment_rentals (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  equipment_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  start_time DATETIME NOT NULL,
+  end_time DATETIME NOT NULL,
+  status TEXT NOT NULL CHECK (status IN ('active', 'cancelled', 'completed')),
+  FOREIGN KEY (equipment_id) REFERENCES equipment(id) ON DELETE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
+);
+
+CREATE UNIQUE INDEX one_active_equipment_rental_per_user_equipment_day
+ON equipment_rentals(user_id, equipment_id, DATE(start_time))
+WHERE status = 'active';
 
 CREATE TABLE trainer_review (
   id INTEGER PRIMARY KEY AUTOINCREMENT,

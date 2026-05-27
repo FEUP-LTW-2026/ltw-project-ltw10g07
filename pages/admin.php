@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../database/connection.php';
 require_once __DIR__ . '/../database/User.php';
 require_once __DIR__ . '/../database/ClassCatalog.php';
+require_once __DIR__ . '/../database/Trainer.php';
 require_once __DIR__ . '/../database/Equipment.php';
 require_once __DIR__ . '/../utils/session.php';
 require_once __DIR__ . '/../templates/flash_messages.php';
@@ -14,7 +15,26 @@ if (!isLoggedIn() || getUserRole() !== 'admin') {
 $db = getDB();
 $users = User::getAll($db);
 $classes = ClassCatalog::getAll($db);
+$trainers = Trainer::getAll($db);
 $equipment = Equipment::getAll($db);
+$equipmentRentals = $db->query('
+  SELECT
+    equipment_rentals.id,
+    equipment_rentals.start_time,
+    equipment_rentals.end_time,
+    equipment_rentals.status,
+    equipment.name AS equipment_name,
+    user.name AS user_name,
+    user.role AS user_role
+  FROM equipment_rentals
+  JOIN equipment ON equipment.id = equipment_rentals.equipment_id
+  JOIN user ON user.id = equipment_rentals.user_id
+  WHERE DATE(equipment_rentals.start_time) = DATE("now", "localtime")
+    AND equipment_rentals.status = "active"
+  ORDER BY
+    equipment_rentals.start_time ASC,
+    equipment.name ASC
+')->fetchAll(PDO::FETCH_ASSOC);
 $errors = getFlashMessages('errors');
 $success = getFlashMessages('success');
 
@@ -223,6 +243,15 @@ require __DIR__ . '/../templates/header.php';
               </div>
               <div class="form-row">
                 <div class="form-group">
+                  <label for="new-class-trainer">Treinador</label>
+                  <select id="new-class-trainer" name="trainer_id" required>
+                    <option value="">Selecionar treinador</option>
+                    <?php foreach ($trainers as $trainer): ?>
+                      <option value="<?= (int) $trainer['id'] ?>"><?= htmlspecialchars($trainer['name']) ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+                <div class="form-group">
                   <label for="new-class-duration">Duração</label>
                   <input type="number" id="new-class-duration" name="duration" min="15" max="180" step="5" required />
                 </div>
@@ -271,6 +300,16 @@ require __DIR__ . '/../templates/header.php';
                 </div>
                 <div class="form-row">
                   <div class="form-group">
+                    <label for="class-trainer-<?= (int) $class['id'] ?>">Treinador</label>
+                    <select id="class-trainer-<?= (int) $class['id'] ?>" name="trainer_id" required>
+                      <?php foreach ($trainers as $trainer): ?>
+                        <option value="<?= (int) $trainer['id'] ?>" <?= (int) $class['trainer_id'] === (int) $trainer['id'] ? 'selected' : '' ?>>
+                          <?= htmlspecialchars($trainer['name']) ?>
+                        </option>
+                      <?php endforeach; ?>
+                    </select>
+                  </div>
+                  <div class="form-group">
                     <label for="class-duration-<?= (int) $class['id'] ?>">Duração</label>
                     <input type="number" id="class-duration-<?= (int) $class['id'] ?>" name="duration" min="15" max="180" step="5" value="<?= (int) $class['duration'] ?>" required />
                   </div>
@@ -300,7 +339,37 @@ require __DIR__ . '/../templates/header.php';
           <div class="admin-section-header">
             <div>
               <h2>Equipamento</h2>
-              <p>Controla os itens da área principal e o seu estado de disponibilidade.</p>
+              <p>Controla os itens da área principal, disponibilidade e alugueres de hoje.</p>
+            </div>
+          </div>
+
+          <div class="admin-card admin-rentals-card">
+            <div class="admin-card-title">
+              <h3>Alugueres de hoje</h3>
+              <button type="button" class="btn btn-outline btn-sm" data-rentals-toggle aria-expanded="false" aria-controls="admin-rentals-list">
+                Ver alugueres (<?= count($equipmentRentals) ?>)
+              </button>
+            </div>
+
+            <div id="admin-rentals-list" data-rentals-list hidden>
+              <?php if ($equipmentRentals !== []): ?>
+                <div class="admin-rentals-list">
+                <?php foreach ($equipmentRentals as $rental): ?>
+                  <div class="admin-rental-row">
+                    <div>
+                      <strong><?= htmlspecialchars($rental['equipment_name']) ?></strong>
+                      <span><?= htmlspecialchars($rental['user_name']) ?> · <?= htmlspecialchars($roleLabels[$rental['user_role']] ?? $rental['user_role']) ?></span>
+                    </div>
+                    <div>
+                      <strong><?= htmlspecialchars(substr($rental['start_time'], 11, 5)) ?>-<?= htmlspecialchars(substr($rental['end_time'], 11, 5)) ?></strong>
+                      <span><?= htmlspecialchars($rental['status']) ?></span>
+                    </div>
+                  </div>
+                <?php endforeach; ?>
+                </div>
+              <?php else: ?>
+                <p class="admin-empty">Ainda não existem alugueres para hoje.</p>
+              <?php endif; ?>
             </div>
           </div>
 
@@ -336,14 +405,14 @@ require __DIR__ . '/../templates/header.php';
               <div class="form-row">
                 <div class="form-group">
                   <label for="new-equipment-quantity">Quantidade total</label>
-                  <input type="number" id="new-equipment-quantity" name="quantity" min="0" value="1" required />
+                  <input type="number" id="new-equipment-quantity" name="total_quantity" min="0" value="1" required />
                 </div>
                 <div class="form-group">
                   <label for="new-equipment-maintenance">Em manutenção</label>
                   <input type="number" id="new-equipment-maintenance" name="maintenance_quantity" min="0" value="0" required />
                 </div>
                 <label class="admin-check">
-                  <input type="checkbox" name="rentable" />
+                  <input type="checkbox" name="rental_available" />
                   Alugável
                 </label>
               </div>
@@ -385,14 +454,14 @@ require __DIR__ . '/../templates/header.php';
                 <div class="form-row">
                   <div class="form-group">
                     <label for="equipment-quantity-<?= (int) $item['id'] ?>">Quantidade total</label>
-                    <input type="number" id="equipment-quantity-<?= (int) $item['id'] ?>" name="quantity" min="0" value="<?= (int) ($item['quantity'] ?? 1) ?>" required />
+                    <input type="number" id="equipment-quantity-<?= (int) $item['id'] ?>" name="total_quantity" min="0" value="<?= (int) ($item['total_quantity'] ?? 1) ?>" required />
                   </div>
                   <div class="form-group">
                     <label for="equipment-maintenance-<?= (int) $item['id'] ?>">Em manutenção</label>
                     <input type="number" id="equipment-maintenance-<?= (int) $item['id'] ?>" name="maintenance_quantity" min="0" value="<?= (int) ($item['maintenance_quantity'] ?? 0) ?>" required />
                   </div>
                   <label class="admin-check">
-                    <input type="checkbox" name="rentable" <?= (int) ($item['rentable'] ?? 0) === 1 ? 'checked' : '' ?> />
+                    <input type="checkbox" name="rental_available" <?= (int) ($item['rental_available'] ?? 0) === 1 ? 'checked' : '' ?> />
                     Alugável
                   </label>
                 </div>

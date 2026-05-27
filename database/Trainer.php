@@ -32,9 +32,20 @@ class Trainer {
                 user.photo,
                 trainer.bio,
                 trainer.specializations,
-                trainer.rating
+                trainer.rating,
+                COUNT(CASE
+                    WHEN class_session.session_date < DATE(\'now\', \'localtime\')
+                      OR (
+                          class_session.session_date = DATE(\'now\', \'localtime\')
+                          AND class_session.end_time <= TIME(\'now\', \'localtime\')
+                      )
+                    THEN 1
+                END) AS sessions
             FROM trainer
             JOIN user ON user.id = trainer.user_id
+            LEFT JOIN class ON class.trainer_id = trainer.id
+            LEFT JOIN class_session ON class_session.class_id = class.id
+            GROUP BY trainer.id, user.name, user.photo, trainer.bio, trainer.specializations, trainer.rating
             ORDER BY trainer.rating DESC, user.name ASC
         ');
 
@@ -55,9 +66,20 @@ class Trainer {
                 user.photo,
                 trainer.bio,
                 trainer.specializations,
-                trainer.rating
+                trainer.rating,
+                COUNT(CASE
+                    WHEN class_session.session_date < DATE(\'now\', \'localtime\')
+                      OR (
+                          class_session.session_date = DATE(\'now\', \'localtime\')
+                          AND class_session.end_time <= TIME(\'now\', \'localtime\')
+                      )
+                    THEN 1
+                END) AS sessions
             FROM trainer
             JOIN user ON user.id = trainer.user_id
+            LEFT JOIN class ON class.trainer_id = trainer.id
+            LEFT JOIN class_session ON class_session.class_id = class.id
+            GROUP BY trainer.id, user.name, user.photo, trainer.bio, trainer.specializations, trainer.rating
             ORDER BY trainer.rating DESC, user.name ASC
             LIMIT ?
         ');
@@ -82,12 +104,23 @@ class Trainer {
                 user.photo,
                 trainer.bio,
                 trainer.specializations,
-                trainer.rating
+                trainer.rating,
+                COUNT(CASE
+                    WHEN class_session.session_date < DATE(\'now\', \'localtime\')
+                      OR (
+                          class_session.session_date = DATE(\'now\', \'localtime\')
+                          AND class_session.end_time <= TIME(\'now\', \'localtime\')
+                      )
+                    THEN 1
+                END) AS sessions
             FROM trainer
             JOIN user ON user.id = trainer.user_id
+            LEFT JOIN class ON class.trainer_id = trainer.id
+            LEFT JOIN class_session ON class_session.class_id = class.id
             WHERE user.name LIKE ?
                OR trainer.specializations LIKE ?
                OR trainer.bio LIKE ?
+            GROUP BY trainer.id, user.name, user.photo, trainer.bio, trainer.specializations, trainer.rating
             ORDER BY trainer.rating DESC, user.name ASC
         ');
         $stmt->execute([$searchTerm, $searchTerm, $searchTerm]);
@@ -111,7 +144,14 @@ class Trainer {
                 trainer.specializations,
                 trainer.certifications,
                 trainer.rating,
-                COUNT(class_session.id) AS sessions
+                COUNT(CASE
+                    WHEN class_session.session_date < DATE(\'now\', \'localtime\')
+                      OR (
+                          class_session.session_date = DATE(\'now\', \'localtime\')
+                          AND class_session.end_time <= TIME(\'now\', \'localtime\')
+                      )
+                    THEN 1
+                END) AS sessions
             FROM trainer
             JOIN user ON user.id = trainer.user_id
             LEFT JOIN class ON class.trainer_id = trainer.id

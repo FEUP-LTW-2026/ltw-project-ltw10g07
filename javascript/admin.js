@@ -101,3 +101,15 @@ if (userSearchForm) {
     runUserSearch();
   });
 }
+
+const rentalsToggle = document.querySelector('[data-rentals-toggle]');
+const rentalsList = document.querySelector('[data-rentals-list]');
+
+if (rentalsToggle && rentalsList) {
+  rentalsToggle.addEventListener('click', () => {
+    const shouldOpen = rentalsList.hidden;
+    rentalsList.hidden = !shouldOpen;
+    rentalsToggle.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+    rentalsToggle.textContent = rentalsToggle.textContent.replace(shouldOpen ? 'Ver' : 'Esconder', shouldOpen ? 'Esconder' : 'Ver');
+  });
+}
