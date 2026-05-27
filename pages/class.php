@@ -1,9 +1,11 @@
 <?php
 declare(strict_types=1);
 
+date_default_timezone_set('Europe/Lisbon');
+
 require_once __DIR__ . '/../utils/session.php';
 require_once __DIR__ . '/../database/connection.php';
-require_once __DIR__ . '/../utils/security.php'; // ADICIONADO: Importar as funções de segurança
+require_once __DIR__ . '/../utils/security.php';
 
 $errors = getFlashMessages('errors');
 $success = getFlashMessages('success');
@@ -208,8 +210,16 @@ require __DIR__ . '/../templates/header.php';
                 <button type="submit" class="btn btn-danger btn-lg" style="background: #dc2626; border-color: #dc2626; color: white;">Cancelar Minha Inscrição</button>
               <?php else: ?>
                 <input type="hidden" name="action" value="enroll" />
-                <button type="submit" class="btn btn-primary btn-lg" <?= $spots_left === 0 ? 'disabled' : '' ?>>
-                  <?= $spots_left === 0 ? 'Sessão Esgotada' : 'Inscrever-me Nesta Sessão' ?>
+                <?php
+                $lockEnroll = false;
+                if ($mainSession) {
+                    $sessionStart = strtotime($mainSession['session_date'] . ' ' . $mainSession['start_time']);
+                    $lockEnroll   = time() > ($sessionStart - 20 * 60);
+                }
+                ?>
+                <button type="submit" class="btn btn-primary btn-lg"
+                  <?= ($spots_left === 0 || $lockEnroll) ? 'disabled' : '' ?>>
+                  <?= $spots_left === 0 ? 'Sessão Esgotada' : ($lockEnroll ? 'Inscrições Encerradas' : 'Inscrever-me Nesta Sessão') ?>
                 </button>
               <?php endif; ?>
             </form>
@@ -253,6 +263,107 @@ require __DIR__ . '/../templates/header.php';
         </div>
       </div>
     </section>
-  </main>
+  
 
+
+    <?php
+
+    require_once __DIR__ . '/../database/ClassReview.php';
+
+    $canReview   = false;
+    $userReview  = null;
+    $reviews     = [];
+    $avgRating   = 0;
+
+    if (isLoggedIn() && getUserRole() === 'member') {
+        $canReview  = ClassReview::memberHasEnrolledInClass($db, (int)getUserId(), $class_id);
+        $userReview = ClassReview::findByUserAndClass($db, (int)getUserId(), $class_id);
+    }
+
+    $reviews   = ClassReview::getForClass($db, $class_id);
+    $avgRating = ClassReview::averageRating($db, $class_id);
+    ?>
+
+    <section class="class-reviews-section" id="reviews-section">
+      <div class="container">
+
+        <h2>Avaliações
+          <?php if ($avgRating > 0): ?>
+            <span class="reviews-avg">
+              <?= str_repeat('★', (int)round($avgRating)) ?><?= str_repeat('☆', 5 - (int)round($avgRating)) ?>
+              <?= number_format($avgRating, 1) ?> / 5
+            </span>
+          <?php endif; ?>
+        </h2>
+
+        <?php if ($canReview): ?>
+          <div class="review-form-wrap">
+            <h3><?= $userReview ? 'Editar a tua avaliação' : 'Deixa a tua avaliação' ?></h3>
+            <form action="../actions/action_review_class.php" method="POST" class="review-form">
+              <input type="hidden" name="class_id" value="<?= $class_id ?>">
+
+              <div class="form-group">
+                <label>Classificação</label>
+                <div class="star-rating">
+                  <?php for ($i = 5; $i >= 1; $i--): ?>
+                    <input type="radio" id="star<?= $i ?>" name="rating" value="<?= $i ?>"
+                      <?= ($userReview && (int)$userReview['rating'] === $i) ? 'checked' : '' ?> required>
+                    <label for="star<?= $i ?>">★</label>
+                  <?php endfor; ?>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="comment">Comentário</label>
+                <textarea id="comment" name="comment" rows="3" maxlength="700" placeholder="Conta a tua experiência..." required><?= htmlspecialchars($userReview['comment'] ?? '') ?></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary">
+                <?= $userReview ? 'Atualizar avaliação' : 'Publicar avaliação' ?>
+              </button>
+            </form>
+            <?php if ($userReview): ?>
+              <form action="../actions/action_review_class.php" method="POST" style="margin-top:.75rem">
+                <input type="hidden" name="class_id" value="<?= $class_id ?>">
+                <input type="hidden" name="delete_review" value="1">
+                <button type="submit" class="btn btn-danger btn-sm"
+                  onclick="return confirm('Tens a certeza que queres remover a tua avaliação?')">
+                  Remover avaliação
+                </button>
+              </form>
+            <?php endif; ?>
+          </div>
+        <?php elseif (isLoggedIn() && getUserRole() === 'member'): ?>
+          <p class="review-locked">Só podes avaliar aulas em que te inscreveste.</p>
+        <?php elseif (!isLoggedIn()): ?>
+          <p class="review-locked"><a href="login.php">Inicia sessão</a> para deixar uma avaliação.</p>
+        <?php endif; ?>
+
+        <?php if ($reviews === []): ?>
+          <p class="reviews-empty">Ainda não há avaliações para esta aula.</p>
+        <?php else: ?>
+          <div class="reviews-list">
+            <?php foreach ($reviews as $r): ?>
+              <div class="review-card">
+                <div class="review-card-header">
+                  <?php if (!empty($r['author_photo'])): ?>
+                    <img src="<?= htmlspecialchars($r['author_photo']) ?>" class="review-avatar" alt="">
+                  <?php else: ?>
+                    <div class="review-avatar review-avatar-placeholder"><?= htmlspecialchars($r['author_initials']) ?></div>
+                  <?php endif; ?>
+                  <div>
+                    <strong><?= htmlspecialchars($r['author']) ?></strong>
+                    <span class="review-stars"><?= str_repeat('★', $r['rating']) ?><?= str_repeat('☆', 5 - $r['rating']) ?></span>
+                  </div>
+                  <span class="review-date"><?= htmlspecialchars(substr($r['created_at'], 0, 10)) ?></span>
+                </div>
+                <p class="review-comment"><?= htmlspecialchars($r['comment']) ?></p>
+              </div>
+            <?php endforeach; ?>
+          </div>
+        <?php endif; ?>
+
+      </div>
+    </section>
+  </main>
 <?php require __DIR__ . '/../templates/footer.php'; ?>
