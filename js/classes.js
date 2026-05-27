@@ -1,89 +1,90 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // 1. Apanhar os elementos do ecrã
-    const form = document.querySelector('.filters-wrapper form');
     const searchInput = document.getElementById('hero-search-input');
     const intensitySelect = document.getElementById('filter-intensity');
     const trainerSelect = document.getElementById('filter-trainer');
-    const sortSelect = document.getElementById('filter-sort');
-    const classesContainer = document.getElementById('classes-container'); // Onde vamos injetar as aulas
+    const dateInput = document.getElementById('filter-date');
+    const timeSelect = document.getElementById('filter-time');
+    const classesContainer = document.getElementById('classes-container');
 
-    // 2. A função mágica que vai à API buscar as aulas via AJAX
+    // Chamar a API inicial
+    fetchClasses();
+
     function fetchClasses() {
-        // Preparar os dados do filtro para enviar no link
         const params = new URLSearchParams({
             q: searchInput.value,
             intensity: intensitySelect.value,
             trainer_id: trainerSelect.value,
-            sort: sortSelect.value
+            date: dateInput.value,
+            time: timeSelect.value
         });
 
-        // Chamar a API em pano de fundo
         fetch('../api/api_classes.php?' + params.toString())
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    renderClasses(data.data); // Mandar desenhar as aulas recebidas
+                    renderClasses(data.data);
                 }
             })
             .catch(error => console.error('Erro no AJAX:', error));
     }
 
-    // 3. A função que apaga o que lá estava e desenha as novas aulas
-    function renderClasses(classes) {
-        if (classes.length === 0) {
+    function renderClasses(sessions) {
+        if (sessions.length === 0) {
             classesContainer.innerHTML = `
                 <div style="text-align: center; padding: 3rem 0; color: var(--color-text-muted);">
-                    <h3>Nenhuma aula encontrada com os filtros selecionados.</h3>
-                    <p>Tenta mudar os critérios de pesquisa ou intensidade.</p>
+                    <h3>Nenhuma sessão agendada com estes filtros.</h3>
+                    <p>Tenta procurar por outro dia ou período horário.</p>
                 </div>
             `;
             return;
         }
 
         let html = '<ul class="classes-grid">';
-
-        classes.forEach(c => {
-            // Calcular a cor da badge da intensidade
-            const badgeColor = c.intensity === 'Alta' ? 'badge-amber' : (c.intensity === 'Baixa' ? 'badge-green' : 'badge-blue');
-            const imageMarkup = c.image
-                ? `<img src="${c.image}" alt="${c.name}" />`
-                : `<div class="class-image-placeholder" aria-hidden="true">${c.name.charAt(0).toUpperCase()}</div>`;
-            const trainerName = c.trainer_name ? c.trainer_name : 'Ginásio';
+        
+        sessions.forEach(s => {
+            const badgeColor = s.intensity === 'Alta' ? 'badge-amber' : (s.intensity === 'Baixa' ? 'badge-green' : 'badge-blue');
+            const image = s.image ? s.image : '../img/hiit.jpg';
+            const trainerName = s.trainer_name ? s.trainer_name : 'Ginásio';
+            
+            const timeFormatted = s.start_time.substring(0, 5);
+            const spotsLeft = s.capacity - s.active_enrollments;
 
             html += `
                 <li class="class-card">
                     <div class="class-img-wrap">
-                        ${imageMarkup}
+                        <img src="${image}" alt="${s.name}" />
                     </div>
                     <div class="class-card-body">
                         <div class="class-card-tags">
-                            <span class="badge badge-blue">${c.type}</span>
-                            <span class="badge ${badgeColor}">${c.intensity}</span>
+                            <span class="badge badge-blue">${s.type}</span>
+                            <span class="badge ${badgeColor}">${s.intensity}</span>
                         </div>
-                        <h3>${c.name}</h3>
-                        <p class="class-time">${c.duration} min</p>
+                        <h3 style="margin-bottom: 0.2rem;">${s.name}</h3>
+                        
+                        <p style="font-size: 0.9rem; font-weight: bold; color: #4f46e5; margin-bottom: 0.5rem;">
+                            ${s.session_date} às ${timeFormatted}
+                        </p>
+                        <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1rem;">
+                            Sala: ${s.room} <br> Vagas: ${spotsLeft}/${s.capacity}
+                        </p>
+
                         <div class="class-card-footer">
                             <span class="trainer-name">${trainerName}</span>
-                            <a href="class.php?id=${c.id}" class="btn btn-outline btn-sm">Ver Detalhes</a>
+                            <a href="class.php?id=${s.class_id}&session_id=${s.session_id}" class="btn btn-outline btn-sm">Ver Sessão</a>
                         </div>
                     </div>
                 </li>
             `;
         });
-
+        
         html += '</ul>';
-        classesContainer.innerHTML = html; // Injetar o novo HTML na página!
+        classesContainer.innerHTML = html;
     }
 
-    // 4. Avisar o JavaScript para correr a pesquisa quando mudamos os filtros
-    searchInput.addEventListener('input', fetchClasses); // Assim que o utilizador digita uma letra!
+    // Escutar eventos
+    searchInput.addEventListener('input', fetchClasses);
     intensitySelect.addEventListener('change', fetchClasses);
     trainerSelect.addEventListener('change', fetchClasses);
-    sortSelect.addEventListener('change', fetchClasses);
-
-    // Bloquear o envio normal do formulário (que recarregava a página)
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        fetchClasses();
-    });
+    dateInput.addEventListener('change', fetchClasses);
+    timeSelect.addEventListener('change', fetchClasses);
 });
