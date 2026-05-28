@@ -36,7 +36,7 @@ try {
         JOIN class ON class.id = class_session.class_id
         LEFT JOIN trainer ON trainer.id = class.trainer_id
         LEFT JOIN user ON user.id = trainer.user_id
-        WHERE datetime(class_session.session_date || " " || class_session.end_time) >= datetime("now", "-23 hours")
+        WHERE datetime(class_session.session_date || " " || class_session.end_time) >= datetime("now", "-5 hours")
     ';
 
     $params = [];
