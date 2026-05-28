@@ -78,7 +78,7 @@ $navLinks = [
                 <a href="admin.php" class="<?= $activePage === 'admin' ? 'active' : '' ?>">Admin</a>
               <?php endif; ?>
               
-              <?php if ($activePage !== 'admin'): ?>
+              <?php if ($userRole !== 'admin' && $activePage !== 'admin'): ?>
                 <a href="account.php" class="<?= $activePage === 'account' ? 'active' : '' ?>">Editar conta</a>
               <?php endif; ?>
               <form action="../actions/action_logout.php" method="POST" class="account-menu-form">

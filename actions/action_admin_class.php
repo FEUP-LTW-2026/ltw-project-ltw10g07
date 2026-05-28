@@ -19,6 +19,69 @@ function redirectAdminClasses(array $errors = [], array $success = []): void {
     exit;
 }
 
+function uploadClassImage(?array $file, array &$errors): ?string {
+    if ($file === null || ($file['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
+        return null;
+    }
+
+    $error = (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE);
+    if ($error !== UPLOAD_ERR_OK) {
+        $errors[] = match ($error) {
+            UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE => 'A imagem é demasiado grande (máx. 2 MB).',
+            default => 'Erro ao fazer upload da imagem.',
+        };
+        return null;
+    }
+
+    $maxBytes = 2 * 1024 * 1024;
+    if ((int) $file['size'] > $maxBytes) {
+        $errors[] = 'A imagem é demasiado grande (máx. 2 MB).';
+        return null;
+    }
+
+    $allowedMime = ['image/jpeg', 'image/png', 'image/webp'];
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $mimeType = $finfo->file($file['tmp_name']);
+
+    if (!in_array($mimeType, $allowedMime, true)) {
+        $errors[] = 'Só são aceites imagens JPEG, PNG ou WebP.';
+        return null;
+    }
+
+    $ext = match ($mimeType) {
+        'image/png' => 'png',
+        'image/webp' => 'webp',
+        default => 'jpg',
+    };
+
+    $uploadDir = __DIR__ . '/../uploads/class_images/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true);
+    }
+
+    $filename = 'class_' . time() . '_' . bin2hex(random_bytes(6)) . '.' . $ext;
+    $destPath = $uploadDir . $filename;
+
+    if (!move_uploaded_file($file['tmp_name'], $destPath)) {
+        $errors[] = 'Erro ao guardar a imagem. Tenta novamente.';
+        return null;
+    }
+
+    return '../uploads/class_images/' . $filename;
+}
+
+function deleteUploadedClassImage(string $image): void {
+    if ($image === '' || !str_contains($image, 'uploads/class_images/')) {
+        return;
+    }
+
+    $relativePath = preg_replace('#^\.\./#', '', $image);
+    $path = __DIR__ . '/../' . ltrim($relativePath, '/');
+    if (is_file($path)) {
+        @unlink($path);
+    }
+}
+
 if (!isLoggedIn() || getUserRole() !== 'admin') {
     header('Location: ../pages/login.php');
     exit;
@@ -39,10 +102,9 @@ $name = trim($_POST['name'] ?? '');
 $description = trim($_POST['description'] ?? '');
 $type = trim($_POST['type'] ?? '');
 $intensity = $_POST['intensity'] ?? '';
-$duration = (int) ($_POST['duration'] ?? 0);
 $capacity = (int) ($_POST['capacity'] ?? 0);
-$image = trim($_POST['image'] ?? '');
 $errors = [];
+$existingClass = null;
 
 if ($action === 'delete') {
     if ($classId <= 0) {
@@ -57,6 +119,17 @@ if (!in_array($action, ['create', 'update'], true)) {
     redirectAdminClasses(['Ação inválida.']);
 }
 
+if ($action === 'update') {
+    if ($classId <= 0) {
+        redirectAdminClasses(['Aula inválida.']);
+    }
+
+    $existingClass = ClassCatalog::findById($db, $classId);
+    if ($existingClass === null) {
+        redirectAdminClasses(['Aula inválida.']);
+    }
+}
+
 if ($name === '') {
     $errors[] = 'O nome da aula é obrigatório.';
 }
@@ -67,10 +140,6 @@ if ($type === '') {
 
 if (!in_array($intensity, ['Baixa', 'Média', 'Alta'], true)) {
     $errors[] = 'A intensidade selecionada não é válida.';
-}
-
-if ($duration < 15 || $duration > 180) {
-    $errors[] = 'A duração deve estar entre 15 e 180 minutos.';
 }
 
 if ($capacity < 1 || $capacity > 80) {
@@ -92,14 +161,27 @@ if ($errors !== []) {
     redirectAdminClasses($errors);
 }
 
+$duration = $existingClass !== null ? (int) $existingClass['duration'] : 45;
+$image = $existingClass !== null ? (string) ($existingClass['image'] ?? '') : '';
+$uploadedImage = uploadClassImage($_FILES['image_file'] ?? null, $errors);
+
+if ($errors !== []) {
+    redirectAdminClasses($errors);
+}
+
+if ($uploadedImage !== null) {
+    $image = $uploadedImage;
+}
+
 if ($action === 'create') {
     ClassCatalog::create($db, $trainerId, $name, $description, $type, $intensity, $duration, $capacity, $image);
     redirectAdminClasses([], ['Aula criada com sucesso.']);
 }
 
-if ($classId <= 0) {
-    redirectAdminClasses(['Aula inválida.']);
+ClassCatalog::update($db, $classId, $trainerId, $name, $description, $type, $intensity, $duration, $capacity, $image);
+
+if ($uploadedImage !== null) {
+    deleteUploadedClassImage((string) ($existingClass['image'] ?? ''));
 }
 
-ClassCatalog::update($db, $classId, $trainerId, $name, $description, $type, $intensity, $duration, $capacity, $image);
 redirectAdminClasses([], ['Aula atualizada com sucesso.']);

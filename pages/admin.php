@@ -219,7 +219,7 @@ require __DIR__ . '/../templates/header.php';
           </div>
 
           <div class="admin-grid">
-            <form action="../actions/action_admin_class.php" method="POST" class="admin-card admin-form">
+            <form action="../actions/action_admin_class.php" method="POST" class="admin-card admin-form" enctype="multipart/form-data">
               <?= csrfInput() ?>
               <input type="hidden" name="action" value="create" />
               <h3>Criar aula</h3>
@@ -252,17 +252,15 @@ require __DIR__ . '/../templates/header.php';
                   </select>
                 </div>
                 <div class="form-group">
-                  <label for="new-class-duration">Duração</label>
-                  <input type="number" id="new-class-duration" name="duration" min="15" max="180" step="5" required />
-                </div>
-                <div class="form-group">
                   <label for="new-class-capacity">Capacidade</label>
                   <input type="number" id="new-class-capacity" name="capacity" min="1" max="80" required />
                 </div>
               </div>
               <div class="form-group">
-                <label for="new-class-image">Imagem</label>
-                <input type="text" id="new-class-image" name="image" placeholder="Caminho da imagem (opcional)" />
+                <span class="form-label">Imagem</span>
+                <label for="new-class-image" class="btn btn-outline btn-sm admin-file-button">Escolher imagem</label>
+                <input type="file" id="new-class-image" name="image_file" class="admin-file-input" accept="image/jpeg,image/png,image/webp" />
+                <span class="admin-file-name" data-file-name>Nenhuma imagem escolhida</span>
               </div>
               <div class="form-group">
                 <label for="new-class-description">Descrição</label>
@@ -272,7 +270,7 @@ require __DIR__ . '/../templates/header.php';
             </form>
 
             <?php foreach ($classes as $class): ?>
-              <form action="../actions/action_admin_class.php" method="POST" class="admin-card admin-form">
+              <form action="../actions/action_admin_class.php" method="POST" class="admin-card admin-form" enctype="multipart/form-data">
                 <?= csrfInput() ?>
                 <input type="hidden" name="action" value="update" />
                 <input type="hidden" name="class_id" value="<?= (int) $class['id'] ?>" />
@@ -310,17 +308,17 @@ require __DIR__ . '/../templates/header.php';
                     </select>
                   </div>
                   <div class="form-group">
-                    <label for="class-duration-<?= (int) $class['id'] ?>">Duração</label>
-                    <input type="number" id="class-duration-<?= (int) $class['id'] ?>" name="duration" min="15" max="180" step="5" value="<?= (int) $class['duration'] ?>" required />
-                  </div>
-                  <div class="form-group">
                     <label for="class-capacity-<?= (int) $class['id'] ?>">Capacidade</label>
                     <input type="number" id="class-capacity-<?= (int) $class['id'] ?>" name="capacity" min="1" max="80" value="<?= (int) $class['capacity'] ?>" required />
                   </div>
                 </div>
                 <div class="form-group">
-                  <label for="class-image-<?= (int) $class['id'] ?>">Imagem</label>
-                  <input type="text" id="class-image-<?= (int) $class['id'] ?>" name="image" value="<?= htmlspecialchars($class['image'] ?? '') ?>" />
+                  <span class="form-label">Imagem</span>
+                  <label for="class-image-<?= (int) $class['id'] ?>" class="btn btn-outline btn-sm admin-file-button">Escolher imagem</label>
+                  <input type="file" id="class-image-<?= (int) $class['id'] ?>" name="image_file" class="admin-file-input" accept="image/jpeg,image/png,image/webp" />
+                  <span class="admin-file-name" data-file-name>
+                    <?= !empty($class['image']) ? 'Imagem atual guardada' : 'Nenhuma imagem escolhida' ?>
+                  </span>
                 </div>
                 <div class="form-group">
                   <label for="class-description-<?= (int) $class['id'] ?>">Descrição</label>

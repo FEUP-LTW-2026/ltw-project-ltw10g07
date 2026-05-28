@@ -113,3 +113,15 @@ if (rentalsToggle && rentalsList) {
     rentalsToggle.textContent = rentalsToggle.textContent.replace(shouldOpen ? 'Ver' : 'Esconder', shouldOpen ? 'Esconder' : 'Ver');
   });
 }
+
+document.querySelectorAll('.admin-file-input').forEach((input) => {
+  input.addEventListener('change', () => {
+    const fileName = input.closest('.form-group')?.querySelector('[data-file-name]');
+
+    if (!fileName) {
+      return;
+    }
+
+    fileName.textContent = input.files && input.files[0] ? input.files[0].name : 'Nenhuma imagem escolhida';
+  });
+});

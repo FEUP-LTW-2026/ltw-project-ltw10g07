@@ -217,6 +217,36 @@
   gap: .75rem;
 }
 
+.form-label {
+  display: block;
+  margin-bottom: .35rem;
+  color: var(--color-text-secondary);
+  font-size: .8rem;
+  font-weight: 600;
+}
+
+.admin-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+.admin-file-button {
+  width: fit-content;
+  cursor: pointer;
+}
+
+.admin-file-name {
+  margin-top: .35rem;
+  color: var(--color-text-secondary);
+  font-size: .8rem;
+  font-weight: 600;
+}
+
 .admin-empty {
   grid-column: 1 / -1;
   padding: 1rem;
