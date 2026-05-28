@@ -22,6 +22,8 @@ document.addEventListener('DOMContentLoaded', function () {
   let selectedEquipment = null;
   let selectedSlot = null;
   let currentRental = null;
+  const canRentEquipment = filters.dataset.canRentEquipment === 'true';
+  const isAdmin = filters.dataset.isAdmin === 'true';
 
   function appendText(parent, tagName, text, className) {
     const element = document.createElement(tagName);
@@ -165,19 +167,59 @@ document.addEventListener('DOMContentLoaded', function () {
     appendDetail(details, 'Aluguer', item.rental_available ? 'Disponível' : 'Indisponível');
     card.appendChild(details);
 
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = item.rental_available ? 'btn btn-primary btn-full' : 'btn btn-outline btn-full';
-    button.textContent = item.rental_available ? 'Alugar hoje' : 'Apenas uso no ginásio';
-
-    if (item.rental_available) {
+    if (item.rental_available && canRentEquipment) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'btn btn-primary btn-full';
+      button.textContent = 'Alugar hoje';
       button.dataset.rentEquipment = 'true';
       button.dataset.equipmentId = String(item.id);
       button.dataset.equipmentName = item.name;
-    } else {
-      button.disabled = true;
+      card.appendChild(button);
+
+      return card;
     }
 
+    if (item.rental_available && isAdmin) {
+      const rentals = Array.isArray(item.rentals) ? item.rentals : [];
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'btn btn-outline btn-full';
+      button.textContent = 'Ver alugueres (' + rentals.length + ')';
+      button.dataset.equipmentRentalsToggle = 'true';
+      button.setAttribute('aria-expanded', 'false');
+      card.appendChild(button);
+
+      const rentalsPanel = document.createElement('div');
+      rentalsPanel.className = 'equipment-admin-rentals';
+      rentalsPanel.hidden = true;
+      appendText(rentalsPanel, 'h4', 'Alugueres de hoje');
+
+      if (rentals.length > 0) {
+        const rentalsList = document.createElement('ul');
+
+        rentals.forEach((rental) => {
+          const row = document.createElement('li');
+          appendText(row, 'strong', rental.user_name);
+          appendText(row, 'span', formatSlotTime(rental.start_time) + '-' + formatSlotTime(rental.end_time));
+          rentalsList.appendChild(row);
+        });
+
+        rentalsPanel.appendChild(rentalsList);
+      } else {
+        appendText(rentalsPanel, 'p', 'Sem alugueres ativos hoje.');
+      }
+
+      card.appendChild(rentalsPanel);
+
+      return card;
+    }
+
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'btn btn-outline btn-full';
+    button.textContent = 'Apenas uso no ginásio';
+    button.disabled = true;
     card.appendChild(button);
 
     return card;

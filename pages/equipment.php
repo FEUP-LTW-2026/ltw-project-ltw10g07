@@ -91,7 +91,13 @@ require __DIR__ . '/../templates/header.php';
         <h2 id="equipment-list-heading" class="visually-hidden">Lista de equipamentos</h2>
 
         <?php if ($equipment !== []): ?>
-          <form class="equipment-filters" id="equipment-filters" role="search">
+          <form
+            class="equipment-filters"
+            id="equipment-filters"
+            role="search"
+            data-can-rent-equipment="<?= $canRentEquipment ? 'true' : 'false' ?>"
+            data-is-admin="<?= $isAdmin ? 'true' : 'false' ?>"
+          >
             <div class="equipment-search">
               <label for="equipment-search">Pesquisar equipamento</label>
               <input type="search" id="equipment-search" name="q" placeholder="Pesquisar por passadeira, luvas, yoga..." autocomplete="off" />

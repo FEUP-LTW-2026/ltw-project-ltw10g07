@@ -1,117 +1,199 @@
-# LiftToBig — Gym Management Website
+# LiftToBig
 
-Projeto académico de LTW (Linguagens e Tecnologias Web) — Faculdade de Engenharia da Universidade do Porto.
+Projeto académico de LTW (Linguagens e Tecnologias Web) da Faculdade de Engenharia da Universidade do Porto.
 
+LiftToBig é uma aplicação web em PHP para gestão de um ginásio. Inclui páginas públicas de apresentação, aulas, treinadores e equipamentos, além de áreas autenticadas para membros, treinadores e administradores.
 
+## Funcionalidades
 
-## Como abrir
+- Landing page com destaques do ginásio, aulas e treinadores.
+- Registo, login, logout e edição de conta.
+- Upload de fotografia de perfil.
+- Catálogo de aulas com pesquisa/filtros AJAX.
+- Página de detalhe de aula com sessões, inscrições e avaliações.
+- Catálogo de treinadores com pesquisa AJAX, perfil público e avaliações.
+- Área de treinador para consultar sessões atribuídas e membros inscritos.
+- Edição de perfil público de treinador.
+- Catálogo de equipamentos com pesquisa/filtros AJAX.
+- Aluguer de equipamentos por membros e treinadores, com horários disponíveis e cancelamento.
+- Painel de administração para gerir utilizadores, aulas, equipamentos e alugueres ativos.
 
-Como agora as páginas usam templates PHP, é preciso abrir através de um servidor PHP:
+## Perfis
+
+O projeto suporta três papéis:
+
+- `member`: pode inscrever-se em aulas, avaliar aulas/treinadores e alugar equipamentos.
+- `trainer`: pode agendar sessões, consultar o painel de treinador, editar o perfil público e alugar equipamentos.
+- `admin`: pode gerir utilizadores, aulas e equipamentos. Na página de equipamentos, o admin consulta alugueres ativos em vez de alugar.
+
+## Como correr
+
+É necessário abrir o projeto através de um servidor PHP, porque as páginas usam sessões, templates e SQLite.
 
 ```bash
 php -S localhost:8000
 ```
 
-Depois abrir `http://localhost:8000/pages/landingpage.php` no browser.
-Também podes abrir `http://localhost:8000/`, que redireciona para a landing page.
+Depois abre:
 
-
-## Estrutura de Ficheiros
-
+```text
+http://localhost:8000/
 ```
+
+O `index.php` redireciona para `pages/landingpage.php`.
+
+## Base de Dados
+
+A aplicação usa SQLite. A ligação principal está em:
+
+```text
+database/ltw.db
+```
+
+O schema está em:
+
+```text
+database/database.sql
+```
+
+As tabelas principais são:
+
+- `user`
+- `trainer`
+- `class`
+- `class_session`
+- `enrollment`
+- `review`
+- `trainer_review`
+- `equipment`
+- `equipment_rentals`
+
+## Estrutura
+
+```text
 /
-├── index.php           ← Entrada do projeto; redireciona para pages/landingpage.php
-│
+├── index.php
 ├── actions/
-│   ├── action_admin_class.php     ← Gestão admin do catálogo de aulas
-│   ├── action_admin_equipment.php ← Gestão admin do equipamento
-│   ├── action_admin_user.php      ← Gestão admin de utilizadores
-│   ├── action_create_class.php    ← Publicação de aulas por trainers/admins
-│   ├── action_login.php    ← Processa o formulário de login
-│   ├── action_logout.php   ← Termina a sessão do utilizador
-│   ├── action_register.php ← Processa o formulário de registo
-│   └── action_update_account.php ← Atualiza os detalhes da conta
-│
+│   ├── action_admin_class.php
+│   ├── action_admin_equipment.php
+│   ├── action_admin_user.php
+│   ├── action_create_class.php
+│   ├── action_create_session.php
+│   ├── action_delete_class.php
+│   ├── action_enroll.php
+│   ├── action_login.php
+│   ├── action_logout.php
+│   ├── action_register.php
+│   ├── action_review_class.php
+│   ├── action_review_trainer.php
+│   ├── action_update_account.php
+│   ├── action_update_trainer_profile.php
+│   └── action_upload_photo.php
 ├── api/
-│   └── admin_users.php ← Endpoint JSON/AJAX para pesquisa de utilizadores
-│
-├── pages/
-│   ├── index.php       ← Redireciona para a landing page
-│   ├── landingpage.php ← Landing page (página inicial)
-│   ├── classes.php     ← Listagem de aulas
-│   ├── class.php       ← Detalhe de uma aula
-│   ├── trainers.php    ← Listagem de treinadores
-│   ├── trainer.php     ← Perfil de um treinador
-│   ├── login.php       ← Página de login
-│   ├── register.php    ← Página de registo
-│   ├── account.php     ← Página de edição da conta
-│   ├── publish_class.php ← Página de publicação de aulas
-│   └── admin.php       ← Painel de administração
-├── templates/
-│   ├── header.php      ← Cabeçalho, navegação e imports CSS comuns
-│   ├── footer.php      ← Rodapé comum
-│   ├── flash_messages.php ← Template reutilizável para mensagens de erro/sucesso
-│   └── trainers.php    ← Template com dados/listagem de treinadores
-│
-├── database/
-│   ├── connection.php  ← Ligação à base de dados SQLite
-│   ├── database.sql    ← Script de criação/inicialização da base de dados
-│   ├── ltw.db          ← Base de dados SQLite do projeto
-│   ├── ClassCatalog.php ← Modelo e operações relacionadas com aulas
-│   ├── Equipment.php   ← Modelo e operações relacionadas com equipamento
-│   ├── TrainerReview.php ← Modelo e operações relacionadas com avaliações
-│   ├── Trainer.php     ← Modelo e operações relacionadas com treinadores
-│   └── User.php        ← Modelo e operações relacionadas com utilizadores
-│
-├── utils/
-│   └── session.php     ← Funções auxiliares para gestão de sessões
-│
+│   ├── admin_users.php
+│   ├── api_classes.php
+│   ├── api_equipment.php
+│   ├── api_trainers.php
+│   ├── cancel_equipment_rental.php
+│   ├── create_equipment_rental.php
+│   └── equipment_availability.php
 ├── css/
-│   ├── admin.css       ← Estilos específicos do painel admin
-│   ├── base.css        ← Variáveis, reset e estilos de elementos HTML
-│   ├── components.css  ← Componentes reutilizáveis (botões, cards, badges, forms…)
-│   ├── landingpage.css ← Estilos específicos da landing page
-│   ├── classes.css     ← Estilos específicos da página de aulas
-│   ├── class.css       ← Estilos específicos do detalhe de uma aula
-│   ├── trainers.css    ← Estilos específicos das páginas de treinadores
-│   ├── login.css       ← Estilos específicos da página de login/registo
-│   ├── account.css     ← Estilos específicos da página de conta
-│   └── responsive.css  ← Ajustes de responsividade partilhados
-│
+│   ├── account.css
+│   ├── admin.css
+│   ├── base.css
+│   ├── class.css
+│   ├── classes.css
+│   ├── components.css
+│   ├── equipment.css
+│   ├── landingpage.css
+│   ├── login.css
+│   ├── publish_class.css
+│   ├── responsive.css
+│   ├── trainer_dashboard.css
+│   └── trainers.css
+├── database/
+│   ├── ClassCatalog.php
+│   ├── ClassReview.php
+│   ├── Equipment.php
+│   ├── Trainer.php
+│   ├── TrainerReview.php
+│   ├── User.php
+│   ├── connection.php
+│   ├── database.sql
+│   └── ltw.db
+├── js/
+│   ├── classes.js
+│   ├── equipment.js
+│   └── trainers.js
 ├── javascript/
-│   └── admin.js        ← JS do painel admin, incluindo tabs e pesquisa AJAX
-│
-└── img/                ← Imagens 
-    ├── hero-athlete.jpg
-    ├── barbell.jpg
-    ├── logo.jpg
-    ├── powerhit.jpg
-    ├── yoga.jpg
-    ├── zumba.jpg
-    ├── cycling.jpg
-    ├── hiit.jpg
-    ├── mobility.jpg
-    ├── boxing.jpg
-    ├── rui-costa.jpg
-    ├── andre.jpg
-    └── tomas.jpg
+│   └── admin.js
+├── pages/
+│   ├── account.php
+│   ├── admin.php
+│   ├── class.php
+│   ├── classes.php
+│   ├── equipment.php
+│   ├── index.php
+│   ├── landingpage.php
+│   ├── login.php
+│   ├── publish_class.php
+│   ├── register.php
+│   ├── trainer.php
+│   ├── trainer_dashboard.php
+│   ├── trainer_profile_edit.php
+│   └── trainers.php
+├── templates/
+│   ├── flash_messages.php
+│   ├── footer.php
+│   ├── header.php
+│   └── trainers.php
+├── uploads/
+│   └── profile_photos/
+└── utils/
+    ├── security.php
+    └── session.php
 ```
 
+## Páginas Principais
 
-## Páginas para a 1ª Entrega
+| Página | Descrição |
+| --- | --- |
+| `pages/landingpage.php` | Página inicial |
+| `pages/classes.php` | Catálogo de aulas |
+| `pages/class.php` | Detalhe de uma aula |
+| `pages/trainers.php` | Catálogo de treinadores |
+| `pages/trainer.php` | Perfil de treinador |
+| `pages/equipment.php` | Catálogo e aluguer de equipamentos |
+| `pages/account.php` | Edição de conta |
+| `pages/publish_class.php` | Criação de sessões por treinadores |
+| `pages/trainer_dashboard.php` | Painel do treinador |
+| `pages/trainer_profile_edit.php` | Edição do perfil público do treinador |
+| `pages/admin.php` | Painel de administração |
 
-| `pages/landingpage.php` | [nome] | ✅ PHP + HTML + CSS |
-| `pages/classes.php` | [nome] |  ✅ PHP + HTML + CSS |
-| `pages/login.php` | [nome] | ✅ PHP + HTML + CSS |
+## Organização do CSS e JS
 
-## Organização do CSS
+O CSS está dividido por responsabilidades:
 
-O CSS está dividido em 3 camadas:
+- `css/base.css`: tokens de design, reset e estilos globais.
+- `css/components.css`: botões, cards, formulários, badges e componentes reutilizáveis.
+- `css/[pagina].css`: estilos específicos de cada página.
+- `css/responsive.css`: ajustes globais de responsividade.
 
-1. **`css/base.css`** — tokens de design (variáveis de cor, tipografia, espaçamento), reset e estilos padrão de elementos HTML 
+O JavaScript está separado por área:
 
-2. **`css/components.css`** — componentes reutilizáveis partilhados entre todas as páginas.
+- `js/classes.js`: filtros AJAX das aulas.
+- `js/trainers.js`: pesquisa AJAX dos treinadores.
+- `js/equipment.js`: filtros, alugueres e modal de horários dos equipamentos.
+- `javascript/admin.js`: tabs, pesquisa de utilizadores e interações do painel admin.
 
-3. **`css/[pagina].css`** — estilos específicos de cada página. Mantido o mais pequeno possível.
+## Segurança
 
-O projeto já suporta contas `member`, `trainer` e `admin`. Admins conseguem gerir utilizadores, aulas e equipamento no painel de administração.
+- Sessões com cookies `HttpOnly` e `SameSite=Lax`.
+- Tokens CSRF em formulários sensíveis.
+- Passwords guardadas com hash.
+- Validações de papel antes de ações restritas.
+- Queries preparadas nas operações com input do utilizador.
+
+## Nota de Desenvolvimento
+
+O ficheiro `database/ltw.db` é usado para desenvolvimento local. Se for necessário reconstruir a base de dados, usa o schema em `database/database.sql` e volta a inserir os dados de teste necessários.

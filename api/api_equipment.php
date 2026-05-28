@@ -17,6 +17,31 @@ try {
     $search = trim($_GET['q'] ?? '');
     $category = trim($_GET['category'] ?? 'all');
     $rentable = trim($_GET['rentable'] ?? 'all');
+    $isAdmin = getUserRole() === 'admin';
+    $equipmentRentals = [];
+
+    if ($isAdmin) {
+        $rentalsStmt = $db->query('
+            SELECT
+                equipment_rentals.equipment_id,
+                equipment_rentals.start_time,
+                equipment_rentals.end_time,
+                user.name AS user_name
+            FROM equipment_rentals
+            JOIN user ON user.id = equipment_rentals.user_id
+            WHERE equipment_rentals.status = "active"
+              AND DATE(equipment_rentals.start_time) = DATE("now", "localtime")
+            ORDER BY equipment_rentals.start_time ASC, user.name ASC
+        ');
+
+        foreach ($rentalsStmt->fetchAll(PDO::FETCH_ASSOC) as $rental) {
+            $equipmentRentals[(int) $rental['equipment_id']][] = [
+                'user_name' => $rental['user_name'],
+                'start_time' => $rental['start_time'],
+                'end_time' => $rental['end_time'],
+            ];
+        }
+    }
 
     $query = '
         SELECT
@@ -61,7 +86,7 @@ try {
 
     echo json_encode([
         'status' => 'success',
-        'data' => array_map(static function (array $item): array {
+        'data' => array_map(static function (array $item) use ($equipmentRentals): array {
             return [
                 'id' => (int) $item['id'],
                 'name' => $item['name'],
@@ -72,6 +97,7 @@ try {
                 'maintenance_quantity' => (int) $item['maintenance_quantity'],
                 'rental_available' => (int) $item['rental_available'] === 1,
                 'available_units' => (int) $item['available_units'],
+                'rentals' => $equipmentRentals[(int) $item['id']] ?? [],
             ];
         }, $stmt->fetchAll(PDO::FETCH_ASSOC)),
     ]);
