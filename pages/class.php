@@ -104,10 +104,15 @@ if (!$mainSession && count($realSessions) > 0) {
 $main_session_id = $mainSession ? (int)$mainSession['id'] : 0;
 
 $currentEnrollments = 0;
+$waitlistCount = 0;
 if ($main_session_id > 0) {
     $stmt = $db->prepare('SELECT COUNT(*) FROM enrollment WHERE session_id = ? AND status = \'active\'');
     $stmt->execute([$main_session_id]);
     $currentEnrollments = (int)$stmt->fetchColumn();
+
+    $stmt = $db->prepare('SELECT COUNT(*) FROM waitlist WHERE session_id = ?');
+    $stmt->execute([$main_session_id]);
+    $waitlistCount = (int)$stmt->fetchColumn();
 }
 
 $spots_total = (int)$classData['capacity'];
@@ -115,11 +120,30 @@ $spots_left  = max(0, $spots_total - $currentEnrollments);
 $occupancy_pct = ($spots_total > 0) ? (int)round((1 - $spots_left / $spots_total) * 100) : 0;
 
 $isEnrolledInMain = false;
+$isOnWaitlist     = false;
+$waitlistPosition = 0;
 if (isLoggedIn() && $main_session_id > 0) {
-    $stmt = $db->prepare('SELECT id FROM enrollment WHERE user_id = ? AND session_id = ? AND status = \'active\'');
+    $stmt = $db->prepare('SELECT id, status FROM enrollment WHERE user_id = ? AND session_id = ?');
     $stmt->execute([getUserId(), $main_session_id]);
-    if ($stmt->fetch()) {
+    $userEnrollment = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($userEnrollment && $userEnrollment['status'] === 'active') {
         $isEnrolledInMain = true;
+    }
+
+    if (!$isEnrolledInMain) {
+        $stmt = $db->prepare('SELECT id FROM waitlist WHERE user_id = ? AND session_id = ?');
+        $stmt->execute([getUserId(), $main_session_id]);
+        if ($stmt->fetch()) {
+            $isOnWaitlist = true;
+            $stmt = $db->prepare('
+                SELECT COUNT(*) FROM waitlist
+                WHERE session_id = ? AND created_at <= (
+                    SELECT created_at FROM waitlist WHERE user_id = ? AND session_id = ?
+                )
+            ');
+            $stmt->execute([$main_session_id, getUserId(), $main_session_id]);
+            $waitlistPosition = (int)$stmt->fetchColumn();
+        }
     }
 }
 
@@ -181,7 +205,16 @@ require __DIR__ . '/../templates/header.php';
 
           <div class="occupancy-bar-wrap" aria-label="Ocupação da aula: <?= $occupancy_pct ?>%">
             <div class="occupancy-bar-header">
-              <span><?= $spots_left ?> vagas disponíveis</span>
+              <span>
+                <?php if ($spots_left > 0): ?>
+                  <?= $spots_left ?> vagas disponíveis
+                <?php else: ?>
+                  Sessão esgotada
+                <?php endif; ?>
+                <?php if ($waitlistCount > 0): ?>
+                  · <?= $waitlistCount ?> em lista de espera
+                <?php endif; ?>
+              </span>
               <span><?= $occupancy_pct ?>% ocupado</span>
             </div>
             <div class="occupancy-bar" role="progressbar" aria-valuenow="<?= $occupancy_pct ?>" aria-valuemin="0" aria-valuemax="100">
@@ -202,32 +235,45 @@ require __DIR__ . '/../templates/header.php';
             </div>
           <?php endif; ?>
 
+          <?php
+          $lockEnroll = false;
+          if ($mainSession) {
+              $sessionStart = strtotime($mainSession['session_date'] . ' ' . $mainSession['start_time']);
+              $lockEnroll   = time() > ($sessionStart - 20 * 60);
+          }
+          ?>
+
           <?php if ($main_session_id > 0): ?>
             <form action="../actions/action_enroll.php" method="POST">
-              <?= csrfInput() ?> <!-- ADICIONADO: Token CSRF -->
+              <?= csrfInput() ?>
               <input type="hidden" name="session_id" value="<?= $main_session_id ?>" />
               <input type="hidden" name="class_id" value="<?= (int)$classData['id'] ?>" />
-              
+
               <?php if ($isEnrolledInMain): ?>
                 <input type="hidden" name="action" value="cancel" />
-                <button type="submit" class="btn btn-danger btn-lg" style="background: #dc2626; border-color: #dc2626; color: white;">Cancelar Minha Inscrição</button>
+                <button type="submit" class="btn btn-danger btn-lg" style="background:#dc2626;border-color:#dc2626;color:white;">Cancelar Minha Inscrição</button>
+
+              <?php elseif ($isOnWaitlist): ?>
+                <div style="margin-bottom:.75rem;padding:.75rem 1rem;background:#fef9c3;border:1px solid #fde047;border-radius:8px;color:#854d0e;">
+                  <strong>Estás em <?= $waitlistPosition ?>.º lugar na lista de espera</strong>
+                </div>
+                <input type="hidden" name="action" value="cancel" />
+                <button type="submit" class="btn btn-lg" style="background:#f59e0b;border-color:#f59e0b;color:white;">Sair da Lista de Espera</button>
+
+              <?php elseif ($lockEnroll): ?>
+                <button type="button" class="btn btn-primary btn-lg" disabled>Inscrições Encerradas</button>
+
+              <?php elseif ($spots_left > 0): ?>
+                <input type="hidden" name="action" value="enroll" />
+                <button type="submit" class="btn btn-primary btn-lg">Inscrever-me Nesta Sessão</button>
+
               <?php else: ?>
                 <input type="hidden" name="action" value="enroll" />
-                <?php
-                $lockEnroll = false;
-                if ($mainSession) {
-                    $sessionStart = strtotime($mainSession['session_date'] . ' ' . $mainSession['start_time']);
-                    $lockEnroll   = time() > ($sessionStart - 20 * 60);
-                }
-                ?>
-                <button type="submit" class="btn btn-primary btn-lg"
-                  <?= ($spots_left === 0 || $lockEnroll) ? 'disabled' : '' ?>>
-                  <?= $spots_left === 0 ? 'Sessão Esgotada' : ($lockEnroll ? 'Inscrições Encerradas' : 'Inscrever-me Nesta Sessão') ?>
-                </button>
+                <button type="submit" class="btn btn-lg" style="background:#7c3aed;border-color:#7c3aed;color:white;">Entrar na Lista de Espera</button>
               <?php endif; ?>
             </form>
           <?php else: ?>
-            <button class="btn btn-ghost btn-lg" disabled style="opacity: 0.6;">Sem sessões agendadas</button>
+            <button class="btn btn-ghost btn-lg" disabled style="opacity:0.6;">Sem sessões agendadas</button>
           <?php endif; ?>
         </div>
       </div>

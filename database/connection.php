@@ -8,8 +8,23 @@ function getDB(): PDO {
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $db->exec('PRAGMA foreign_keys = ON;');
     ensureEquipmentSchema($db);
+    ensureWaitlistTable($db);
 
     return $db;
+}
+
+function ensureWaitlistTable(PDO $db): void {
+    $db->exec('
+        CREATE TABLE IF NOT EXISTS waitlist (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            session_id INTEGER NOT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+            FOREIGN KEY (session_id) REFERENCES class_session(id) ON DELETE CASCADE,
+            UNIQUE(user_id, session_id)
+        )
+    ');
 }
 
 function ensureEquipmentSchema(PDO $db): void {

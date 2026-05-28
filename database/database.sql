@@ -3,6 +3,7 @@ PRAGMA foreign_keys = ON;
 DROP TABLE IF EXISTS review;
 DROP TABLE IF EXISTS trainer_review;
 DROP TABLE IF EXISTS equipment_rentals;
+DROP TABLE IF EXISTS waitlist;
 DROP TABLE IF EXISTS enrollment;
 DROP TABLE IF EXISTS class_session;
 DROP TABLE IF EXISTS class;
@@ -105,6 +106,16 @@ CREATE TABLE enrollment (
   UNIQUE(user_id, session_id)
 );
 
+
+CREATE TABLE waitlist (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  session_id INTEGER NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+  FOREIGN KEY (session_id) REFERENCES class_session(id) ON DELETE CASCADE,
+  UNIQUE(user_id, session_id)
+);
 
 CREATE TABLE review (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
