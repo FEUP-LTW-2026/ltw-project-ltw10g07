@@ -38,7 +38,7 @@ $stmt = $db->prepare('
     WHERE class.trainer_id = ?
       AND (
         class_session.id IS NULL
-        OR datetime(class_session.session_date || " " || class_session.end_time) >= datetime("now", "-23 hours")
+        OR datetime(class_session.session_date || " " || class_session.end_time) >= datetime("now", "-5 hours")
       )
     GROUP BY
       class.id,
