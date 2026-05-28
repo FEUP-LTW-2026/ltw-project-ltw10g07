@@ -23,9 +23,30 @@ $sessionDate = trim($_POST['session_date'] ?? '');
 $startTime = trim($_POST['start_time'] ?? '');
 $endTime = trim($_POST['end_time'] ?? '');
 $room = trim($_POST['room'] ?? '');
+$timezone = new DateTimeZone('Europe/Lisbon');
+$today = new DateTimeImmutable('today', $timezone);
+$maxSessionDate = $today->modify('+1 month');
 
 if ($classId <= 0 || $sessionDate === '' || $startTime === '' || $endTime === '' || $room === '') {
     setFlashMessages('errors', ['Por favor preenche todos os campos.']);
+    header('Location: ../pages/publish_class.php');
+    exit;
+}
+
+$sessionDateObject = DateTimeImmutable::createFromFormat('!Y-m-d', $sessionDate, $timezone);
+$sessionDateErrors = DateTimeImmutable::getLastErrors();
+
+if (
+    !$sessionDateObject
+    || ($sessionDateErrors !== false && ($sessionDateErrors['warning_count'] > 0 || $sessionDateErrors['error_count'] > 0))
+) {
+    setFlashMessages('errors', ['Seleciona uma data válida.']);
+    header('Location: ../pages/publish_class.php');
+    exit;
+}
+
+if ($sessionDateObject < $today || $sessionDateObject > $maxSessionDate) {
+    setFlashMessages('errors', ['Só podes agendar sessões entre hoje e daqui a 1 mês.']);
     header('Location: ../pages/publish_class.php');
     exit;
 }

@@ -26,6 +26,10 @@ $stmt = $db->prepare('
 $stmt->execute([getUserId()]);
 $myClasses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+$timezone = new DateTimeZone('Europe/Lisbon');
+$today = new DateTimeImmutable('today', $timezone);
+$maxSessionDate = $today->modify('+1 month');
+
 $pageTitle = 'Agendar Sessão - LiftToBig';
 $pageStyles = ['../css/publish_class.css'];
 $activePage = 'publish-class';
@@ -68,7 +72,14 @@ require __DIR__ . '/../templates/header.php';
                 <div class="form-row">
                   <div class="form-group">
                     <label for="session_date">Data</label>
-                    <input type="date" id="session_date" name="session_date" required />
+                    <input
+                      type="date"
+                      id="session_date"
+                      name="session_date"
+                      min="<?= htmlspecialchars($today->format('Y-m-d')) ?>"
+                      max="<?= htmlspecialchars($maxSessionDate->format('Y-m-d')) ?>"
+                      required
+                    />
                   </div>
 
                   <div class="form-group">

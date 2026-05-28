@@ -87,10 +87,15 @@ try {
 
     $startTime = $start->format('Y-m-d H:i:s');
     $endTime = $end->format('Y-m-d H:i:s');
-    $today = date('Y-m-d');
+    $now = new DateTimeImmutable('now');
+    $today = $now->format('Y-m-d');
 
     if ($start->format('Y-m-d') !== $today || $end->format('Y-m-d') !== $today || $end <= $start) {
         respond(400, false, 'O aluguer tem de pertencer ao dia atual.');
+    }
+
+    if ($start <= $now) {
+        respond(400, false, 'Seleciona um horário que ainda não tenha começado.');
     }
 
     $slotDuration = $end->getTimestamp() - $start->getTimestamp();

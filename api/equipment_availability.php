@@ -97,7 +97,8 @@ try {
         exit;
     }
 
-    $today = date('Y-m-d');
+    $now = new DateTimeImmutable('now');
+    $today = $now->format('Y-m-d');
     $userId = getUserId();
     $baseAvailable = max(0, (int) $equipment['total_quantity'] - (int) $equipment['maintenance_quantity']);
     $slots = [];
@@ -105,6 +106,12 @@ try {
     for ($hour = 9; $hour < 22; $hour++) {
         $startTime = sprintf('%s %02d:00:00', $today, $hour);
         $endTime = sprintf('%s %02d:00:00', $today, $hour + 1);
+        $slotStart = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $startTime);
+
+        if ($slotStart === false || $slotStart <= $now) {
+            continue;
+        }
+
         $activeRentals = countActiveRentals($db, $equipmentId, $startTime, $endTime);
 
         $slots[] = [
