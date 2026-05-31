@@ -43,7 +43,7 @@ require __DIR__ . '/../templates/header.php';
                 <label for="filter-time">Período</label>
                 <select id="filter-time" name="time">
                   <option value="all">Qualquer Hora</option>
-                  <option value="morning">Manhã (< 12:00)</option>
+                  <option value="morning">Manhã (&lt; 12:00)</option>
                   <option value="afternoon">Tarde (12:00 - 18:00)</option>
                   <option value="evening">Noite (> 18:00)</option>
                 </select>

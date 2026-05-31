@@ -4,6 +4,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../database/connection.php';
 require_once __DIR__ . '/../database/ClassReview.php';
 require_once __DIR__ . '/../utils/session.php';
+require_once __DIR__ . '/../utils/security.php';
 
 if (!isLoggedIn()) {
     header('Location: ../pages/login.php');
@@ -17,6 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $classId  = isset($_POST['class_id']) ? (int) $_POST['class_id'] : 0;
 $redirect = '../pages/class.php?id=' . $classId . '#reviews-section';
+
+verifyCsrfToken($redirect);
 $db       = getDB();
 
 if (isset($_POST['delete_review'])) {

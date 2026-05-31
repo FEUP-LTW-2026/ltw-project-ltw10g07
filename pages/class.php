@@ -1,9 +1,6 @@
 <?php
 declare(strict_types=1);
 
-ini_set('display_errors', '1');
-error_reporting(E_ALL);
-
 date_default_timezone_set('Europe/Lisbon');
 
 require_once __DIR__ . '/../utils/session.php';
@@ -203,7 +200,7 @@ require __DIR__ . '/../templates/header.php';
             </div>
           <?php endif; ?>
 
-          <div class="occupancy-bar-wrap" aria-label="Ocupação da aula: <?= $occupancy_pct ?>%">
+          <div class="occupancy-bar-wrap" role="group" aria-label="Ocupação da aula: <?= $occupancy_pct ?>%">
             <div class="occupancy-bar-header">
               <span>
                 <?php if ($spots_left > 0): ?>
@@ -350,6 +347,7 @@ require __DIR__ . '/../templates/header.php';
 
         <?php if ($userReview && isLoggedIn() && getUserRole() === 'member'): ?>
           <form action="../actions/action_review_class.php" method="POST" style="margin-bottom:1rem">
+            <?= csrfInput() ?>
             <input type="hidden" name="class_id" value="<?= $class_id ?>">
             <input type="hidden" name="delete_review" value="1">
             <button type="submit" class="btn btn-danger btn-sm"
@@ -387,6 +385,7 @@ require __DIR__ . '/../templates/header.php';
             </form>
             <?php if ($userReview): ?>
               <form action="../actions/action_review_class.php" method="POST" style="margin-top:.75rem">
+                <?= csrfInput() ?>
                 <input type="hidden" name="class_id" value="<?= $class_id ?>">
                 <input type="hidden" name="delete_review" value="1">
                 <button type="submit" class="btn btn-danger btn-sm"

@@ -6,7 +6,7 @@ require_once __DIR__ . '/../templates/flash_messages.php';
 
 // Apenas Treinadores podem entrar aqui!
 if (!isLoggedIn() || getUserRole() !== 'trainer') {
-  header('Location: ../pages/classes.php');
+  header('Location: classes.php');
   exit;
 }
 

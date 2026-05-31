@@ -152,7 +152,7 @@ require __DIR__ . '/../templates/header.php';
                     <?php endif; ?>
                     <div>
                       <p class="review-author"><?= htmlspecialchars($review['author']) ?></p>
-                      <p class="review-stars" aria-label="<?= (int) $review['rating'] ?> em 5 estrelas">
+                      <p class="review-stars" role="img" aria-label="<?= (int) $review['rating'] ?> em 5 estrelas">
                         <?php for ($i = 0; $i < 5; $i++): ?><?= $i < (int) $review['rating'] ? '&#9733;' : '&#9734;' ?><?php endfor; ?>
                       </p>
                     </div>
