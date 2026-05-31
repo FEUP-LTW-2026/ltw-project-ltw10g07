@@ -17,6 +17,7 @@ LiftToBig é uma aplicação web em PHP para gestão de um ginásio. Inclui pág
 - Catálogo de equipamentos com pesquisa/filtros AJAX.
 - Aluguer de equipamentos por membros e treinadores, com horários disponíveis e cancelamento.
 - Painel de administração para gerir utilizadores, aulas, equipamentos e alugueres ativos.
+- Waitlist para sessões com capacidade esgotada.
 
 ## Perfis
 
@@ -67,6 +68,7 @@ As tabelas principais são:
 - `trainer_review`
 - `equipment`
 - `equipment_rentals`
+- `waitlist`
 
 ## Estrutura
 
@@ -79,7 +81,7 @@ As tabelas principais são:
 │   ├── action_admin_user.php
 │   ├── action_create_class.php
 │   ├── action_create_session.php
-│   ├── action_delete_class.php
+│   ├── action_delete_session.php
 │   ├── action_enroll.php
 │   ├── action_login.php
 │   ├── action_logout.php
@@ -120,7 +122,8 @@ As tabelas principais são:
 │   ├── User.php
 │   ├── connection.php
 │   ├── database.sql
-│   └── ltw.db
+│   ├── ltw.db
+│   └── seed_sessions.php
 ├── js/
 │   ├── classes.js
 │   ├── equipment.js
@@ -148,6 +151,7 @@ As tabelas principais são:
 │   ├── header.php
 │   └── trainers.php
 ├── uploads/
+│   ├── class_images/
 │   └── profile_photos/
 └── utils/
     ├── security.php
