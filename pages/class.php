@@ -226,11 +226,14 @@ require __DIR__ . '/../templates/header.php';
             <div style="margin-top: 1.5rem; margin-bottom: 1.5rem; padding: 1rem; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px;">
                 <h3 style="font-size: 0.95rem; margin-bottom: 0.75rem; color: #475569;">⚙️ Painel do Treinador</h3>
                 <div style="display: flex; gap: 0.5rem;">
-                    <form action="../actions/action_delete_class.php" method="POST" style="flex: 1; margin: 0;" onsubmit="return confirm('ATENÇÃO: Queres apagar esta aula e todas as sessões?');">
-                        <?= csrfInput() ?> <!-- ADICIONADO: Token CSRF -->
+                    
+                    <?php if ($main_session_id > 0): ?>
+                    <form action="../actions/action_delete_session.php" method="POST" style="flex: 1; margin: 0;" onsubmit="return confirm('ATENÇÃO: Queres cancelar e apagar definitivamente esta sessão agendada?');">
+                        <?= csrfInput() ?> <input type="hidden" name="session_id" value="<?= $main_session_id ?>">
                         <input type="hidden" name="class_id" value="<?= (int)$classData['id'] ?>">
-                        <button type="submit" class="btn btn-danger btn-sm" style="width: 100%; background: #dc2626; border: none; color: white;">Eliminar Aula</button>
+                        <button type="submit" class="btn btn-danger btn-sm" style="width: 100%; background: #dc2626; border: none; color: white;">Eliminar Sessão</button>
                     </form>
+                    <?php endif; ?>
                 </div>
             </div>
           <?php endif; ?>

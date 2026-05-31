@@ -9,7 +9,23 @@ require_once __DIR__ . '/../templates/trainers.php';
 
 $db = getDB();
 $featuredTrainers = Trainer::getFeatured($db);
-$featuredClasses = array_slice(ClassCatalog::getAll($db), 0, 3);
+
+// NOVA LÓGICA: Ir buscar as 3 próximas SESSÕES cronologicamente
+$currentDate = date('Y-m-d');
+$currentTime = date('H:i');
+
+$stmt = $db->prepare('
+    SELECT 
+        c.id, c.name, c.type, c.intensity, c.duration, c.image,
+        cs.id AS session_id, cs.session_date, cs.start_time
+    FROM class_session cs
+    JOIN class c ON c.id = cs.class_id
+    WHERE cs.session_date > ? OR (cs.session_date = ? AND cs.start_time >= ?)
+    ORDER BY cs.session_date ASC, cs.start_time ASC
+    LIMIT 3
+');
+$stmt->execute([$currentDate, $currentDate, $currentTime]);
+$upcomingSessions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 require __DIR__ . '/../templates/header.php';
 ?>
@@ -38,7 +54,7 @@ require __DIR__ . '/../templates/header.php';
             equipamento de última geração e uma comunidade que evolui contigo.
           </p>
           <form class="hero-search" role="search" action="trainers.php" method="GET">
-            <label for="hero-search-input" >Pesquisar treinadores</label>
+            <label for="hero-search-input" class="visually-hidden">Pesquisar treinadores</label>
             <span aria-hidden="true" style="color:var(--color-text-muted);font-size:.95rem">&#9906;</span>
             <input
               type="search"
@@ -82,15 +98,15 @@ require __DIR__ . '/../templates/header.php';
 
         <div class="section-header">
           <div>
-            <h2 id="classes-heading">Aulas em Destaque</h2>
-            <p>Encontra a sessão perfeita para o teu nível de energia hoje.</p>
+            <h2 id="classes-heading">Próximas Sessões</h2>
+            <p>Junta-te a uma das nossas aulas que estão prestes a começar.</p>
           </div>
-          <a href="classes.php" class="link-more">Ver Horários &rsaquo;</a>
+          <a href="classes.php" class="link-more">Ver Horário Completo &rsaquo;</a>
         </div>
 
-        <?php if ($featuredClasses !== []): ?>
+        <?php if ($upcomingSessions !== []): ?>
           <ul class="classes-grid">
-            <?php foreach ($featuredClasses as $class): ?>
+            <?php foreach ($upcomingSessions as $class): ?>
               <?php
                 $badgeClass = $class['intensity'] === 'Alta'
                   ? 'badge-amber'
@@ -114,21 +130,34 @@ require __DIR__ . '/../templates/header.php';
                 </div>
 
                 <div class="class-info">
-                  <div class="class-meta-item">
-                    <span class="meta-icon" aria-hidden="true">&#9202;</span>
-                    <span><?= (int) $class['duration'] ?>m</span>
+                  <!-- NOVA ADIÇÃO: Mostrar a data e a hora do lado esquerdo do cartão -->
+                  <div style="display: flex; gap: 1rem; margin-bottom: 0.5rem;">
+                    <div class="class-meta-item" style="color: #4f46e5; font-weight: bold;">
+                      <span class="meta-icon" aria-hidden="true">📅</span>
+                      <span><?= htmlspecialchars(substr($class['start_time'], 0, 5)) ?> (<?= htmlspecialchars(substr($class['session_date'], 5, 5)) ?>)</span>
+                    </div>
                   </div>
-                  <div class="class-meta-item">
-                    <span class="meta-icon" aria-hidden="true">&#128293;</span>
-                    <span><?= htmlspecialchars($class['intensity']) ?></span>
+
+                  <div style="display: flex; gap: 1rem; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; gap: 1rem;">
+                      <div class="class-meta-item">
+                        <span class="meta-icon" aria-hidden="true">&#9202;</span>
+                        <span><?= (int) $class['duration'] ?>m</span>
+                      </div>
+                      <div class="class-meta-item">
+                        <span class="meta-icon" aria-hidden="true">&#128293;</span>
+                        <span><?= htmlspecialchars($class['intensity']) ?></span>
+                      </div>
+                    </div>
+                    <!-- Botão de ver aula ajustado para levar ao session_id correto -->
+                    <a href="class.php?id=<?= (int) $class['id'] ?>&session_id=<?= (int) $class['session_id'] ?>" class="btn btn-outline btn-sm">Inscrever</a>
                   </div>
-                  <a href="class.php?id=<?= (int) $class['id'] ?>" class="btn btn-outline btn-sm" style="margin-left:auto">Ver aula</a>
                 </div>
               </li>
             <?php endforeach; ?>
           </ul>
         <?php else: ?>
-          <p>Ainda não existem aulas publicadas.</p>
+          <p>Neste momento, não existem sessões agendadas para os próximos dias.</p>
         <?php endif; ?>
       </div>
     </section>
